@@ -10,7 +10,8 @@
   "dependencies": {
     "@babel/runtime": "^7.15.4",
     "jquery": "^3.5.1",
-    "meteor-node-stubs": "^1.0.1"
+    "meteor-node-stubs": "^1.0.1",
+    "phaser": "^3.55.2"
   },
   "meteor": {
     "mainModule": {
