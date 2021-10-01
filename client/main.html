@@ -3,23 +3,23 @@
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
+  <h1>Welcome to Ali-eye-n Blaster 3000!</h1>
 
-  {{> hello}}
+  {{> score}}
   {{> info}}
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
+<template name="score">
+  <button id="counter">Click Me</button>
   <p>You've pressed the button {{counter}} times.</p>
+  <div id="highscores">
+    <p>Highest Score:</p>
+    <div id="scoreHolder"></div>
+    <div id="highscore"></div>
+    <button id="save">Save Score</button>
+  </div>
 </template>
 
 <template name="info">
-  <h2>Learn Meteor!</h2>
-  <ul>
-    <li><a href="https://www.meteor.com/try" target="_blank">Do the Tutorial</a></li>
-    <li><a href="http://guide.meteor.com" target="_blank">Follow the Guide</a></li>
-    <li><a href="https://docs.meteor.com" target="_blank">Read the Docs</a></li>
-    <li><a href="https://forums.meteor.com" target="_blank">Discussions</a></li>
-  </ul>
+  <h2>Sample Template</h2>
 </template>
