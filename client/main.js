@@ -17,7 +17,7 @@ var config = {
           gravity: { y: 100 }
       }
   },
-  scene: [DefaultPage, MainMenu, GamemodeMenu]
+  scene: [MainMenu, GamemodeMenu, DefaultPage]
 };
 
 const game = new Phaser.Game(config);
@@ -41,27 +41,3 @@ function loadHighscore() {
     document.getElementById('highscore').innerHTML = highscore;
   });
 }
-
-function saveHighscore() {
-  console.log("Unimplemented!");
-}
-
-Template.score.onCreated(function helloOnCreated() {
-  // counter starts at 0
-  this.counter = new ReactiveVar(0);
-  loadHighscore()
-});
-
-Template.score.helpers({
-  counter() {
-    return Template.instance().counter.get();
-  },
-});
-
-Template.score.events({
-  'click button'(event, instance) {
-    // increment the counter when button is clicked
-    instance.counter.set(instance.counter.get() + 1);
-  },
-
-});
