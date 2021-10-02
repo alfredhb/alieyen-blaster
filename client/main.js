@@ -3,6 +3,8 @@ import './templates/main.html';
 
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { MainMenu } from './scenes/main_menu.scene';
+import { GamemodeMenu } from './scenes/gamemode_menu.scene';
 
 // Phaser Load
 function preload() {
@@ -45,10 +47,10 @@ var config = {
           gravity: { y: 100 }
       }
   },
-  scene: {
+  scene: [{
       preload: preload,
       create: create
-  }
+  }, MainMenu, GamemodeMenu]
 };
 
 var game = new Phaser.Game(config);
