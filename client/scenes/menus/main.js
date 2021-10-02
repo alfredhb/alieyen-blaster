@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 
-export default class GamemodeMenu extends Phaser.Scene {
+export default class Scene1 extends Phaser.Scene {
     constructor() {
-        super('gamemode')
+        super('mainMenu')
     }
 
     create() {

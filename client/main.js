@@ -3,39 +3,9 @@ import './templates/main.html';
 
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
-import { MainMenu } from './scenes/main_menu.scene';
-import { GamemodeMenu } from './scenes/gamemode_menu.scene';
-
-// Phaser Load
-function preload() {
-  console.log("preload");
-  this.load.setBaseURL('https://labs.phaser.io');
-
-  this.load.image('sky', 'assets/skies/space3.png');
-  this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-  this.load.image('red', 'assets/particles/red.png');
-}
-
-function create() {
-  console.log("create");
-  this.add.image(400, 300, 'sky');
-
-  var particles = this.add.particles('red');
-
-  var emitter = particles.createEmitter({
-      speed: 100,
-      scale: { start: 1, end: 0 },
-      blendMode: 'ADD'
-  });
-
-  var logo = this.physics.add.image(400, 100, 'logo');
-
-  logo.setVelocity(100, 200);
-  logo.setBounce(1, 1);
-  logo.setCollideWorldBounds(true);
-
-  emitter.startFollow(logo);
-}
+import DefaultPage from './scenes/menus/default'
+import GamemodeMenu from './scenes/menus/gamemode';
+import MainMenu from './scenes/menus/main';
 
 var config = {
   type: Phaser.AUTO,
@@ -47,13 +17,10 @@ var config = {
           gravity: { y: 100 }
       }
   },
-  scene: [{
-      preload: preload,
-      create: create
-  }, MainMenu, GamemodeMenu]
+  scene: [DefaultPage, MainMenu, GamemodeMenu]
 };
 
-var game = new Phaser.Game(config);
+const game = new Phaser.Game(config);
 
 // Other Helper Functions
 function loadHighscore() {
