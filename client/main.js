@@ -1,8 +1,8 @@
+import 'phaser';
+import './templates/main.html';
+
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
-
-import 'phaser';
-import './main.html';
 
 // Phaser Load
 function preload() {
@@ -42,7 +42,7 @@ var config = {
   physics: {
       default: 'arcade',
       arcade: {
-          gravity: { y: 200 }
+          gravity: { y: 100 }
       }
   },
   scene: {
