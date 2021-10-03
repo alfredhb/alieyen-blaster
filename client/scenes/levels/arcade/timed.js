@@ -53,8 +53,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
             qButton.clearTint();
             qText.clearTint();
         }).on('pointerup', () => {
-            this.menuSounds.menuClick.play();
             qSound.play();
+            this.scene.start('arcadeMenu');
         })
     }
 }
