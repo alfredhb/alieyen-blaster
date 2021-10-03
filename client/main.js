@@ -8,6 +8,7 @@ import DefaultPage from './scenes/menus/default'
 import GamemodeMenu from './scenes/menus/gamemode';
 import InitialLoad from './scenes/data/initial_load'
 import MainMenu from './scenes/menus/main';
+import StartMenu from './scenes/menus/start';
 import TimedArcade from './scenes/levels/arcade/timed';
 
 // Game Config
@@ -21,7 +22,7 @@ var config = {
           gravity: { y: 100 }
       }
   },
-  scene: [InitialLoad, MainMenu, GamemodeMenu, ArcadeMenu, TimedArcade, DefaultPage]
+  scene: [InitialLoad, StartMenu, MainMenu, GamemodeMenu, ArcadeMenu, TimedArcade, DefaultPage]
 };
 
 const game = new Phaser.Game(config);

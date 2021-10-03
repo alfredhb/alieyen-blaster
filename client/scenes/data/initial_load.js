@@ -17,7 +17,7 @@ export default class DataScene1 extends Phaser.Scene {
         this.add.text(20, 20, 'Loading...')
 
         if (this.assetLocations.length == 0) {
-            this.scene.start('mainMenu');
+            this.scene.start('startMenu');
         }
 
         // load all assets
@@ -31,7 +31,7 @@ export default class DataScene1 extends Phaser.Scene {
                 this.assetsLoaded += 1;
 
                 if (this.assetsLoaded == this.assetLocations.length) {
-                    this.scene.start('mainMenu');
+                    this.scene.start('startMenu');
                 }
             })
 
