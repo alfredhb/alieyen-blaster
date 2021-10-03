@@ -8,8 +8,10 @@ export default class DataScene1 extends Phaser.Scene {
     preload() {
         this.assetLocations = [
             {key: "arcade-bg", path: "background/arcade_background.png"},
+            {key: "arcade-button", path: "buttons/arcade_no_text.png"},
             {key: "space-bg", path: "background/space_background.png"},
-            {key: "story-bg", path: "background/story_background.png"}
+            {key: "story-bg", path: "buttons/story_no_text.png"},
+            {key: "story-button", path: "background/story_background.png"}
         ]
         this.assetsLoaded = 0;
     }
@@ -28,11 +30,17 @@ export default class DataScene1 extends Phaser.Scene {
         // this.load.image('small-button', 'assets/particles/red.png');
         for (let asset of this.assetLocations) {
             this.textures.once('addtexture', () => {
-                console.log("added texture : " + asset.key )
                 this.assetsLoaded += 1;
 
+                // show asset has loaded.
+                this.add.text(20, 20 + 10 * this.assetsLoaded, 'added texture: ' + asset.key)
+                this.add.image(80, 20 + 10 * this.assetsLoaded, asset.key).setDisplaySize(20, 20);
+                console.log("added texture: ", asset.key)
+
                 if (this.assetsLoaded == this.assetLocations.length) {
-                    this.scene.start('startMenu');
+                    setTimeout(() => {
+                        this.scene.start('startMenu');
+                    }, 2000);
                 }
             })
 
