@@ -3,6 +3,7 @@ import './templates/main.html';
 
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
+import ArcadeMenu from './scenes/menus/arcade'
 import DefaultPage from './scenes/menus/default'
 import GamemodeMenu from './scenes/menus/gamemode';
 import InitialLoad from './scenes/data/initial_load'
@@ -18,7 +19,7 @@ var config = {
           gravity: { y: 100 }
       }
   },
-  scene: [InitialLoad, MainMenu, GamemodeMenu, DefaultPage]
+  scene: [InitialLoad, MainMenu, GamemodeMenu, ArcadeMenu, DefaultPage]
 };
 
 const game = new Phaser.Game(config);

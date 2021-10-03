@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-export default class Scene1 extends Phaser.Scene {
+export default class MenuScene1 extends Phaser.Scene {
     
     constructor() {
         super('mainMenu')
@@ -22,27 +22,20 @@ export default class Scene1 extends Phaser.Scene {
     }
 
     initButtons(width, height) {
-
         // Singlelplayer button
-        const spButton = this.add.image(width * 0.3, height * 0.6, 'big-button')
-            .setDisplaySize(250, 350);
-        
+        const spButton = this.add.image(width * 0.3, height * 0.6, 'big-button').setDisplaySize(250, 350);
         this.add.text(spButton.x, spButton.y, 'Singlelplayer', {
             color: "#000000"
         }).setOrigin(0.5);
     
         // Multiplayer button
-        const mpButton = this.add.image(width * 0.7, height * 0.6, 'big-button')
-            .setDisplaySize(250, 350);
-    
+        const mpButton = this.add.image(width * 0.7, height * 0.6, 'big-button').setDisplaySize(250, 350);
         this.add.text(mpButton.x, mpButton.y, 'Multiplayer', {
             color: "#000000"
         }).setOrigin(0.5);
     
         // Quit button
-        const qButton = this.add.image(width * 0.95, height * 0.93, 'small-button')
-            .setDisplaySize(50, 50);
-    
+        const qButton = this.add.image(width * 0.95, height * 0.93, 'small-button').setDisplaySize(50, 50);
         this.add.text(qButton.x, qButton.y, 'X', {
             color: "#FF0000",
             fontSize: "50px",
@@ -51,7 +44,6 @@ export default class Scene1 extends Phaser.Scene {
         }).setOrigin(0.5);
 
         this.buttons = [spButton, mpButton, qButton]
-
         // Create Interactives
         for (let button of this.buttons) {
             button.setInteractive();
@@ -65,6 +57,7 @@ export default class Scene1 extends Phaser.Scene {
         }
 
         // Set action for specific buttons
+        // TODO: implement player count saving and other fntns
         spButton.on('pointerup', () => {
             this.scene.start('gamemodeMenu');
         });
