@@ -16,7 +16,7 @@ Meteor.methods({
   },
 
   // Loads asset from ./data/assets/{path} and returns a base64 object of it
-  loadAsset(path) {
+  loadImageAsset(path) {
     try {
       var asset = fs.readFileSync("../../../../../data/assets/" + path);
 

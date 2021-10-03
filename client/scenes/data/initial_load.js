@@ -17,18 +17,15 @@ export default class DataScene1 extends Phaser.Scene {
             {key: "story-button", path: "buttons/story_no_text.png"}
         ]
         this.assetsLoaded = 0;
-    }
-
-    create() {
-        this.add.text(20, 20, 'Loading...')
 
         if (this.assetLocations.length == 0) {
             this.scene.start('startMenu');
         }
 
         // load all assets
+        // TODO: Parallelization?
         
-        // Load images (assets)
+        // Load images
         // // this.textures.addBase64('big-button', bigButton);
         // this.load.image('small-button', 'assets/particles/red.png');
         for (let asset of this.assetLocations) {
@@ -47,7 +44,7 @@ export default class DataScene1 extends Phaser.Scene {
                 }
             })
 
-            Meteor.call("loadAsset", asset.path, (err, res) => {
+            Meteor.call("loadImageAsset", asset.path, (err, res) => {
                 if (err != null) {
                     console.log(err);
                     return;
