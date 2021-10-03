@@ -6,6 +6,10 @@ export default class MenuScene2 extends Phaser.Scene {
     }
 
     preload() {
+        // Load Sounds
+        this.menuSounds = {
+            menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
+        }
     }
 
     create() {
@@ -23,49 +27,65 @@ export default class MenuScene2 extends Phaser.Scene {
     initButtons(width, height) {
         // Story button
         const storyButton = this.add.image(width * 0.25, height * 0.5, 'story-button').setDisplaySize(width * 0.5, height);
-        this.add.text(storyButton.x, storyButton.y, 'Story', {
+        const storyText = this.add.text(storyButton.x, storyButton.y, 'Story', {
             fontSize: "50px",
             color: "#FFFFFF"
         }).setOrigin(0.5);
+        // TODO: set to TTS of text
+        const storySound = this.menuSounds.menuClick;
     
         // Arcade button
         const arcadeButton = this.add.image(width * 0.75, height * 0.5, 'arcade-button').setDisplaySize(width * 0.5, height);
-        this.add.text(arcadeButton.x, arcadeButton.y, 'Arcade', {
+        const arcadeText = this.add.text(arcadeButton.x, arcadeButton.y, 'Arcade', {
             fontSize: "50px",
             color: "#FFFFFF"
         }).setOrigin(0.5);
+        // TODO: set to TTS of text
+        const arcadeSound = this.menuSounds.menuClick;
     
         // Quit button
-        const qButton = this.add.image(width * 0.95, height * 0.93, 'small-button').setDisplaySize(50, 50);
-        this.add.text(qButton.x, qButton.y, 'X', {
+        const qButton = this.add.image(width * 0.95, height * 0.93, '__WHITE').setDisplaySize(50, 50);
+        const qText = this.add.text(qButton.x, qButton.y, 'X', {
             color: "#FF0000",
             fontSize: "50px",
             strokeThickness: 3,
 			stroke: '#FF0000',
         }).setOrigin(0.5);
+        const qSound = this.menuSounds.menuClick;
 
-        this.buttons = [storyButton, arcadeButton, qButton]
+        this.buttons = [
+            {button: storyButton, text: storyText, sound: storySound},
+            {button: arcadeButton, text: arcadeText, sound: arcadeSound},
+            {button: qButton, text: qText, sound: qSound},
+        ]
         // Create Interactives
-        for (let button of this.buttons) {
-            button.setInteractive();
+        for (let buttonObj of this.buttons) {
+            buttonObj.button.setInteractive();
 
-            button.on('pointerover', () => {
-                button.setTint(0x7878ff);
+            buttonObj.button.on('pointerover', () => {
+                buttonObj.button.setTint(0xFF0000);
+                buttonObj.text.setTint(0xFFF);
+
+                // TODO: Add buttonObj.sound.play() when TTS is added of them
             })
-            button.on('pointerout', () => {
-                button.clearTint();
+            buttonObj.button.on('pointerout', () => {
+                buttonObj.button.clearTint();
+                buttonObj.text.clearTint();
             })
         }
 
         // Set action for specific buttons
         // TODO: implement player count saving and other fntns
         storyButton.on('pointerup', () => {
+            this.menuSounds.menuClick.play();
             console.log('Unimplemented');
         });
         arcadeButton.on('pointerup', () => {
+            this.menuSounds.menuClick.play();
             this.scene.start('arcadeMenu');
         });
         qButton.on('pointerup', () => {
+            qSound.play();
             this.scene.start('startMenu');
         });
     }

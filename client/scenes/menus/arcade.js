@@ -5,6 +5,13 @@ export default class MenuScene3 extends Phaser.Scene {
         super('arcadeMenu')
     }
 
+    preload() {
+        // Load Sounds
+        this.menuSounds = {
+            menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
+        }
+    }
+
     create() {
         const { width, height } = this.scale;
 
@@ -29,40 +36,50 @@ export default class MenuScene3 extends Phaser.Scene {
 
         // Timed button
         const tiButton = this.add.image(width * 0.25, height * 0.35, 'gameslot-button').setDisplaySize(width * .35, height * .25);
-        this.add.text(tiButton.x, tiButton.y, 'Timed', textStyle).setOrigin(0.5);
+        const tiText = this.add.text(tiButton.x, tiButton.y, 'Timed', textStyle).setOrigin(0.5);
     
         // Endless button
         const enButton = this.add.image(width * 0.75, height * 0.35, 'gameslot-button').setDisplaySize(width * .35, height * .25);
-        this.add.text(enButton.x, enButton.y, 'Endless', textStyle).setOrigin(0.5);
+        const enText = this.add.text(enButton.x, enButton.y, 'Endless', textStyle).setOrigin(0.5);
 
         // Lives Button
         const liButton = this.add.image(width * 0.25, height * 0.7, 'gameslot-button').setDisplaySize(width * .35, height * .25);
-        this.add.text(liButton.x, liButton.y, 'Timed', textStyle).setOrigin(0.5);
+        const liText = this.add.text(liButton.x, liButton.y, 'Lives', textStyle).setOrigin(0.5);
     
         // Gauntlet button
         const gaButton = this.add.image(width * 0.75, height * 0.7, 'gameslot-button').setDisplaySize(width * .35, height * .25);
-        this.add.text(gaButton.x, gaButton.y, 'Endless', textStyle).setOrigin(0.5);
+        const gaText = this.add.text(gaButton.x, gaButton.y, 'Gauntlet', textStyle).setOrigin(0.5);
     
         // Quit button
-        const qButton = this.add.image(width * 0.95, height * 0.93, 'small-button').setDisplaySize(50, 50);
-        this.add.text(qButton.x, qButton.y, 'X', {
+        const qButton = this.add.image(width * 0.95, height * 0.93, '__WHITE').setDisplaySize(50, 50);
+        const qText = this.add.text(qButton.x, qButton.y, 'X', {
             color: "#FF0000",
             fontSize: "50px",
             strokeThickness: 3,
 			stroke: '#FF0000',
         }).setOrigin(0.5);
+        const qSound = this.menuSounds.menuClick;
 
-        this.buttons = [tiButton, enButton, liButton, gaButton, qButton]
+        this.buttons = [
+            {button: tiButton, text: tiText, sound: null},
+            {button: enButton, text: enText, sound: null},
+            {button: liButton, text: liText, sound: null},
+            {button: gaButton, text: gaText, sound: null},
+            {button: qButton, text: qText, sound: qSound}
+        ];
         // Create Interactives
-        for (let button of this.buttons) {
-            button.setInteractive();
+        for (let buttonObj of this.buttons) {
+            buttonObj.button.setInteractive();
 
-            button.on('pointerover', () => {
-                button.setTint(0x7878ff);
-            })
-            button.on('pointerout', () => {
-                button.clearTint();
-            })
+            buttonObj.button.on('pointerover', () => {
+                buttonObj.button.setTint(0x7878ff);
+            });
+            buttonObj.button.on('pointerout', () => {
+                buttonObj.button.clearTint();
+            });
+            buttonObj.button.on('pointerup', () => {
+                this.menuSounds.menuClick.play();
+            });
         }
 
         // Set action for specific buttons
@@ -74,6 +91,7 @@ export default class MenuScene3 extends Phaser.Scene {
             console.log('Unimplemented');
         });
         qButton.on('pointerup', () => {
+            qSound.play()
             this.scene.start('gamemodeMenu');
         });
     }
