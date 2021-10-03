@@ -61,7 +61,7 @@ export default class MenuScene1 extends Phaser.Scene {
             console.log('Unimplemented');
         });
         qButton.on('pointerup', () => {
-            console.log('Unimplemented');
+            console.log('startMenu');
         });
     }
 }
