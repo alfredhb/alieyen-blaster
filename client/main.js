@@ -6,8 +6,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import ArcadeMenu from './scenes/menus/arcade'
 import DefaultPage from './scenes/menus/default'
 import GamemodeMenu from './scenes/menus/gamemode';
-import InitialLoad from './scenes/data/initial_load'
-import MainMenu from './scenes/menus/main';
+import InitialLoad from './scenes/data/initial_load';
 import StartMenu from './scenes/menus/start';
 import TimedArcade from './scenes/levels/arcade/timed';
 
@@ -22,7 +21,7 @@ var config = {
           gravity: { y: 100 }
       }
   },
-  scene: [InitialLoad, StartMenu, MainMenu, GamemodeMenu, ArcadeMenu, TimedArcade, DefaultPage]
+  scene: [InitialLoad, StartMenu, GamemodeMenu, ArcadeMenu, TimedArcade, DefaultPage]
 };
 
 const game = new Phaser.Game(config);

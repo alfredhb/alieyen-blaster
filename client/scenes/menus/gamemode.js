@@ -21,16 +21,18 @@ export default class MenuScene2 extends Phaser.Scene {
     }
 
     initButtons(width, height) {
-        // Singlelplayer button
-        const stButton = this.add.image(width * 0.3, height * 0.6, 'big-button').setDisplaySize(250, 350);
-        this.add.text(stButton.x, stButton.y, 'Story', {
-            color: "#000000"
+        // Story button
+        const storyButton = this.add.image(width * 0.25, height * 0.5, 'big-button').setDisplaySize(width * 0.5, height);
+        this.add.text(storyButton.x, storyButton.y, 'Story', {
+            fontSize: "50px",
+            color: "#FFFFFF"
         }).setOrigin(0.5);
     
-        // Multiplayer button
-        const arButton = this.add.image(width * 0.7, height * 0.6, 'big-button').setDisplaySize(250, 350);
-        this.add.text(arButton.x, arButton.y, 'Arcade', {
-            color: "#000000"
+        // Arcade button
+        const arcadeButton = this.add.image(width * 0.75, height * 0.5, 'big-button').setDisplaySize(width * 0.5, height);
+        this.add.text(arcadeButton.x, arcadeButton.y, 'Arcade', {
+            fontSize: "50px",
+            color: "#FFFFFF"
         }).setOrigin(0.5);
     
         // Quit button
@@ -64,7 +66,7 @@ export default class MenuScene2 extends Phaser.Scene {
             this.scene.start('arcadeMenu');
         });
         qButton.on('pointerup', () => {
-            this.scene.start('mainMenu');
+            this.scene.start('startMenu');
         });
     }
 }

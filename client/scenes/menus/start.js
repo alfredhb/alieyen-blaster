@@ -9,6 +9,7 @@ export default class MenuScene4 extends Phaser.Scene {
         const { width, height } = this.scale;
 
         // Background
+        this.add.image(width * 0.5, height * 0.5, 'space-bg').setDisplaySize(width, height)
 
         // Title
         this.add.text(width * 0.5, height * 0.1, 'Ali-eye-n Blaster 3000', {
@@ -53,7 +54,7 @@ export default class MenuScene4 extends Phaser.Scene {
         // Set action for specific buttons
         // TODO: implement player count saving and other fntns
         plButton.on('pointerup', () => {
-            this.scene.start('mainMenu');
+            this.scene.start('gamemodeMenu');
         });
         qButton.on('pointerup', () => {
             console.log('Unimplemented');

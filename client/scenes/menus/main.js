@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 
+// DEPRECATED - Replaced by gamemode.js
 export default class MenuScene1 extends Phaser.Scene {
     
     constructor() {
@@ -17,15 +18,15 @@ export default class MenuScene1 extends Phaser.Scene {
 
     initButtons(width, height) {
         // Singlelplayer button
-        const spButton = this.add.image(width * 0.25, height * 0.5, 'big-button').setDisplaySize(width * 0.5, height);
-        this.add.text(spButton.x, spButton.y, 'Singlelplayer', {
+        const storyButton = this.add.image(width * 0.25, height * 0.5, 'big-button').setDisplaySize(width * 0.5, height);
+        this.add.text(storyButton.x, storyButton.y, 'Singlelplayer', {
             fontSize: "50px",
             color: "#FFFFFF"
         }).setOrigin(0.5);
     
         // Multiplayer button
-        const mpButton = this.add.image(width * 0.75, height * 0.5, 'big-button').setDisplaySize(width * 0.5, height);
-        this.add.text(mpButton.x, mpButton.y, 'Multiplayer', {
+        const arcadeButton = this.add.image(width * 0.75, height * 0.5, 'big-button').setDisplaySize(width * 0.5, height);
+        this.add.text(arcadeButton.x, arcadeButton.y, 'Multiplayer', {
             fontSize: "50px",
             color: "#FFFFFF"
         }).setOrigin(0.5);
@@ -39,7 +40,7 @@ export default class MenuScene1 extends Phaser.Scene {
 			stroke: '#FF0000',
         }).setOrigin(0.5);
 
-        this.buttons = [spButton, mpButton, qButton]
+        this.buttons = [storyButton, arcadeButton, qButton]
         // Create Interactives
         for (let button of this.buttons) {
             button.setInteractive();
@@ -54,10 +55,10 @@ export default class MenuScene1 extends Phaser.Scene {
 
         // Set action for specific buttons
         // TODO: implement player count saving and other fntns
-        spButton.on('pointerup', () => {
+        storyButton.on('pointerup', () => {
             this.scene.start('gamemodeMenu');
         });
-        mpButton.on('pointerup', () => {
+        arcadeButton.on('pointerup', () => {
             console.log('Unimplemented');
         });
         qButton.on('pointerup', () => {
