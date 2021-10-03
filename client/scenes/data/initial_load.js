@@ -7,11 +7,13 @@ export default class DataScene1 extends Phaser.Scene {
 
     preload() {
         this.assetLocations = [
-            {key: "arcade-bg", path: "background/arcade_background.png"},
+            // Backgrounds
+            {key: "arcade-bg", path: "background/background3.png"},
+            {key: "space-bg", path: "background/background1.png"},
+            {key: "story-bg", path: "background/background2.png"},
+            // Buttons
             {key: "arcade-button", path: "buttons/arcade_no_text.png"},
-            {key: "space-bg", path: "background/space_background.png"},
-            {key: "story-bg", path: "buttons/story_no_text.png"},
-            {key: "story-button", path: "background/story_background.png"}
+            {key: "story-button", path: "buttons/story_no_text.png"}
         ]
         this.assetsLoaded = 0;
     }
