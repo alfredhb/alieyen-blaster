@@ -61,7 +61,7 @@ export default class MenuScene3 extends Phaser.Scene {
             console.log('Unimplemented');
         });
         qButton.on('pointerup', () => {
-            this.scene.start('gamemdeMenu');
+            this.scene.start('gamemodeMenu');
         });
     }
 }
