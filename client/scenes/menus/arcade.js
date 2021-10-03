@@ -28,19 +28,19 @@ export default class MenuScene3 extends Phaser.Scene {
         }
 
         // Timed button
-        const tiButton = this.add.image(width * 0.25, height * 0.35, 'big-button').setDisplaySize(width * .35, height * .25);
+        const tiButton = this.add.image(width * 0.25, height * 0.35, 'gameslot-button').setDisplaySize(width * .35, height * .25);
         this.add.text(tiButton.x, tiButton.y, 'Timed', textStyle).setOrigin(0.5);
     
         // Endless button
-        const enButton = this.add.image(width * 0.75, height * 0.35, 'big-button').setDisplaySize(width * .35, height * .25);
+        const enButton = this.add.image(width * 0.75, height * 0.35, 'gameslot-button').setDisplaySize(width * .35, height * .25);
         this.add.text(enButton.x, enButton.y, 'Endless', textStyle).setOrigin(0.5);
 
         // Lives Button
-        const liButton = this.add.image(width * 0.25, height * 0.7, 'big-button').setDisplaySize(width * .35, height * .25);
+        const liButton = this.add.image(width * 0.25, height * 0.7, 'gameslot-button').setDisplaySize(width * .35, height * .25);
         this.add.text(liButton.x, liButton.y, 'Timed', textStyle).setOrigin(0.5);
     
         // Gauntlet button
-        const gaButton = this.add.image(width * 0.75, height * 0.7, 'big-button').setDisplaySize(width * .35, height * .25);
+        const gaButton = this.add.image(width * 0.75, height * 0.7, 'gameslot-button').setDisplaySize(width * .35, height * .25);
         this.add.text(gaButton.x, gaButton.y, 'Endless', textStyle).setOrigin(0.5);
     
         // Quit button
