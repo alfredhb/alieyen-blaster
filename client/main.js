@@ -10,10 +10,11 @@ import InitialLoad from './scenes/data/initial_load'
 import MainMenu from './scenes/menus/main';
 import TimedArcade from './scenes/levels/arcade/timed';
 
+// Game Config
 var config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
+  width: window.innerWidth || document.body.clientWidth,
+  height: window.innerHeight || document.body.clientHeight,
   physics: {
       default: 'arcade',
       arcade: {
