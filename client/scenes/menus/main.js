@@ -11,27 +11,23 @@ export default class MenuScene1 extends Phaser.Scene {
 
     create() {
         const { width, height } = this.scale;
-
-        this.add.text(width * 0.22, height * 0.1, 'Ali-eye-n Blaster 3000', {
-            fontFamily: "Lekton",
-            fontSize: "50px",
-            strokeThickness: 0,
-        });
         
         this.initButtons(width, height);
     }
 
     initButtons(width, height) {
         // Singlelplayer button
-        const spButton = this.add.image(width * 0.3, height * 0.6, 'big-button').setDisplaySize(250, 350);
+        const spButton = this.add.image(width * 0.25, height * 0.5, 'big-button').setDisplaySize(width * 0.5, height);
         this.add.text(spButton.x, spButton.y, 'Singlelplayer', {
-            color: "#000000"
+            fontSize: "50px",
+            color: "#FFFFFF"
         }).setOrigin(0.5);
     
         // Multiplayer button
-        const mpButton = this.add.image(width * 0.7, height * 0.6, 'big-button').setDisplaySize(250, 350);
+        const mpButton = this.add.image(width * 0.75, height * 0.5, 'big-button').setDisplaySize(width * 0.5, height);
         this.add.text(mpButton.x, mpButton.y, 'Multiplayer', {
-            color: "#000000"
+            fontSize: "50px",
+            color: "#FFFFFF"
         }).setOrigin(0.5);
     
         // Quit button
