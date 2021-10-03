@@ -22,14 +22,14 @@ export default class MenuScene2 extends Phaser.Scene {
 
     initButtons(width, height) {
         // Singlelplayer button
-        const spButton = this.add.image(width * 0.3, height * 0.6, 'big-button').setDisplaySize(250, 350);
-        this.add.text(spButton.x, spButton.y, 'Story', {
+        const stButton = this.add.image(width * 0.3, height * 0.6, 'big-button').setDisplaySize(250, 350);
+        this.add.text(stButton.x, stButton.y, 'Story', {
             color: "#000000"
         }).setOrigin(0.5);
     
         // Multiplayer button
-        const mpButton = this.add.image(width * 0.7, height * 0.6, 'big-button').setDisplaySize(250, 350);
-        this.add.text(mpButton.x, mpButton.y, 'Arcade', {
+        const arButton = this.add.image(width * 0.7, height * 0.6, 'big-button').setDisplaySize(250, 350);
+        this.add.text(arButton.x, arButton.y, 'Arcade', {
             color: "#000000"
         }).setOrigin(0.5);
     
@@ -42,7 +42,7 @@ export default class MenuScene2 extends Phaser.Scene {
 			stroke: '#FF0000',
         }).setOrigin(0.5);
 
-        this.buttons = [spButton, mpButton, qButton]
+        this.buttons = [stButton, arButton, qButton]
         // Create Interactives
         for (let button of this.buttons) {
             button.setInteractive();
@@ -57,10 +57,10 @@ export default class MenuScene2 extends Phaser.Scene {
 
         // Set action for specific buttons
         // TODO: implement player count saving and other fntns
-        spButton.on('pointerup', () => {
+        stButton.on('pointerup', () => {
             console.log('Unimplemented');
         });
-        mpButton.on('pointerup', () => {
+        arButton.on('pointerup', () => {
             this.scene.start('arcadeMenu');
         });
         qButton.on('pointerup', () => {
