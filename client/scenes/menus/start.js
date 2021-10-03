@@ -5,6 +5,13 @@ export default class MenuScene4 extends Phaser.Scene {
         super('startMenu')
     }
 
+    preload() {
+        // Load Sounds
+        this.menuSounds = {
+            menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
+        }
+    }
+
     create() {
         const { width, height } = this.scale;
 
@@ -19,45 +26,56 @@ export default class MenuScene4 extends Phaser.Scene {
             color: "#FFFFFF"
         }).setOrigin(0.5);
 
+        // Buttons
         this.initButtons(width, height);
     }
 
     initButtons(width, height) {
         // Play Button
-        const plButton = this.add.image(width * 0.5, height * 0.7, 'big-button').setDisplaySize(450, 250);
-        this.add.text(plButton.x, plButton.y, 'Play!', {
-            color: "#FFFFFF"
+        const plButton = this.add.image(width * 0.5, height * 0.7, '__WHITE').setDisplaySize(450, 250);
+        const plButtonText = this.add.text(plButton.x, plButton.y, 'Play!', {
+            color: "#FF0000",
+            fontSize: "50px",
         }).setOrigin(0.5);
+        const plButtonSound = this.menuSounds.menuClick;
 
         // Quit Button
-        const qButton = this.add.image(width * 0.95, height * 0.93, 'small-button').setDisplaySize(50, 50);
-        this.add.text(qButton.x, qButton.y, 'X', {
+        const qButton = this.add.image(width * 0.95, height * 0.93, '__WHITE').setDisplaySize(50, 50);
+        const qButtonText = this.add.text(qButton.x, qButton.y, 'X', {
             color: "#FF0000",
             fontSize: "50px",
             strokeThickness: 3,
 			stroke: '#FF0000',
         }).setOrigin(0.5);
+        const qButtonSound = this.menuSounds.menuClick;
 
-        this.buttons = [plButton, qButton]
+        this.buttons = [
+            {button: plButton, text: plButtonText, sound: plButtonSound},
+            {button: qButton, text: qButtonText, sound: qButtonSound}
+        ];
         // Create Interactives
-        for (let button of this.buttons) {
-            button.setInteractive();
+        for (let buttonObj of this.buttons) {
+            buttonObj.button.setInteractive();
 
-            button.on('pointerover', () => {
-                button.setTint(0x7878ff);
-            })
-            button.on('pointerout', () => {
-                button.clearTint();
-            })
+            buttonObj.button.on('pointerover', () => {
+                buttonObj.button.setTint(0xFF0000);
+                buttonObj.text.setTint(0xFFF);
+                // buttonObj.sound.play(); // Play the saved sound
+            });
+            buttonObj.button.on('pointerout', () => {
+                buttonObj.button.clearTint();
+                buttonObj.text.clearTint();
+            });
         }
 
         // Set action for specific buttons
-        // TODO: implement player count saving and other fntns
         plButton.on('pointerup', () => {
+            this.menuSounds.menuClick.play();
             this.scene.start('gamemodeMenu');
         });
         qButton.on('pointerup', () => {
             console.log('Unimplemented');
+            qButtonSound.play()
         });
     }
 }
