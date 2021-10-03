@@ -77,7 +77,7 @@ export default class MenuScene4 extends Phaser.Scene {
         });
         qButton.on('pointerup', () => {
             console.log('Unimplemented');
-            qSound.play()
+            qSound.play();
         });
     }
 }
