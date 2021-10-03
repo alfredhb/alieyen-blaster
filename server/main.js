@@ -14,4 +14,15 @@ Meteor.methods({
   
     return score;
   },
+
+  // Loads asset from ./data/assets/{path} and returns a base64 object of it
+  loadAsset(path) {
+    try {
+      var asset = fs.readFileSync("../../../../../data/assets/" + path);
+
+      return asset.toString('base64');
+    } catch {
+      throw Meteor.Error("File not found with path: " + path);
+    }
+  }
 });

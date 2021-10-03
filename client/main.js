@@ -5,6 +5,7 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 import DefaultPage from './scenes/menus/default'
 import GamemodeMenu from './scenes/menus/gamemode';
+import InitialLoad from './scenes/data/initial_load'
 import MainMenu from './scenes/menus/main';
 
 var config = {
@@ -17,7 +18,7 @@ var config = {
           gravity: { y: 100 }
       }
   },
-  scene: [MainMenu, GamemodeMenu, DefaultPage]
+  scene: [InitialLoad, MainMenu, GamemodeMenu, DefaultPage]
 };
 
 const game = new Phaser.Game(config);
