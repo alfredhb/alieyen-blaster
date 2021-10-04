@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Bullet from '../../../gameobjects/bullet'
+import QuitButton from '../../../gameobjects/quit_button';
 
 // Build Assuming Singleplayer
 export default class ArcadeScene1 extends Phaser.Scene {
@@ -42,7 +43,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
         // Add Score
 
         // Quit button
-        this.addQuit(width, height);
+        const quit = new QuitButton(this, 'arcadeMenu');
     }
 
     // TODO: Finish adding bullet physics, remove magic numbers, replace turret icon
@@ -72,30 +73,6 @@ export default class ArcadeScene1 extends Phaser.Scene {
             if (bullet) {
                 bullet.fire(this.turret.x, this.turret.y + 50, angle);
             }
-        })
-    }
-
-    addQuit(width, height) {
-        const qButton = this.add.image(width * 0.95, height * 0.93, '__WHITE').setDisplaySize(width * 0.05, width * 0.05);
-        const qText = this.add.text(qButton.x, qButton.y, 'X', {
-            color: "#FF0000",
-            fontSize: "75px",
-            strokeThickness: 3,
-			stroke: '#FF0000',
-        }).setOrigin(0.5);
-        const qSound = this.menuSounds.menuClick;
-
-        qButton.setInteractive()
-        .on('pointerover', () => {
-            qButton.setTint(0xFF0000);
-            qText.setTint(0xFFF);
-            // buttonObj.sound.play(); // Play the saved sound
-        }).on('pointerout', () => {
-            qButton.clearTint();
-            qText.clearTint();
-        }).on('pointerup', () => {
-            qSound.play();
-            this.scene.start('arcadeMenu');
         })
     }
 }
