@@ -8,7 +8,7 @@ export default class DataScene1 extends Phaser.Scene {
     preload() {
         this.load.setBaseURL('https://labs.phaser.io');
 
-        this.imageAssets = [
+        this.localImageAssets = [
             // Backgrounds
             {key: "arcade-bg", path: "background/background3.png"},
             {key: "space-bg", path: "background/background1.png"},
@@ -16,7 +16,7 @@ export default class DataScene1 extends Phaser.Scene {
             // Buttons
             {key: "arcade-button", path: "buttons/arcade_no_text.png"},
             {key: "gameslot-button", path: "buttons/game_slot.png"},
-            {key: "story-button", path: "buttons/story_no_text.png"}
+            {key: "story-button", path: "buttons/story_no_text.png"},
         ]
         this.soundAssets = [
             {key: "menu-click", path: "assets/audio/kyobi/wavs/menuClick.wav"},
@@ -25,28 +25,44 @@ export default class DataScene1 extends Phaser.Scene {
 
         // load all assets
         // TODO: Parallelization?
+        this.addLoadListener();
         
-        // Load images
-        if (this.imageAssets.length == 0) {
-            this.scene.start('startMenu');
+        // Load Local Images
+        this.loadLocalImages();
+
+        // Load Online Images
+        this.loadOnlineImages();
+        
+        // Load Sounds
+        for (let asset of this.soundAssets) {
+            this.load.audio(asset.key, asset.path);
+        }
+    }
+
+    // Must listen for all textures to be loaded before continuing into game
+    addLoadListener() {
+        this.textures.on('addtexture', (key, texture) => {
+            this.imagesLoaded += 1;
+
+            // show asset has loaded.
+            this.add.text(20, 20 + 10 * this.imagesLoaded, 'added texture: ' + key)
+            this.add.image(80, 20 + 10 * this.imagesLoaded, key).setDisplaySize(20, 20);
+            console.log("added texture: ", key)
+
+            if (this.imagesLoaded == this.localImageAssets.length) {
+                setTimeout(() => {
+                    this.scene.start('startMenu');
+                }, 2000);
+            }
+        })
+    }
+
+    loadLocalImages() {
+        if (this.localImageAssets.length == 0) {
+            return;
         }
 
-        for (let asset of this.imageAssets) {
-            this.textures.once('addtexture', () => {
-                this.imagesLoaded += 1;
-
-                // show asset has loaded.
-                this.add.text(20, 20 + 10 * this.imagesLoaded, 'added texture: ' + asset.key)
-                this.add.image(80, 20 + 10 * this.imagesLoaded, asset.key).setDisplaySize(20, 20);
-                console.log("added texture: ", asset.key)
-
-                if (this.imagesLoaded == this.imageAssets.length) {
-                    setTimeout(() => {
-                        this.scene.start('startMenu');
-                    }, 2000);
-                }
-            })
-
+        for (let asset of this.localImageAssets) {
             Meteor.call("loadImageAsset", asset.path, (err, res) => {
                 if (err != null) {
                     console.log(err);
@@ -57,11 +73,10 @@ export default class DataScene1 extends Phaser.Scene {
                 this.textures.addBase64(asset.key, data);
             });
         }
+    }
 
-        // Load Sounds
-        for (let asset of this.soundAssets) {
-            this.load.audio(asset.key, asset.path);
-        }
+    loadOnlineImages() {
+        this.load.image('bullet', 'assets/sprites/bullet.png');
     }
 
     create() {
