@@ -19,9 +19,9 @@ export default class MenuScene4 extends Phaser.Scene {
         this.add.image(width * 0.5, height * 0.5, 'space-bg').setDisplaySize(width, height)
 
         // Title
-        this.add.text(width * 0.5, height * 0.1, 'Ali-eye-n Blaster 3000', {
-            fontFamily: "Lekton",
-            fontSize: "50px",
+        this.add.text(width * 0.5, height * 0.15, 'Ali-eye-n Blaster 3000', {
+            fontFamily: "Impact",
+            fontSize: "150px",
             strokeThickness: 0,
             color: "#FFFFFF"
         }).setOrigin(0.5);

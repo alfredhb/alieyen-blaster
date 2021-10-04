@@ -14,32 +14,26 @@ export default class MenuScene2 extends Phaser.Scene {
 
     create() {
         const { width, height } = this.scale;
-
-        this.add.text(width * 0.3, height * 0.1, 'Select Gamemode', {
-            fontFamily: "Lekton",
-            fontSize: "50px",
-            strokeThickness: 0,
-        });
         
         this.initButtons(width, height);
     }
 
     initButtons(width, height) {
+        let textStyle = {
+            fontFamily: "Impact",
+            fontSize: "100px",
+            color: "#FFFFFF",
+        }
+
         // Story button
         const storyButton = this.add.image(width * 0.25, height * 0.5, 'story-button').setDisplaySize(width * 0.5, height);
-        const storyText = this.add.text(storyButton.x, storyButton.y, 'Story', {
-            fontSize: "50px",
-            color: "#FFFFFF"
-        }).setOrigin(0.5);
+        const storyText = this.add.text(storyButton.x, storyButton.y, 'Story', textStyle).setOrigin(0.5);
         // TODO: set to TTS of text
         const storySound = this.menuSounds.menuClick;
     
         // Arcade button
         const arcadeButton = this.add.image(width * 0.75, height * 0.5, 'arcade-button').setDisplaySize(width * 0.5, height);
-        const arcadeText = this.add.text(arcadeButton.x, arcadeButton.y, 'Arcade', {
-            fontSize: "50px",
-            color: "#FFFFFF"
-        }).setOrigin(0.5);
+        const arcadeText = this.add.text(arcadeButton.x, arcadeButton.y, 'Arcade', textStyle).setOrigin(0.5);
         // TODO: set to TTS of text
         const arcadeSound = this.menuSounds.menuClick;
     
@@ -78,7 +72,7 @@ export default class MenuScene2 extends Phaser.Scene {
         // TODO: implement player count saving and other fntns
         storyButton.on('pointerup', () => {
             this.menuSounds.menuClick.play();
-            console.log('Unimplemented');
+            this.scene.start('savefileMenu');
         });
         arcadeButton.on('pointerup', () => {
             this.menuSounds.menuClick.play();

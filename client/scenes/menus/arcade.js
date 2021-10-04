@@ -19,17 +19,18 @@ export default class MenuScene3 extends Phaser.Scene {
         this.add.image(width * 0.5, height * 0.5, 'arcade-bg').setDisplaySize(width, height)
 
         // Title
-        this.add.text(width * 0.4, height * 0.1, 'Arcade', {
-            fontFamily: "Lekton",
-            fontSize: "50px",
+        this.add.text(width * 0.5, height * 0.15, 'Arcade', {
+            fontFamily: "Impact",
+            fontSize: "100px",
             strokeThickness: 0,
-        });
+        }).setOrigin(0.5);
         
         this.initButtons(width, height);
     }
 
     initButtons(width, height) {
         let textStyle = {
+            fontFamily: "Impact",
             fontSize: "50px",
             color: "#FFFFFF",
         }
@@ -72,10 +73,12 @@ export default class MenuScene3 extends Phaser.Scene {
             buttonObj.button.setInteractive();
 
             buttonObj.button.on('pointerover', () => {
-                buttonObj.button.setTint(0x7878ff);
+                buttonObj.button.setTint(0xFF0000);
+                buttonObj.text.setTint(0xFFF);
             });
             buttonObj.button.on('pointerout', () => {
                 buttonObj.button.clearTint();
+                buttonObj.text.clearTint();
             });
             buttonObj.button.on('pointerup', () => {
                 this.menuSounds.menuClick.play();
