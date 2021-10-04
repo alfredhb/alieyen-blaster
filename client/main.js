@@ -7,21 +7,22 @@ import ArcadeMenu from './scenes/menus/arcade'
 import DefaultPage from './scenes/menus/default'
 import GamemodeMenu from './scenes/menus/gamemode';
 import InitialLoad from './scenes/data/initial_load';
+import SavefileMenu from './scenes/menus/savefiles';
 import StartMenu from './scenes/menus/start';
 import TimedArcade from './scenes/levels/arcade/timed';
 
 // Game Config
 var config = {
   type: Phaser.AUTO,
-  width: window.innerWidth || document.body.clientWidth,
-  height: window.innerHeight || document.body.clientHeight,
+  width: (window.innerWidth || document.body.clientWidth) * 0.95,
+  height: (window.innerHeight || document.body.clientHeight) * 0.9,
   physics: {
       default: 'arcade',
       arcade: {
           gravity: { y: 100 }
       }
   },
-  scene: [InitialLoad, StartMenu, GamemodeMenu, ArcadeMenu, TimedArcade, DefaultPage]
+  scene: [InitialLoad, StartMenu, GamemodeMenu, SavefileMenu, ArcadeMenu, TimedArcade, DefaultPage]
 };
 
 const game = new Phaser.Game(config);
