@@ -21,9 +21,10 @@ export default class MenuScene4 extends Phaser.Scene {
         // Title
         this.add.text(width * 0.5, height * 0.15, 'Ali-eye-n Blaster 3000', {
             fontFamily: "Impact",
-            fontSize: "150px",
+            fontSize: (width / 11) + "px",
             strokeThickness: 0,
-            color: "#FFFFFF"
+            color: "#FFFFFF",
+            aligh: 'center',
         }).setOrigin(0.5);
 
         // Buttons
@@ -32,7 +33,7 @@ export default class MenuScene4 extends Phaser.Scene {
 
     initButtons(width, height) {
         // Play Button
-        const plButton = this.add.image(width * 0.5, height * 0.7, '__WHITE').setDisplaySize(450, 250);
+        const plButton = this.add.image(width * 0.5, height * 0.7, '__WHITE').setDisplaySize(width * 0.25, height * 0.25);
         const plText = this.add.text(plButton.x, plButton.y, 'Play!', {
             color: "#FF0000",
             fontSize: "50px",
@@ -40,7 +41,7 @@ export default class MenuScene4 extends Phaser.Scene {
         const plSound = this.menuSounds.menuClick;
 
         // Quit Button
-        const qButton = this.add.image(width * 0.95, height * 0.93, '__WHITE').setDisplaySize(50, 50);
+        const qButton = this.add.image(width * 0.95, height * 0.93, '__WHITE').setDisplaySize(width * 0.05, width * 0.05);
         const qText = this.add.text(qButton.x, qButton.y, 'X', {
             color: "#FF0000",
             fontSize: "50px",

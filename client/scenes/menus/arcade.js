@@ -52,7 +52,7 @@ export default class MenuScene3 extends Phaser.Scene {
         const gaText = this.add.text(gaButton.x, gaButton.y, 'Gauntlet', textStyle).setOrigin(0.5);
     
         // Quit button
-        const qButton = this.add.image(width * 0.95, height * 0.93, '__WHITE').setDisplaySize(50, 50);
+        const qButton = this.add.image(width * 0.95, height * 0.93, '__WHITE').setDisplaySize(width * 0.05, width * 0.05);
         const qText = this.add.text(qButton.x, qButton.y, 'X', {
             color: "#FF0000",
             fontSize: "50px",
