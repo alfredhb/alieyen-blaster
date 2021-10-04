@@ -18,6 +18,9 @@ export default class DataScene1 extends Phaser.Scene {
             {key: "gameslot-button", path: "buttons/game_slot.png"},
             {key: "story-button", path: "buttons/story_no_text.png"},
         ]
+        this.onlineImageAssets = [
+            {key: 'bullet', path: 'assets/sprites/bullet.png'},
+        ]
         this.soundAssets = [
             {key: "menu-click", path: "assets/audio/kyobi/wavs/menuClick.wav"},
         ]
@@ -41,15 +44,22 @@ export default class DataScene1 extends Phaser.Scene {
 
     // Must listen for all textures to be loaded before continuing into game
     addLoadListener() {
+        const { width, height } = this.scale;
+        let totalAssets = (this.localImageAssets.length + this.onlineImageAssets.length);
+        let loadBlockWidth = (width * 0.45) / totalAssets
+
         this.textures.on('addtexture', (key, texture) => {
+            const loadBlock = this.add.image(
+                width * 0.275 + loadBlockWidth * this.imagesLoaded,
+                height * 0.5,
+                '__WHITE'
+            ).setDisplaySize(loadBlockWidth, width * 0.025);
+            loadBlock.setOrigin(0, 0.5);
+            loadBlock.setTint(0xFF0000);
+            loadBlock.setDepth(10);
+
             this.imagesLoaded += 1;
-
-            // show asset has loaded.
-            this.add.text(20, 20 + 10 * this.imagesLoaded, 'added texture: ' + key)
-            this.add.image(80, 20 + 10 * this.imagesLoaded, key).setDisplaySize(20, 20);
-            console.log("added texture: ", key)
-
-            if (this.imagesLoaded == this.localImageAssets.length) {
+            if (this.imagesLoaded == totalAssets) {
                 setTimeout(() => {
                     this.scene.start('startMenu');
                 }, 2000);
@@ -76,10 +86,25 @@ export default class DataScene1 extends Phaser.Scene {
     }
 
     loadOnlineImages() {
-        this.load.image('bullet', 'assets/sprites/bullet.png');
+        for (let asset of this.onlineImageAssets) {
+            this.load.image(asset.key, asset.path);
+        }
     }
 
     create() {
-        this.add.text(20, 20, 'Loading...')
+        const { width, height } = this.scale;
+        
+        // Loading Text
+        const loadText = this.add.text(width * 0.5, height * 0.4, 'Loading...', {
+            fontSize: "100px",
+            fontFamily: "impact",
+            align: "center",
+        });
+        loadText.setOrigin(0.5);
+
+        // LoadBar generation
+        const loadBar = this.add.image(width * 0.5, height * 0.5, '__WHITE');
+        loadBar.setDisplaySize(width * 0.5, width * 0.05);
+        loadBar.setOrigin(0.5);
     }
 }
