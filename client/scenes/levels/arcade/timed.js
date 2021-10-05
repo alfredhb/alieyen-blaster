@@ -37,6 +37,11 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.timerText.setText(Math.floor(this.timer.getRemainingSeconds() * 100) / 100);
     }
 
+    /**
+     * Initializes all player / static graphic components
+     * @param {number} width 
+     * @param {number} height 
+     */
     initHud(width, height) {
         // Add Background
         const bg = this.add.image(width * 0.5, height * 0.5, 'space-bg').setDisplaySize(width, height);
@@ -57,7 +62,11 @@ export default class ArcadeScene1 extends Phaser.Scene {
         const quit = new QuitButton(this, 'arcadeMenu');
     }
 
-    // TODO: Finish adding bullet physics, remove magic numbers, replace turret icon
+    /**
+     * TODO: Finish adding bullet physics, remove magic numbers, replace turret icon
+     * @param {number} width 
+     * @param {number} height 
+     */
     addTurret(width, height) {
         // Add Asset
         this.turret = this.add.isotriangle(width * 0.5, height * 0.9, 96, 64, false, 0xFFF).setDisplaySize(25, 125);
