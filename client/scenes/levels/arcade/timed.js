@@ -25,6 +25,16 @@ export default class ArcadeScene1 extends Phaser.Scene {
         // Init Tutorial Screen (overlay)
 
         // Add Game logic
+        this.initTimer(width, height);
+
+        // TODO: remove this
+        // Temporary timer start
+        this.timer.paused = false;
+    }
+
+    update() {
+        // Update Timer Text
+        this.timerText.setText(Math.floor(this.timer.getRemainingSeconds() * 100) / 100);
     }
 
     initHud(width, height) {
@@ -39,6 +49,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.addTurret(width, height);
 
         // Add Time
+        this.initTimer();
 
         // Add Score
 
@@ -75,4 +86,40 @@ export default class ArcadeScene1 extends Phaser.Scene {
             }
         })
     }
+
+    /**
+     * Create a time (ms), timer which calls resolveFunc on completion
+     * @param {number} width 
+     * @param {number} height 
+     */
+    initTimer(width, height) {
+        // Create Timer Event
+        let time = 5000; // 5 sec
+        let resolveFunc = () => {
+            this.input.removeListener('pointerdown');
+            console.log("removed listener... which is it?");
+        }
+        this.timer = this.time.addEvent({
+            delay: time,
+            callback: resolveFunc,
+            callbackScope: this,
+            loop: false,
+            paused: true,
+        });
+
+        // Place Timer on Hud
+        // TODO: place over actual spot
+        this.timerText = this.add.text(
+            width * 0.1,
+            height * 0.9,
+            Math.floor(this.timer.getRemainingSeconds() * 100) / 100,
+            {
+                fontFamily: "impact",
+                fontSize: "50px",
+                color: "#FFF",
+            });
+        this.timerText.setOrigin(0.5);
+    }
+
+    // spawnAliens()
 }
