@@ -81,7 +81,7 @@ export default class MenuScene3 extends Phaser.Scene {
         // Set action for specific buttons
         // TODO: implement player count saving and other fntns
         tiButton.on('pointerup', () => {
-            this.scene.start('timedArcade');
+            this.scene.start('preLevelArcade', {nextScene: 'timedArcade'});
         });
         enButton.on('pointerup', () => {
             console.log('Unimplemented');

@@ -95,7 +95,7 @@ export default class DataScene1 extends Phaser.Scene {
         const { width, height } = this.scale;
         
         // Loading Text
-        const loadText = this.add.text(width * 0.5, height * 0.4, 'Loading...', {
+        const loadText = this.add.text(width * 0.5, height * 0.35, 'Loading...', {
             fontSize: "100px",
             fontFamily: "impact",
             align: "center",
