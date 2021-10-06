@@ -3,6 +3,8 @@ import AlienGrunt from '../../../gameobjects/alien_grunt';
 import Bullet from '../../../gameobjects/bullet'
 import QuitButton from '../../../gameobjects/quit_button';
 
+const alien_grunt_score = 10;
+
 // Build Assuming Singleplayer
 export default class ArcadeScene1 extends Phaser.Scene {
     constructor() {
@@ -28,7 +30,6 @@ export default class ArcadeScene1 extends Phaser.Scene {
         // Add Game logic
         this.initTimer(width, height);
         this.initSprites();
-        this.initCollisions();
 
         // TODO: remove this
         // Temporary timer start and aliens
@@ -42,6 +43,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.timerText.setText(this.timer.getRemainingSeconds().toString().substr(0,4));
     }
 
+    // HUD METHODS
     /**
      * Initializes all player / static graphic components
      * @param {number} width 
@@ -58,10 +60,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
         // Add Tracking turret
         this.addTurret(width, height);
 
-        // Add Time
-        this.initTimer();
-
-        // Add Score
+        // Add Score counter & ending score card
 
         // Quit button
         const quit = new QuitButton(this, 'arcadeMenu');
@@ -94,13 +93,48 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
             this.turret.setRotation(angle);
 
-            let bullet = this.bullets.get();
-            if (bullet) {
-                bullet.fire(this.turret.x, this.turret.y + 50, angle);
-            }
-        })
+            // Create Bullet
+            this.addBullet();
+        });
     }
 
+    /**
+     * Adds a bullet as long as one can be added, with a collision function which
+     * removes the colliding alien and increments score.
+     */
+    addBullet() {
+        let collisionFunc = (bullet, alien) => {
+            console.log("collided!");
+            if (alien.active) {
+                alien.destroy();
+                this.score += alien_grunt_score;
+            }
+        }
+
+        let bullet = this.bullets.get();
+        if (bullet) {
+            // Add collider here
+            let overlapper = this.physics.add.overlap(
+                bullet, 
+                this.aliens,
+                collisionFunc,
+                null, 
+                this
+            );
+            bullet.fire(this.turret.x, this.turret.y + 50, angle);
+        }
+    }
+
+    /**
+     * Adds a score counter location, must be updated by updates
+     * @param {number} width 
+     * @param {number} height 
+     */
+    addScoreCounter(width, height) {
+        return;
+    }
+
+    // GAME LOGIC METHODS
     /**
      * Create a time (ms), timer which calls resolveFunc on completion
      * @param {number} width 
@@ -115,7 +149,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
             // Stop Aliens spawn
             // Start Score Calc and Display Logic
-            this.colliderFunc.destroy();
+            console.log("Scored: ", this.score)
         }
         this.timer = this.time.addEvent({
             delay: time,
@@ -179,36 +213,5 @@ export default class ArcadeScene1 extends Phaser.Scene {
             totalDelay += delay;
             console.log(totalDelay);
         }
-    }
-
-    // Initialize a collider between bullet and alien sprite types
-    // Destroy the alien on collision and increment a score var
-    initCollisions(width, height) {
-        // Alien dies, bullet continues
-        let collisionFunc = (obj1, obj2) => {
-            this.score += 10;
-
-            obj2.destroy();
-            console.log("alien killed, score: ", this.score)
-        }
-
-        this.physics.world = this.physics.world.setBounds(0, 0, width, height, false, false, false, false);
-
-        // this.collisionFunc = this.physics.add.collider(
-        //     this.bullets,
-        //     this.aliens,
-        //     collisionFunc,
-        //     true, 
-        //     this
-        // );
-
-        this.colliderFunc = this.physics.add.overlap(
-            this.bullets,
-            this.aliens,
-            collisionFunc,
-            null,
-            this
-        );
-        console.log(this.bullets, this.aliens, this.colliderFunc);
     }
 }
