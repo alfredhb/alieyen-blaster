@@ -5,6 +5,9 @@ import QuitButton from '../../../gameobjects/quit_button';
 
 const alien_grunt_score = 10;
 
+// TODO: move to separate file
+const zeroPad = (num, places) => String(num).padStart(places, '0')
+
 // Build Assuming Singleplayer
 export default class ArcadeScene1 extends Phaser.Scene {
     constructor() {
@@ -41,6 +44,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
     update() {
         // Update Timer Text
         this.timerText.setText(this.timer.getRemainingSeconds().toString().substr(0,4));
+        this.scoreText.setText("Score: " + zeroPad(this.score, 3));
     }
 
     // HUD METHODS
@@ -61,6 +65,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.addTurret(width, height);
 
         // Add Score counter & ending score card
+        this.addScoreCounter(width, height);
 
         // Quit button
         const quit = new QuitButton(this, 'arcadeMenu');
@@ -94,15 +99,16 @@ export default class ArcadeScene1 extends Phaser.Scene {
             this.turret.setRotation(angle);
 
             // Create Bullet
-            this.addBullet();
+            this.addBullet(angle);
         });
     }
 
     /**
      * Adds a bullet as long as one can be added, with a collision function which
      * removes the colliding alien and increments score.
+     * @param {number} angle
      */
-    addBullet() {
+    addBullet(angle) {
         let collisionFunc = (bullet, alien) => {
             console.log("collided!");
             if (alien.active) {
@@ -131,6 +137,24 @@ export default class ArcadeScene1 extends Phaser.Scene {
      * @param {number} height 
      */
     addScoreCounter(width, height) {
+        this.scoreText = this.add.text(
+            width * 0.8,
+            height * 0.1,
+            "Score: " + zeroPad(this.score, 3),
+            {
+                fontFamily: "impact",
+                fontSize: "50px",
+                color: "#FFF",
+            });
+    }
+
+    /**
+     * Create a final score card detailing how many points scored, and what
+     * the points come from, and option to restart or quit
+     * @param {number} width 
+     * @param {number} height 
+     */
+    addScoreTitleCard(width, height) {
         return;
     }
 
@@ -161,6 +185,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
         // Place Timer on Hud
         // TODO: place over actual spot
+        // TODO: convert to const style for common texts
         this.timerText = this.add.text(
             width * 0.1,
             height * 0.9,
