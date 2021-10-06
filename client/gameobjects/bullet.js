@@ -1,12 +1,15 @@
 import Phaser from "phaser";
 
-export default class Bullet extends Phaser.GameObjects.Image {
+export default class Bullet extends Phaser.GameObjects.Sprite {
     constructor(scene) {
         super(scene);
 
-        Phaser.GameObjects.Image.call(this, scene, 0, 0, 'bullet');
+        Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'bullet');
+        this.setDisplaySize(5, 75);
+        this.setOrigin(0.5);
+        this.setTint(0xFF0000);
+
         this.speed = Phaser.Math.GetSpeed(1500, 1);
-        this.setTint(0xFF0000)
     }
 
     fire (x, y, direction) {

@@ -3,10 +3,15 @@ import Phaser from "phaser";
 export default class AlienGrunt extends Phaser.GameObjects.Sprite {
     constructor(scene) {
         super(scene);
+        let { width, height } = scene.scale;
 
-        Phaser.GameObjects.Sprite.call(this, scene, 0, 0, '__DEFAULT');
-        this.maxX = scene.scale[0] + 50;
-        this.speed = Phaser.Math.GetSpeed(Math.random() * 500, 1);
+        Phaser.GameObjects.Sprite.call(this, scene, 0, 0, '__WHITE');
+        this.setDisplaySize(100, 130)
+        this.setOrigin(0.5);
+
+        this.maxX = width + 50;
+        this.maxY = height + 50;
+        this.speed = Phaser.Math.GetSpeed(Phaser.Math.RND.between(300, 700), 1);
     }
 
     // Randomly choose height, and direction
@@ -14,11 +19,11 @@ export default class AlienGrunt extends Phaser.GameObjects.Sprite {
     //      make speed and rotation depend on difficulty (a number)
     launch(difficulty) {
         let direction = (Math.random() >= 0.5) ? 1 : -1;
-        let height = Math.random(0) * this.scene.scale[1] * 0.8;
+        let height = Math.random() * this.maxY * 0.65;
         this.xSpeed = direction * this.speed;
         this.ySpeed = 0;
         
-        this.setPosition((direction > 0) ? -50: this.maxX + 50 , height);
+        this.setPosition((direction > 0) ? -50 : this.maxX, height);
         this.setActive(true);
         this.setVisible(true);
     }
@@ -31,5 +36,11 @@ export default class AlienGrunt extends Phaser.GameObjects.Sprite {
             this.setActive(false);
             this.setVisible(false);
         }
+    }
+
+    // Play sprite death animation & sound?
+    destroy() {
+        this.setActive(false);
+        this.setVisible(false);
     }
 }
