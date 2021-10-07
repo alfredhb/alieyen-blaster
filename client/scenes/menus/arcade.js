@@ -8,8 +8,9 @@ export default class MenuScene3 extends Phaser.Scene {
 
     init(data) {
         this.players = data.playerCount;
+        this.difficulty = (data.difficulty) ? data.difficulty : 1; // easy unless returned from prev scene
 
-        console.log("initialized ArcadeMenu for ", this.players, " players")
+        console.log("initialized ArcadeMenu for ", this.players, " players on difficulty ", this.difficulty)
     }
 
     preload() {
@@ -42,6 +43,10 @@ export default class MenuScene3 extends Phaser.Scene {
             color: "#FFFFFF",
         }
 
+        // Difficulty Settings Button
+        const difButton = this.add.image(width * 0.95, height * 0.07, '__WHITE').setDisplaySize(width * 0.05, width * 0.05);
+        // const 
+
         // Quit Button
         const quit = new QuitButton(this, {
             backMenu: 'gamemodeMenu',
@@ -49,43 +54,43 @@ export default class MenuScene3 extends Phaser.Scene {
         });
 
         // Timed button
-        const tiButton = this.add.image(width * 0.25, height * 0.35, 'gameslot-button').setDisplaySize(width * .35, height * .25);
-        const tiText = this.add.text(tiButton.x, tiButton.y, 'Timed', textStyle).setOrigin(0.5);
+        const tiButton = this.add.image(width * 0.25, height * 0.35, 'gameslot-button');
+        const tiText = this.add.text(tiButton.x, tiButton.y, 'Timed', textStyle);
     
         // Endless button
-        const enButton = this.add.image(width * 0.75, height * 0.35, 'gameslot-button').setDisplaySize(width * .35, height * .25);
-        const enText = this.add.text(enButton.x, enButton.y, 'Endless', textStyle).setOrigin(0.5);
+        const enButton = this.add.image(width * 0.75, height * 0.35, 'gameslot-button');
+        const enText = this.add.text(enButton.x, enButton.y, 'Endless', textStyle);
 
         // Lives Button
-        const liButton = this.add.image(width * 0.25, height * 0.7, 'gameslot-button').setDisplaySize(width * .35, height * .25);
-        const liText = this.add.text(liButton.x, liButton.y, 'Lives', textStyle).setOrigin(0.5);
+        const liButton = this.add.image(width * 0.25, height * 0.7, 'gameslot-button');
+        const liText = this.add.text(liButton.x, liButton.y, 'Lives', textStyle);
     
         // Gauntlet button
-        const gaButton = this.add.image(width * 0.75, height * 0.7, 'gameslot-button').setDisplaySize(width * .35, height * .25);
-        const gaText = this.add.text(gaButton.x, gaButton.y, 'Gauntlet', textStyle).setOrigin(0.5);
+        const gaButton = this.add.image(width * 0.75, height * 0.7, 'gameslot-button');
+        const gaText = this.add.text(gaButton.x, gaButton.y, 'Gauntlet', textStyle);
 
         this.buttons = [
             {button: tiButton, text: tiText, sound: null},
             {button: enButton, text: enText, sound: null},
             {button: liButton, text: liText, sound: null},
             {button: gaButton, text: gaText, sound: null},
-        ];
-        // Create Interactives
-        for (let buttonObj of this.buttons) {
-            buttonObj.button.setInteractive();
+        ].forEach(b => {
+            b.button.setDisplaySize(width * .35, height * .25);
+            b.text.setOrigin(0.5);
+            b.button.setInteractive();
 
-            buttonObj.button.on('pointerover', () => {
-                buttonObj.button.setTint(0xFF0000);
-                buttonObj.text.setTint(0xFFF);
+            b.button.on('pointerover', () => {
+                b.button.setTint(0xFF0000);
+                b.text.setTint(0xFFF);
             });
-            buttonObj.button.on('pointerout', () => {
-                buttonObj.button.clearTint();
-                buttonObj.text.clearTint();
+            b.button.on('pointerout', () => {
+                b.button.clearTint();
+                b.text.clearTint();
             });
-            buttonObj.button.on('pointerup', () => {
+            b.button.on('pointerup', () => {
                 this.menuSounds.menuClick.play();
             });
-        }
+        });
 
         // Set action for specific buttons
         // TODO: implement player count saving and other fntns

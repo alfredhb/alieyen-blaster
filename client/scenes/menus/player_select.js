@@ -17,7 +17,8 @@
     color: "#FFF"
  }
  
- export default class MenuScene8 extends Phaser.Scene {constructor() {
+ export default class MenuScene8 extends Phaser.Scene {
+    constructor() {
         super('playerSelectMenu');
     }
     
@@ -54,6 +55,7 @@
         bg.setDisplaySize(width, height);
 
         // Input
+        // TODO: Delete me
         this.cursor = this.input.activePointer;
 
         // Center Box
