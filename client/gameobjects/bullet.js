@@ -4,14 +4,13 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     constructor(scene) {
         super(scene, 0, 0, 'bullet');
 
-        scene.add.existing(this);
         scene.physics.add.existing(this);
 
-        this.setDisplaySize(5, 75);
+        this.setDisplaySize(10, 175);
         this.setOrigin(0.5);
         this.setTint(0xFF0000);
 
-        this.speed = Phaser.Math.GetSpeed(1500, 1);
+        this.speed = Phaser.Math.GetSpeed(2500, 1);
     }
 
     fire (x, y, direction) {
@@ -28,9 +27,6 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     }
 
     update (time, delta) {
-        // this.x += this.xSpeed * delta;
-        // this.y += this.ySpeed * delta;
-
         if (this.y < -50) {
             this.setActive(false);
             this.setVisible(false);

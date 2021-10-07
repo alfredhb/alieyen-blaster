@@ -6,8 +6,8 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
         let { width, height } = scene.scale;
 
         // Add to physics and to canvas
-        // scene.add.existing(this);
         scene.physics.add.existing(this);
+        this.setPosition(width + 50, height + 50);
         this.setDisplaySize(100, 130)
         this.setOrigin(0.5);
 
@@ -32,9 +32,6 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
     }
 
     update(time, delta) {
-        // this.x += this.xSpeed * delta;
-        // this.y += this.ySpeed * delta;
-
         if (this.x < -50 || this.x > this.maxX) {
             this.setActive(false);
             this.setVisible(false);
