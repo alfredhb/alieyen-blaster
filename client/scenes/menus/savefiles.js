@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import QuitButton from '../../gameobjects/quit_button';
 
 export default class MenuScene5 extends Phaser.Scene {
     constructor() {
@@ -51,21 +52,16 @@ export default class MenuScene5 extends Phaser.Scene {
         const slot4Text = this.add.text(slot4Button.x, slot4Button.y, 'Slot 4', textStyle).setOrigin(0.5);
     
         // Quit button
-        const qButton = this.add.image(width * 0.95, height * 0.93, '__WHITE').setDisplaySize(width * 0.05, width * 0.05);
-        const qText = this.add.text(qButton.x, qButton.y, 'X', {
-            color: "#FF0000",
-            fontSize: "50px",
-            strokeThickness: 3,
-			stroke: '#FF0000',
-        }).setOrigin(0.5);
-        const qSound = this.menuSounds.menuClick;
+        const qButton = new QuitButton(this, {
+            backMenu: 'gamemodeMenu',
+            execFunc: () => { return; }
+        });
 
         this.buttons = [
             {button: slot1Button, text: slot1Text, sound: null},
             {button: slot2Button, text: slot2Text, sound: null},
             {button: slot3Button, text: slot3Text, sound: null},
             {button: slot4Button, text: slot4Text, sound: null},
-            {button: qButton, text: qText, sound: qSound}
         ];
         // Create Interactives
         // TODO use game save file to determine what clicking each button does
@@ -83,11 +79,5 @@ export default class MenuScene5 extends Phaser.Scene {
                 console.log('Unimplemented');
             });
         }
-
-        // Set action for specific buttons
-        qButton.on('pointerup', () => {
-            qSound.play()
-            this.scene.start('gamemodeMenu');
-        });
     }
 }

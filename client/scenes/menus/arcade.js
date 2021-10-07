@@ -37,7 +37,10 @@ export default class MenuScene3 extends Phaser.Scene {
         }
 
         // Quit Button
-        const quit = new QuitButton(this, 'gamemodeMenu');
+        const quit = new QuitButton(this, {
+            backMenu: 'gamemodeMenu',
+            execFunc: () => { return; }
+        });
 
         // Timed button
         const tiButton = this.add.image(width * 0.25, height * 0.35, 'gameslot-button').setDisplaySize(width * .35, height * .25);

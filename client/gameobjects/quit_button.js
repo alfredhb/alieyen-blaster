@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 
 export default class QuitButton extends Phaser.GameObjects.Group {
-    constructor(scene, backMenu) {
+    constructor(scene, config) {
         super(scene);
 
         const { width, height } = scene.scale;
@@ -29,7 +29,8 @@ export default class QuitButton extends Phaser.GameObjects.Group {
         });
         button.on('pointerup', () => {
             clickSound.play();
-            scene.scene.start(backMenu);
+            config.execFunc();
+            scene.scene.start(config.backMenu);
         })
     }
 }

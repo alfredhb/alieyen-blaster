@@ -79,7 +79,10 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.addScoreCounter(width, height);
 
         // Quit button
-        const quit = new QuitButton(this, 'arcadeMenu');
+        const quit = new QuitButton(this, {
+            backMenu: 'arcadeMenu',
+            execFunc: () => { if (this.timer) { this.timer.destroy() }},
+        });
     }
 
     /**

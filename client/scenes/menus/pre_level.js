@@ -65,7 +65,10 @@ export default class MenuScene7 extends Phaser.Scene {
         this.startSection(width, height);
 
         // Quit Button
-        const quitButton = new QuitButton(this, this.prevScene.scene);
+        const quitButton = new QuitButton(this, {
+            backMenu: this.prevScene.scene,
+            execFunc: () => { if (this.timer) { this.timer.destroy() }}
+        });
     }
 
     centerBox(width, height) {
@@ -208,6 +211,7 @@ export default class MenuScene7 extends Phaser.Scene {
             }
         }).on('pointerup', () => {
             if (this.players && this.difficulty) {
+                this.timer.destroy();
                 this.scene.start(
                     this.nextScene,
                     {
@@ -228,6 +232,10 @@ export default class MenuScene7 extends Phaser.Scene {
         if (!this.startReady()) {
             return;
         }
+        // If timer already created, or persists from previous instance of this scene
+        if (this.timer) {
+            return;
+        }
 
         let resolveFunc = () => {
             if (this.startButton.tintTopLeft == 0xFF0000) {
@@ -235,14 +243,6 @@ export default class MenuScene7 extends Phaser.Scene {
             } else {
                 this.startButton.setTint(0xFF0000);
             }
-        }
-        // If timer already created, or persists from previous instance of this scene
-        if (this.timer) {
-            this.timer.callback = resolveFunc;
-            this.timer.callbackScope = this;
-            this.timer.paused = false;
-            console.log(this.timer);
-            return;
         }
 
         // Create timer which strobes start button from red to green
