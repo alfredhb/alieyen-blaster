@@ -14,6 +14,12 @@ export default class ArcadeScene1 extends Phaser.Scene {
         super('timedArcade')
     }
 
+    // Includes the player selection & difficulty selection made in preLevelArcade
+    init(data) {
+        this.playerCount = data.playerCount;
+        this.difficulty = data.difficulty;
+    }
+
     preload() {
         // Load Sounds
         this.menuSounds = {
@@ -23,8 +29,13 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
     create() {
         const { width, height } = this.scale;
-        this.add.text(20, 20, 'Loading..')
 
+        // Init Selection Menu
+
+
+        // Transition to Level
+
+        // Level Content
         // Init Graphics (background, hud, quit)
         this.initHud(width, height);
 
@@ -173,7 +184,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
             // Stop Aliens spawn
             // Start Score Calc and Display Logic
-            console.log("Scored: ", this.score)
+            console.log("Scored: ", this.score);
+            console.log("Max Score: ", this.alienTimers.length * 10);
         }
         this.timer = this.time.addEvent({
             delay: time,
@@ -212,15 +224,15 @@ export default class ArcadeScene1 extends Phaser.Scene {
         while (totalDelay < (this.timer.getOverallRemaining() / 2)) {
             let alien = this.aliens.get();
             let spawnStartNext = () => {
-                alien.launch(1);
+                alien.launch(this.difficulty);
 
                 this.ailensSpawned += 1;
-                if (this.ailensSpawned + 1 == this.alienTimers.length) {
+                if (this.ailensSpawned == this.alienTimers.length) {
                     return;
                 }
 
                 // Start next timer
-                this.alienTimers[this.ailensSpawned + 1].paused = false;
+                this.alienTimers[this.ailensSpawned].paused = false;
             };
 
             let delay = Phaser.Math.RND.between(100, 1000);
