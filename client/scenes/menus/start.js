@@ -75,7 +75,7 @@ export default class MenuScene4 extends Phaser.Scene {
 
         // Set action for specific buttons
         plButton.on('pointerup', () => {
-            this.scene.start('gamemodeMenu');
+            this.scene.start('playerSelectMenu');
         });
         qButton.on('pointerup', () => {
             console.log('Unimplemented');

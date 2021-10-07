@@ -7,6 +7,7 @@ import ArcadeMenu from './scenes/menus/arcade'
 import DefaultPage from './scenes/menus/default'
 import GamemodeMenu from './scenes/menus/gamemode';
 import InitialLoad from './scenes/data/initial_load';
+import PlayerSelectMenu from './scenes/menus/player_select';
 import PreLevelScene from './scenes/menus/pre_level';
 import SavefileMenu from './scenes/menus/savefiles';
 import StartMenu from './scenes/menus/start';
@@ -24,8 +25,8 @@ var config = {
       }
   },
   scene: [
-    InitialLoad, StartMenu, GamemodeMenu, SavefileMenu, PreLevelScene,
-    ArcadeMenu, TimedArcade, DefaultPage]
+    InitialLoad, StartMenu, PlayerSelectMenu, GamemodeMenu, SavefileMenu, 
+    PreLevelScene, ArcadeMenu, TimedArcade, DefaultPage]
 };
 
 const game = new Phaser.Game(config);

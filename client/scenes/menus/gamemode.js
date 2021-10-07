@@ -6,6 +6,11 @@ export default class MenuScene2 extends Phaser.Scene {
         super('gamemodeMenu')
     }
 
+    // Capture Player count from PlayerSelectMenu
+    init(data) {
+        this.players = data.playerCount;
+    }
+
     preload() {
         // Load Sounds
         this.menuSounds = {
@@ -28,7 +33,7 @@ export default class MenuScene2 extends Phaser.Scene {
 
         // Quit button
         const quit = new QuitButton(this, {
-            backMenu: 'startMenu',
+            backMenu: 'playerSelectMenu',
             execFunc: () => { return; }
         });
 
@@ -64,15 +69,24 @@ export default class MenuScene2 extends Phaser.Scene {
             })
         }
 
-        // Set action for specific buttons
-        // TODO: implement player count saving and other fntns
+        // Set action for specific buttons, pass player count to next scenes
         storyButton.on('pointerup', () => {
             this.menuSounds.menuClick.play();
-            this.scene.start('savefileMenu');
+            this.scene.start(
+                'savefileMenu',
+                {
+                    playerCount: this.players,
+                }
+            );
         });
         arcadeButton.on('pointerup', () => {
             this.menuSounds.menuClick.play();
-            this.scene.start('arcadeMenu');
+            this.scene.start(
+                'arcadeMenu',
+                {
+                    playerCount: this.players,
+                }
+            );
         });
     }
 }
