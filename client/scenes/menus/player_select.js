@@ -112,7 +112,7 @@
 
                 // Play TTS here
             }).on('pointerout', () => {
-                if (!this.players) {
+                if (!this.startReady()) {
                     b.button.setTint(0x808080);
                 } else if (this.players != Number(b.text.name)) {
                     b.button.setTint(0x808080);
@@ -125,6 +125,7 @@
                 buttons.forEach(b => b.button.setTint(0x808080));
                 b.button.setTint(0x0000FF);
 
+                // TODO: Remove me
                 console.log("set player count to ", this.players)
 
                 this.menuSounds.menuClick.play();
@@ -155,7 +156,7 @@
                 this.startButton.setTint(0x808080);
             }
         }).on('pointerup', () => {
-            if (this.players) {
+            if (this.startReady()) {
                 this.timer.remove();
                 this.menuSounds.menuClick.play();
                 this.scene.start(
