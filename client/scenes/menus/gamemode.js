@@ -33,8 +33,7 @@ export default class MenuScene2 extends Phaser.Scene {
 
         // Quit button
         const quit = new QuitButton(this, {
-            backMenu: 'playerSelectMenu',
-            execFunc: () => { return; }
+            backMenu: 'playerSelectMenu'
         });
 
         // Story button

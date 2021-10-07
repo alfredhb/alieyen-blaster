@@ -66,8 +66,7 @@ export default class MenuScene7 extends Phaser.Scene {
 
         // Quit Button
         const quitButton = new QuitButton(this, {
-            backMenu: this.prevScene.scene,
-            execFunc: () => { if (this.timer) { this.timer.destroy() }}
+            backMenu: this.prevScene.scene
         });
     }
 

@@ -53,8 +53,7 @@ export default class MenuScene5 extends Phaser.Scene {
     
         // Quit button
         const qButton = new QuitButton(this, {
-            backMenu: 'gamemodeMenu',
-            execFunc: () => { return; }
+            backMenu: 'gamemodeMenu'
         });
 
         this.buttons = [

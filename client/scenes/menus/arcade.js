@@ -38,8 +38,7 @@ export default class MenuScene3 extends Phaser.Scene {
 
         // Quit Button
         const quit = new QuitButton(this, {
-            backMenu: 'gamemodeMenu',
-            execFunc: () => { return; }
+            backMenu: 'gamemodeMenu'
         });
 
         // Timed button
