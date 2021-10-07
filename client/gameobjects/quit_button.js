@@ -30,7 +30,7 @@ export default class QuitButton extends Phaser.GameObjects.Group {
         button.on('pointerup', () => {
             clickSound.play();
             if (config.execFunc) { config.execFunc(); }
-            scene.scene.start(config.backMenu);
+            scene.scene.start(config.backMenu, config.data);
         })
     }
 }
