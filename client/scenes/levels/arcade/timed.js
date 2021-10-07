@@ -18,6 +18,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
     init(data) {
         this.players = data.playerCount;
         this.difficulty = data.difficulty;
+
+        console.log("initialized TimedMenu for ", this.players, " players")
     }
 
     preload() {

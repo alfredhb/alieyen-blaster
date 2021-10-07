@@ -8,6 +8,8 @@ export default class MenuScene3 extends Phaser.Scene {
 
     init(data) {
         this.players = data.playerCount;
+
+        console.log("initialized ArcadeMenu for ", this.players, " players")
     }
 
     preload() {

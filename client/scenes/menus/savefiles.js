@@ -8,6 +8,8 @@ export default class MenuScene5 extends Phaser.Scene {
 
     init(data) {
         this.players = data.playerCount;
+
+        console.log("initialized SafeFileMenu for ", this.players, " players")
     }
 
     preload() {
