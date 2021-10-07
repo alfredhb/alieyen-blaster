@@ -16,7 +16,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
     // Includes the player selection & difficulty selection made in preLevelArcade
     init(data) {
-        this.playerCount = data.playerCount;
+        this.players = data.playerCount;
         this.difficulty = data.difficulty;
     }
 
@@ -82,6 +82,10 @@ export default class ArcadeScene1 extends Phaser.Scene {
         const quit = new QuitButton(this, {
             backMenu: 'arcadeMenu',
             execFunc: () => { if (this.timer) { this.timer.destroy() }},
+            data: { 
+                playerCount: this.players,
+                difficulty: this.difficulty,
+            },
         });
     }
 

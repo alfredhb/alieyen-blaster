@@ -6,6 +6,10 @@ export default class MenuScene3 extends Phaser.Scene {
         super('arcadeMenu')
     }
 
+    init(data) {
+        this.players = data.playerCount;
+    }
+
     preload() {
         // Load Sounds
         this.menuSounds = {
@@ -38,7 +42,8 @@ export default class MenuScene3 extends Phaser.Scene {
 
         // Quit Button
         const quit = new QuitButton(this, {
-            backMenu: 'gamemodeMenu'
+            backMenu: 'gamemodeMenu',
+            data: { playerCount: this.players },
         });
 
         // Timed button
@@ -83,13 +88,10 @@ export default class MenuScene3 extends Phaser.Scene {
         // Set action for specific buttons
         // TODO: implement player count saving and other fntns
         tiButton.on('pointerup', () => {
-            this.scene.start('preLevelMenu', 
+            this.scene.start('timedArcade', 
                 {
-                    nextScene: 'timedArcade',
-                    prevScene: {
-                        scene: 'arcadeMenu',
-                        type: 'ARCADE'
-                    },
+                    playerCount: this.players,
+                    difficulty: this.difficulty,
                 }
             );
         });

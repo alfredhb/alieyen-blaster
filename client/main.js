@@ -5,6 +5,7 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 import ArcadeMenu from './scenes/menus/arcade'
 import DefaultPage from './scenes/menus/default'
+import DifficultySelectMenu from './scenes/menus/difficulty_select'
 import GamemodeMenu from './scenes/menus/gamemode';
 import InitialLoad from './scenes/data/initial_load';
 import PlayerSelectMenu from './scenes/menus/player_select';
@@ -26,7 +27,8 @@ var config = {
   },
   scene: [
     InitialLoad, StartMenu, PlayerSelectMenu, GamemodeMenu, SavefileMenu, 
-    PreLevelScene, ArcadeMenu, TimedArcade, DefaultPage]
+    PreLevelScene, ArcadeMenu, DifficultySelectMenu, TimedArcade, DefaultPage,
+  ]
 };
 
 const game = new Phaser.Game(config);

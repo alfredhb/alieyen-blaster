@@ -6,6 +6,10 @@ export default class MenuScene5 extends Phaser.Scene {
         super('savefileMenu')
     }
 
+    init(data) {
+        this.players = data.playerCount;
+    }
+
     preload() {
         // Load Sounds
         this.menuSounds = {
@@ -53,7 +57,8 @@ export default class MenuScene5 extends Phaser.Scene {
     
         // Quit button
         const qButton = new QuitButton(this, {
-            backMenu: 'gamemodeMenu'
+            backMenu: 'gamemodeMenu',
+            data: { playerCount: this.players },
         });
 
         this.buttons = [
