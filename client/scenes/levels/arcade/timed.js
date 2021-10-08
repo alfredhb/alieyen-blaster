@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 import AlienGrunt from '../../../gameobjects/alien_grunt';
 import Bullet from '../../../gameobjects/bullet'
-import Explode from '../../../gameobjects/explode';
 import QuitButton from '../../../gameobjects/quit_button';
 
 const alien_grunt_score = 10;
