@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import AlienGrunt from '../../../gameobjects/alien_grunt';
 import Bullet from '../../../gameobjects/bullet'
+import Explode from '../../../gameobjects/explode';
 import QuitButton from '../../../gameobjects/quit_button';
 
 const alien_grunt_score = 10;
@@ -46,6 +47,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
         // Add Game logic
         this.initTimer(width, height);
         this.initSprites();
+        this.initAnimations();
 
         // TODO: remove this
         // Temporary timer start and aliens
@@ -131,7 +133,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
     addBullet(angle) {
         let collisionFunc = (bullet, alien) => {
             console.log("collided!");
-            if (alien.active) {
+            if (!alien.dead()) {
                 alien.destroy();
                 this.score += alien_grunt_score;
             }
@@ -233,6 +235,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
         while (totalDelay < (this.timer.getOverallRemaining() / 2)) {
             let alien = this.aliens.get();
             let spawnStartNext = () => {
+                alien.stop(); // stop animations
                 alien.launch(this.difficulty);
 
                 this.ailensSpawned += 1;
@@ -259,5 +262,19 @@ export default class ArcadeScene1 extends Phaser.Scene {
             totalDelay += delay;
             console.log(totalDelay);
         }
+    }
+
+    // Create animations for sprites in the scene 'Global' animations
+    initAnimations() {
+        this.explode = this.anims.create({
+                key: 'explode', 
+                frames: [
+                    {key: 'ex-1'},
+                    {key: 'ex-2'},
+                    {key: 'ex-3'},
+                ], 
+                framerate: 3, 
+                repeat: 2,
+            });
     }
 }
