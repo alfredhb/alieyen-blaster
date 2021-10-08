@@ -32,7 +32,7 @@ export default class MenuScene3 extends Phaser.Scene {
             fontSize: "100px",
             strokeThickness: 0,
         }).setOrigin(0.5);
-        
+
         this.initButtons(width, height);
     }
 
@@ -40,12 +40,12 @@ export default class MenuScene3 extends Phaser.Scene {
         let textStyle = {
             fontFamily: "Impact",
             fontSize: "50px",
-            color: "#FFFFFF",
+            color: "#000000",
         }
 
         // Difficulty Settings Button
         const difButton = this.add.image(width * 0.95, height * 0.07, '__WHITE').setDisplaySize(width * 0.05, width * 0.05);
-        // const 
+        // const
 
         // Quit Button
         const quit = new QuitButton(this, {
@@ -56,7 +56,7 @@ export default class MenuScene3 extends Phaser.Scene {
         // Timed button
         const tiButton = this.add.image(width * 0.25, height * 0.35, 'gameslot-button');
         const tiText = this.add.text(tiButton.x, tiButton.y, 'Timed', textStyle);
-    
+
         // Endless button
         const enButton = this.add.image(width * 0.75, height * 0.35, 'gameslot-button');
         const enText = this.add.text(enButton.x, enButton.y, 'Endless', textStyle);
@@ -64,7 +64,7 @@ export default class MenuScene3 extends Phaser.Scene {
         // Lives Button
         const liButton = this.add.image(width * 0.25, height * 0.7, 'gameslot-button');
         const liText = this.add.text(liButton.x, liButton.y, 'Lives', textStyle);
-    
+
         // Gauntlet button
         const gaButton = this.add.image(width * 0.75, height * 0.7, 'gameslot-button');
         const gaText = this.add.text(gaButton.x, gaButton.y, 'Gauntlet', textStyle);
@@ -95,7 +95,7 @@ export default class MenuScene3 extends Phaser.Scene {
         // Set action for specific buttons
         // TODO: implement player count saving and other fntns
         tiButton.on('pointerup', () => {
-            this.scene.start('timedArcade', 
+            this.scene.start('timedArcade',
                 {
                     playerCount: this.players,
                     difficulty: this.difficulty,

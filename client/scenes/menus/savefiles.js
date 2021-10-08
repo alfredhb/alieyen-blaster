@@ -31,20 +31,20 @@ export default class MenuScene5 extends Phaser.Scene {
             fontSize: "50px",
             strokeThickness: 0,
         });
-        
+
         this.initButtons(width, height);
     }
 
     initButtons(width, height) {
         let textStyle = {
             fontSize: "50px",
-            color: "#FFFFFF",
+            color: "#000000",
         }
 
         // Slot 1 button
         const slot1Button = this.add.image(width * 0.25, height * 0.35, 'gameslot-button').setDisplaySize(width * .35, height * .25);
         const slot1Text = this.add.text(slot1Button.x, slot1Button.y, 'Slot 1', textStyle).setOrigin(0.5);
-    
+
         // Endless button
         const slot2Button = this.add.image(width * 0.75, height * 0.35, 'gameslot-button').setDisplaySize(width * .35, height * .25);
         const slot2Text = this.add.text(slot2Button.x, slot2Button.y, 'Slot 2', textStyle).setOrigin(0.5);
@@ -52,11 +52,11 @@ export default class MenuScene5 extends Phaser.Scene {
         // Lives Button
         const slot3Button = this.add.image(width * 0.25, height * 0.7, 'gameslot-button').setDisplaySize(width * .35, height * .25);
         const slot3Text = this.add.text(slot3Button.x, slot3Button.y, 'Slot 3', textStyle).setOrigin(0.5);
-    
+
         // Gauntlet button
         const slot4Button = this.add.image(width * 0.75, height * 0.7, 'gameslot-button').setDisplaySize(width * .35, height * .25);
         const slot4Text = this.add.text(slot4Button.x, slot4Button.y, 'Slot 4', textStyle).setOrigin(0.5);
-    
+
         // Quit button
         const qButton = new QuitButton(this, {
             backMenu: 'gamemodeMenu',
