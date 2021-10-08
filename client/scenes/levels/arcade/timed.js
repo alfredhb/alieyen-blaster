@@ -159,6 +159,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
                 fontSize: "50px",
                 color: "#FFF",
             });
+        this.scoreText.setDepth(10);
     }
 
     /**
@@ -210,12 +211,28 @@ export default class ArcadeScene1 extends Phaser.Scene {
         });
     }
 
+    /**
+     * Returns the max number of aliens to create depending on difficulty
+     */
+    maxAliens() {
+        switch (this.difficulty) {
+            case 1:
+                return 5;
+            case 2:
+                return 7;
+            case 3:
+                return 10;
+            default:
+                return 5;
+        }
+    }
+
     initSprites() {
         // Create Alien group - only 5 can by visible at one time
         this.aliens = this.physics.add.group({
             classType: AlienGrunt,
             runChildUpdate: true,
-            maxSize: 25,
+            maxSize: this.maxAliens(), // Max aliens on the screen at once
         });
 
         // Total delay of all aliens should be half of duration of timer
@@ -223,35 +240,37 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.alienTimers = [];
         this.ailensSpawned = 0;
         let totalDelay = 0;
-        while (totalDelay < (this.timer.getOverallRemaining() / 2)) {
+        while (this.alienTimers.length < this.maxAliens()) {
             let alien = this.aliens.get();
-            let spawnStartNext = () => {
-                alien.stop(); // stop animations
-                alien.launch(this.difficulty);
+            if (alien) {
+                let spawnStartNext = () => {
+                    alien.stop(); // stop animations
+                    alien.launch();
 
-                this.ailensSpawned += 1;
-                if (this.ailensSpawned == this.alienTimers.length) {
-                    return;
-                }
+                    this.ailensSpawned += 1;
+                    if (this.ailensSpawned == this.alienTimers.length) {
+                        return;
+                    }
 
-                // Start next timer
-                this.alienTimers[this.ailensSpawned].paused = false;
-            };
+                    // Start next timer
+                    this.alienTimers[this.ailensSpawned].paused = false;
+                };
 
-            let delay = Phaser.Math.RND.between(100, 1000);
-            let alienTimer = this.time.addEvent({
-                delay: delay,
-                callback: spawnStartNext,
-                callbackScope: this,
-                loop: false,
-                paused: true,
-            })
+                let delay = Phaser.Math.RND.between(100, 1000);
+                let alienTimer = this.time.addEvent({
+                    delay: delay,
+                    callback: spawnStartNext,
+                    callbackScope: this,
+                    loop: false,
+                    paused: true,
+                })
 
-            this.alienTimers.push(alienTimer);
+                this.alienTimers.push(alienTimer);
 
-            // Increment delay
-            totalDelay += delay;
-            console.log(totalDelay);
+                // Increment delay
+                totalDelay += delay;
+                console.log(totalDelay);
+            }
         }
     }
 
@@ -264,8 +283,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
                     {key: 'ex-2'},
                     {key: 'ex-3'},
                 ], 
-                framerate: 3, 
-                repeat: 2,
+                repeat: 1,
             });
     }
 
