@@ -130,21 +130,13 @@ export default class ArcadeScene1 extends Phaser.Scene {
      * @param {number} angle
      */
     addBullet(angle) {
-        let collisionFunc = (bullet, alien) => {
-            console.log("collided!");
-            if (!alien.dead()) {
-                alien.destroy();
-                this.score += alien_grunt_score;
-            }
-        }
-
         let bullet = this.bullets.get();
         if (bullet) {
             // Add collider here
             let overlapper = this.physics.add.overlap(
                 bullet, 
                 this.aliens,
-                collisionFunc,
+                this.collisionFunc,
                 null, 
                 this
             );
@@ -275,5 +267,15 @@ export default class ArcadeScene1 extends Phaser.Scene {
                 framerate: 3, 
                 repeat: 2,
             });
+    }
+
+    // Increment score, kill alien, kill bullet
+    collisionFunc(bullet, alien) {
+        if (!alien.dead() && bullet.active) {
+            bullet.destroy();
+            alien.destroy();
+            
+            this.score += alien_grunt_score;
+        }
     }
 }

@@ -8,11 +8,11 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
         // Add to physics and to canvas
         scene.physics.add.existing(this);
         this.setPosition(width + 50, height + 50);
-        this.setDisplaySize(100, 130)
+        this.setDisplaySize(130, 175)
         this.setOrigin(0.5);
 
-        this.maxX = width + 50;
-        this.maxY = height + 50;
+        this.maxX = width + 65;
+        this.maxY = height + 65;
     }
 
     // Randomly choose height, and direction
@@ -21,7 +21,7 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
     launch(difficulty) {
         this.speed = Phaser.Math.GetSpeed(Phaser.Math.RND.between(200, 500), 1);
         let direction = (Math.random() >= 0.5) ? 1 : -1;
-        let height = Math.random() * this.maxY * 0.65;
+        let height = Math.random() * this.maxY * 0.5 + 75; // Random height + 100px offset
         this.xSpeed = direction * this.speed * 1000;
         this.ySpeed = 0 * 1000;
         
