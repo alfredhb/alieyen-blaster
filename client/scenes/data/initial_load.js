@@ -6,6 +6,7 @@ export default class DataScene1 extends Phaser.Scene {
     }
 
     preload() {
+        // this.load.setCORS('anonymous');
         this.load.setBaseURL('https://labs.phaser.io');
 
         this.localImageAssets = [
@@ -18,12 +19,14 @@ export default class DataScene1 extends Phaser.Scene {
             {key: "gameslot-button", path: "buttons/game_slot.png"},
             {key: "story-button", path: "buttons/story_no_text.png"},
             // Characters
-            {key: "alien-grunt", path: "characters/green_alien_1.png"},
             {key: "alien-boss", path: "characters/boss_min_1.png"},
             // Animation frames
             {key: "ex-1", path: "features/ex1.png"},
             {key: "ex-2", path: "features/ex2.png"},
             {key: "ex-3", path: "features/ex3.png"},
+            {key: "alien-grunt-1-1", path: "characters/green_alien_1_1.png"},
+            {key: "alien-grunt-1-2", path: "characters/green_alien_1_2.png"},
+            {key: "alien-grunt-1-3", path: "characters/green_alien_1_3.png"},
 
         ]
         this.onlineImageAssets = [
@@ -44,10 +47,12 @@ export default class DataScene1 extends Phaser.Scene {
         // Load Online Images
         this.loadOnlineImages();
         
-        // Load Sounds
+        // Load Online Sounds
         for (let asset of this.soundAssets) {
             this.load.audio(asset.key, asset.path);
         }
+
+        // Local Sounds would use this.sound.decode([{data: base64, key: id}])
     }
 
     // Must listen for all textures to be loaded before continuing into game

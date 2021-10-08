@@ -28,7 +28,7 @@ var config = {
   scene: [
     InitialLoad, StartMenu, PlayerSelectMenu, GamemodeMenu, SavefileMenu, 
     PreLevelScene, ArcadeMenu, DifficultySelectMenu, TimedArcade, DefaultPage,
-  ]
+  ],
 };
 
 const game = new Phaser.Game(config);
