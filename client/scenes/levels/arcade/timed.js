@@ -61,6 +61,28 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.scoreText.setText("Score: " + zeroPad(this.score, 3));
     }
 
+    /**
+     * Callback function when game timer runs out. Removes input listeners, timers
+     * removes all sprites, transitions to score card scene with resulting score
+     * and accuracy.
+     */
+    endLevel() {
+        this.input.removeListener('pointerdown');
+
+        // Destroy timers
+        this.timer.destroy();
+        this.alienTimers.forEach(t => t.destroy());
+
+        // Kill all sprites
+        this.aliens.getChildren().forEach(a => a.destroy(endLevel = true));
+        this.bullets.getChildren().forEach(b => b.destroy());
+
+        // Start Score Calc and Display Logic TODO remove me
+        console.log("Scored: ", this.score);
+
+        // Transition to report card scene TODO
+    }
+
     // HUD METHODS
     /**
      * Initializes all player / static graphic components
@@ -73,7 +95,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
         this.cursor = this.input.activePointer;
 
-        // Add Cockpit
+        // Add Cockpit TODO
 
         // Add Tracking turret
         this.addTurret(width, height);
@@ -180,19 +202,10 @@ export default class ArcadeScene1 extends Phaser.Scene {
      */
     initTimer(width, height) {
         // Create Timer Event
-        let time = 10000; // 5 sec
-        let resolveFunc = () => {
-            this.input.removeListener('pointerdown');
-            console.log("removed listener... which is it?");
-
-            // Stop Aliens spawn
-            // Start Score Calc and Display Logic
-            console.log("Scored: ", this.score);
-            console.log("Max Score: ", this.alienTimers.length * 10);
-        }
+        let time = 10000; // 10 sec
         this.timer = this.time.addEvent({
             delay: time,
-            callback: resolveFunc,
+            callback: this.endLevel,
             callbackScope: this,
             loop: false,
             paused: true,
@@ -227,6 +240,10 @@ export default class ArcadeScene1 extends Phaser.Scene {
         }
     }
 
+    /**
+     * Creates alien physics group and generates this.maxAliens children with
+     * timers for when they are set to initially spawn.
+     */
     initSprites() {
         // Create Alien group - only 5 can by visible at one time
         this.aliens = this.physics.add.group({
@@ -274,7 +291,9 @@ export default class ArcadeScene1 extends Phaser.Scene {
         }
     }
 
-    // Create animations for sprites in the scene 'Global' animations
+    /**
+     * Create any global animations unrelated to a specific sprite
+     */
     initAnimations() {
         this.explode = this.anims.create({
                 key: 'explode', 
@@ -287,11 +306,17 @@ export default class ArcadeScene1 extends Phaser.Scene {
             });
     }
 
-    // Increment score, kill alien, kill bullet
+    /**
+     * Callback function when a bullet and an alien overlap. if the alien is
+     * alive and the bullet is active, then destroy the alien (allowing respawn)
+     * and increment score
+     * @param {Phaser.Physics.Arcade.Sprite} bullet 
+     * @param {Phaser.Physics.Arcade.Sprite} alien 
+     */
     collisionFunc(bullet, alien) {
         if (!alien.dead() && bullet.active) {
             bullet.destroy();
-            alien.destroy();
+            alien.destroy(endLevel = false);
             
             this.score += alien_grunt_score;
         }
