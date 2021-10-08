@@ -17,6 +17,14 @@ export default class DataScene1 extends Phaser.Scene {
             {key: "arcade-button", path: "buttons/arcade_no_text.png"},
             {key: "gameslot-button", path: "buttons/game_slot.png"},
             {key: "story-button", path: "buttons/story_no_text.png"},
+            // Characters
+            {key: "alien-grunt", path: "characters/green_alien_1.png"},
+            {key: "alien-boss", path: "characters/boss_min_1.png"},
+            // Animation frames
+            {key: "ex-1", path: "features/ex1.png"},
+            {key: "ex-2", path: "features/ex2.png"},
+            {key: "ex-3", path: "features/ex3.png"},
+
         ]
         this.onlineImageAssets = [
             {key: 'bullet', path: 'assets/sprites/bullet.png'},
