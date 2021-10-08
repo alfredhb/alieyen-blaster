@@ -147,6 +147,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
     }
 
     /**
+     * TODO: add shot counter to post accuracy in score screen
+     * 
      * Adds a bullet as long as one can be added, with a collision function which
      * removes the colliding alien and increments score.
      * @param {number} angle
@@ -256,7 +258,6 @@ export default class ArcadeScene1 extends Phaser.Scene {
         // Create a list of timers which on end, spawn an alien
         this.alienTimers = [];
         this.ailensSpawned = 0;
-        let totalDelay = 0;
         while (this.alienTimers.length < this.maxAliens()) {
             let alien = this.aliens.get();
             if (alien) {
@@ -283,10 +284,6 @@ export default class ArcadeScene1 extends Phaser.Scene {
                 })
 
                 this.alienTimers.push(alienTimer);
-
-                // Increment delay
-                totalDelay += delay;
-                console.log(totalDelay);
             }
         }
     }
