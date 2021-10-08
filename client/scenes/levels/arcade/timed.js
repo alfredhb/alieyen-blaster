@@ -19,6 +19,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.players = data.playerCount;
         this.difficulty = data.difficulty;
 
+        this.levelDone = false;
+
         console.log("initialized TimedMenu for ", this.players, " players")
     }
 
@@ -67,6 +69,9 @@ export default class ArcadeScene1 extends Phaser.Scene {
      * and accuracy.
      */
     endLevel() {
+        // Set end level state
+        this.levelDone = true;
+
         this.input.removeListener('pointerdown');
 
         // Destroy timers
@@ -74,7 +79,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.alienTimers.forEach(t => t.destroy());
 
         // Kill all sprites
-        this.aliens.getChildren().forEach(a => a.destroy(endLevel = true));
+        this.aliens.getChildren().forEach(a => a.destroy());
         this.bullets.getChildren().forEach(b => b.destroy());
 
         // Start Score Calc and Display Logic TODO remove me
@@ -313,7 +318,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
     collisionFunc(bullet, alien) {
         if (!alien.dead() && bullet.active) {
             bullet.destroy();
-            alien.destroy(endLevel = false);
+            alien.destroy();
             
             this.score += alien_grunt_score;
         }
