@@ -53,20 +53,18 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
             this.setVisible(false);
 
             // any respawn logic
-            if (!this.scene.levelDone) {
-                this.deadVal = true;
-                setTimeout(() => {
-                    this.stop();
-                    this.launch();
-                }, 300);     
-            }
+            this.deadVal = true;
+            setTimeout(() => {
+                this.stop();
+                this.launch();
+            }, 300);     
         }
     }
 
     // TODO Bug allowing aliens to respawn after this.scene.levelDone flag is set
     // and the alien is killed
     // Play sprite death animation & sound?
-    destroy() {
+    kill() {
         this.deadVal = true;
 
         // play animation
@@ -76,12 +74,10 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
             this.setActive(false);
 
             // any respawn logic
-            if (!this.scene.levelDone) {
-                setTimeout(() => {
-                    this.stop();
-                    this.launch();
-                }, 300);
-            }
+            setTimeout(() => {
+                this.stop();
+                this.launch();
+            }, 300);
         });
     }
 
