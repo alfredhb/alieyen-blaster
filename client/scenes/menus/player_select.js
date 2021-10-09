@@ -164,7 +164,7 @@
                 this.scene.start(
                     'gamemodeMenu',
                     {
-                        playerCount: this.players,
+                        playerCount: 1, // TODO add player handling in later scenes
                     }
                 );
             }
