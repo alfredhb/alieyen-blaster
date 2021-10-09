@@ -1,21 +1,9 @@
 /**
  * The menu seen in this slide: https://docs.google.com/presentation/d/1k2VFrhd0RngtsdU3UQYzQbVgNASu-717JjrWl4YOyiE/edit#slide=id.gf5b43401a7_0_6
  */
-
- import { ready } from "jquery";
  import Phaser from "phaser";
+ import Constants from "../../lib/constants";
  import QuitButton from "../../gameobjects/quit_button";
- 
- const titleStyle = {
-    fontFamily: 'impact',
-    fontSize: "75px",
-    color: "#FFF"
- }
- const buttonStyle = {
-    fontFamily: 'impact',
-    fontSize: "50px",
-    color: "#FFF"
- }
  
  export default class MenuScene8 extends Phaser.Scene {
     constructor() {
@@ -37,6 +25,9 @@
                 paused: true,
             });
         }
+
+        // Add constants
+        this.constants = new Constants();
     }
 
     preload() {
@@ -85,13 +76,13 @@
     }
 
     playerSection(width, height) {
-        const playerText = this.add.text(width * 0.5, height * 0.325, 'PLAYERS', titleStyle);
+        const playerText = this.add.text(width * 0.5, height * 0.325, 'PLAYERS', this.constants.MenuTitleStyle());
         playerText.setOrigin(0.5);
 
         const onePlayerButton = this.add.image(width * 0.375, height * 0.45, '__WHITE');
         const twoPlayerButton = this.add.image(width * 0.625, height * 0.45, '__WHITE');
-        const onePlayerText = this.add.text(width * 0.375, height * 0.45, '1 PLAYER', buttonStyle);
-        const twoPlayerText = this.add.text(width * 0.625, height * 0.45, '2 PLAYER', buttonStyle);
+        const onePlayerText = this.add.text(width * 0.375, height * 0.45, '1 PLAYER', this.constants.MenuButtonStyle());
+        const twoPlayerText = this.add.text(width * 0.625, height * 0.45, '2 PLAYER', this.constants.MenuButtonStyle());
         onePlayerText.setName('1');
         twoPlayerText.setName('2');
 
@@ -141,7 +132,12 @@
         this.startButton.setDisplaySize(width * 0.375, height * 0.12);
         this.startButton.setTint(0x808080);
         this.startButton.setOrigin(0.5);
-        const startText = this.add.text(width * 0.5, height * 0.65, 'START', buttonStyle);
+        const startText = this.add.text(
+            width * 0.5, 
+            height * 0.65, 
+            'START', 
+            this.constants.MenuButtonStyle()
+        );
         startText.setOrigin(0.5);
 
         // Set interactiveness of button

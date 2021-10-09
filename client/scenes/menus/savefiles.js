@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import Constants from '../../lib/constants';
 import QuitButton from '../../gameobjects/quit_button';
 
 export default class MenuScene5 extends Phaser.Scene {
@@ -8,6 +9,8 @@ export default class MenuScene5 extends Phaser.Scene {
 
     init(data) {
         this.players = data.playerCount;
+
+        this.constants = new Constants();
 
         console.log("initialized SafeFileMenu for ", this.players, " players")
     }
@@ -26,36 +29,29 @@ export default class MenuScene5 extends Phaser.Scene {
         this.add.image(width * 0.5, height * 0.5, 'story-bg').setDisplaySize(width, height)
 
         // Title
-        this.add.text(width * 0.4, height * 0.1, 'Game Slots', {
-            fontFamily: "Impact",
-            fontSize: "50px",
-            strokeThickness: 0,
-        });
+        const title = this.add.text(width * 0.5, height * 0.15, 'Game Slots', this.constants.MenuTitleStyle());
+        title.setOrigin(0.5);
+        
 
         this.initButtons(width, height);
     }
 
     initButtons(width, height) {
-        let textStyle = {
-            fontSize: "50px",
-            color: "#000000",
-        }
-
         // Slot 1 button
-        const slot1Button = this.add.image(width * 0.25, height * 0.35, 'gameslot-button').setDisplaySize(width * .35, height * .25);
-        const slot1Text = this.add.text(slot1Button.x, slot1Button.y, 'Slot 1', textStyle).setOrigin(0.5);
+        const slot1Button = this.add.image(width * 0.25, height * 0.35, 'gameslot-button');
+        const slot1Text = this.add.text(slot1Button.x, slot1Button.y, 'Slot 1', this.constants.MenuButtonStyle('#000000'));
 
-        // Endless button
-        const slot2Button = this.add.image(width * 0.75, height * 0.35, 'gameslot-button').setDisplaySize(width * .35, height * .25);
-        const slot2Text = this.add.text(slot2Button.x, slot2Button.y, 'Slot 2', textStyle).setOrigin(0.5);
+        // Slot 2 button
+        const slot2Button = this.add.image(width * 0.75, height * 0.35, 'gameslot-button');
+        const slot2Text = this.add.text(slot2Button.x, slot2Button.y, 'Slot 2', this.constants.MenuButtonStyle('#000000'));
 
-        // Lives Button
-        const slot3Button = this.add.image(width * 0.25, height * 0.7, 'gameslot-button').setDisplaySize(width * .35, height * .25);
-        const slot3Text = this.add.text(slot3Button.x, slot3Button.y, 'Slot 3', textStyle).setOrigin(0.5);
+        // Slot 3 button
+        const slot3Button = this.add.image(width * 0.25, height * 0.7, 'gameslot-button');
+        const slot3Text = this.add.text(slot3Button.x, slot3Button.y, 'Slot 3', this.constants.MenuButtonStyle('#000000'));
 
-        // Gauntlet button
-        const slot4Button = this.add.image(width * 0.75, height * 0.7, 'gameslot-button').setDisplaySize(width * .35, height * .25);
-        const slot4Text = this.add.text(slot4Button.x, slot4Button.y, 'Slot 4', textStyle).setOrigin(0.5);
+        // Slot 4 button
+        const slot4Button = this.add.image(width * 0.75, height * 0.7, 'gameslot-button');
+        const slot4Text = this.add.text(slot4Button.x, slot4Button.y, 'Slot 4', this.constants.MenuButtonStyle('#000000'));
 
         // Quit button
         const qButton = new QuitButton(this, {
@@ -71,19 +67,21 @@ export default class MenuScene5 extends Phaser.Scene {
         ];
         // Create Interactives
         // TODO use game save file to determine what clicking each button does
-        for (let buttonObj of this.buttons) {
-            buttonObj.button.setInteractive();
+        this.buttons.forEach(b => {
+            b.button.setDisplaySize(width * .35, height * .25);
+            b.text.setOrigin(0.5);
+            b.button.setInteractive();
 
-            buttonObj.button.on('pointerover', () => {
-                buttonObj.button.setTint(0x7878ff);
+            b.button.on('pointerover', () => {
+                b.button.setTint(0x7878ff);
             });
-            buttonObj.button.on('pointerout', () => {
-                buttonObj.button.clearTint();
+            b.button.on('pointerout', () => {
+                b.button.clearTint();
             });
-            buttonObj.button.on('pointerup', () => {
+            b.button.on('pointerup', () => {
                 this.menuSounds.menuClick.play();
                 console.log('Unimplemented');
             });
-        }
+        });
     }
 }

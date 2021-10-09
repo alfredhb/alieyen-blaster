@@ -1,12 +1,10 @@
 import Phaser from 'phaser';
+import Constants from '../../../lib/constants';
 import AlienGrunt from '../../../gameobjects/alien_grunt';
 import Bullet from '../../../gameobjects/bullet'
 import QuitButton from '../../../gameobjects/quit_button';
 
 const alien_grunt_score = 10;
-
-// TODO: move to separate file
-const zeroPad = (num, places) => String(num).padStart(places, '0')
 
 // Build Assuming Singleplayer
 export default class ArcadeScene1 extends Phaser.Scene {
@@ -18,6 +16,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
     init(data) {
         this.players = data.playerCount;
         this.difficulty = data.difficulty;
+
+        this.constants = new Constants();
 
         console.log("initialized TimedMenu for ", this.players, " players")
     }
@@ -58,7 +58,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
     update() {
         // Update Timer Text
         this.timerText.setText(this.timer.getRemainingSeconds().toString().substr(0,4));
-        this.scoreText.setText("Score: " + zeroPad(this.score, 3));
+        this.scoreText.setText("Score: " + this.constants.ZeroPad(this.score, 3));
     }
 
     /**
@@ -181,12 +181,9 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.scoreText = this.add.text(
             width * 0.8,
             height * 0.1,
-            "Score: " + zeroPad(this.score, 3),
-            {
-                fontFamily: "impact",
-                fontSize: "50px",
-                color: "#FFF",
-            });
+            "Score: " + this.constants.ZeroPad(this.score, 3),
+            this.constants.MenuButtonStyle()
+        );
         this.scoreText.setDepth(10);
     }
 
@@ -223,11 +220,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.timerText = this.add.text(
             width * 0.1,
             height * 0.9,
-            this.timer.getRemainingSeconds().toString().substr(0,4), {
-                fontFamily: "impact",
-                fontSize: "50px",
-                color: "#FFF",
-        });
+            this.timer.getRemainingSeconds().toString().substr(0,4), this.constants.MenuButtonStyle());
     }
 
     /**

@@ -3,18 +3,8 @@
  */
 
  import Phaser from "phaser";
+ import Constants from "../../lib/constants";
  import QuitButton from "../../gameobjects/quit_button";
- 
- const titleStyle = {
-     fontFamily: 'impact',
-     fontSize: "75px",
-     color: "#FFF"
- }
- const buttonStyle = {
-     fontFamily: 'impact',
-     fontSize: "50px",
-     color: "#FFF"
- }
  
  export default class MenuScene9 extends Phaser.Scene {constructor() {
         super('difficultySelectMenu');
@@ -38,6 +28,9 @@
                 paused: true,
             });
         }
+
+        // Add constants
+        this.constants = new Constants();
     }
 
     preload() {
@@ -89,15 +82,15 @@
     }
 
     difficultySection(width, height) {
-        const difficultyText = this.add.text(width * 0.5, height * 0.325, 'DIFFICULTY', titleStyle);
+        const difficultyText = this.add.text(width * 0.5, height * 0.325, 'DIFFICULTY', this.constants.MenuTitleStyle());
         difficultyText.setOrigin(0.5);
 
         const easyButton = this.add.image(width * 0.325, height * .45, '__WHITE');
         const mediumButton = this.add.image(width * 0.5, height * .45, '__WHITE');
         const hardButton = this.add.image(width * 0.675, height * .45, '__WHITE');
-        const easyText = this.add.text(width * 0.325, height * 0.45, 'EASY', buttonStyle);
-        const mediumText = this.add.text(width * 0.5, height * 0.45, 'MEDIUM', buttonStyle);
-        const hardText = this.add.text(width * 0.675, height * 0.45, 'HARD', buttonStyle);
+        const easyText = this.add.text(width * 0.325, height * 0.45, 'EASY', this.constants.MenuButtonStyle());
+        const mediumText = this.add.text(width * 0.5, height * 0.45, 'MEDIUM', this.constants.MenuButtonStyle());
+        const hardText = this.add.text(width * 0.675, height * 0.45, 'HARD', this.constants.MenuButtonStyle());
         easyText.setName('1');
         mediumText.setName('2');
         hardText.setName('3');
@@ -149,7 +142,7 @@
         this.startButton.setDisplaySize(width * 0.375, height * 0.12);
         this.startButton.setTint(0x808080);
         this.startButton.setOrigin(0.5);
-        const startText = this.add.text(width * 0.5, height * 0.65, 'START', buttonStyle);
+        const startText = this.add.text(width * 0.5, height * 0.65, 'START', this.constants.MenuButtonStyle());
         startText.setOrigin(0.5);
 
         // Set interactiveness of button
