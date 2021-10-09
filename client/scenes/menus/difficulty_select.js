@@ -2,7 +2,6 @@
  * The menu seen in this slide: https://docs.google.com/presentation/d/1k2VFrhd0RngtsdU3UQYzQbVgNASu-717JjrWl4YOyiE/edit#slide=id.gf155f0bac5_0_40
  */
 
- import { ready } from "jquery";
  import Phaser from "phaser";
  import QuitButton from "../../gameobjects/quit_button";
  
