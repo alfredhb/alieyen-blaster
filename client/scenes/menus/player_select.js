@@ -160,7 +160,9 @@
                 this.scene.start(
                     'gamemodeMenu',
                     {
-                        playerCount: 1, // TODO add player handling in later scenes
+                        meta: {
+                            playerCount: 1, // TODO add player handling in later scenes
+                        }
                     }
                 );
             }

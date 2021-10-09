@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import QuitButton from "../../gameobjects/quit_button";
+import Constants from "../../lib/constants";
 
 export default class ReportScene extends Phaser.Scene {
     constructor() {
@@ -12,6 +13,8 @@ export default class ReportScene extends Phaser.Scene {
 
         this.levelScore = data.level.score;
         this.totalShots = data.level.shotsFired;
+
+        this.constants = new Constants()
 
         // Specific level report card data
         console.log("initialized ReportScene for ", this.players, " players")
@@ -40,7 +43,7 @@ export default class ReportScene extends Phaser.Scene {
 
         // Init report data 
         // title ()
-        const title = this.add.text(width * 0.5, height * 0.3, )
+        const title = this.add.text(width * 0.5, height * 0.3, this.constants.MenuTitleStyle())
 
         // score breakdown + accuracy
 

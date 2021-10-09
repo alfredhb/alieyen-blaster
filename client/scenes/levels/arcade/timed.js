@@ -89,6 +89,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
             console.log("Scored: ", this.score);
 
             // Transition to report card scene TODO
+            this.scene.start()
         }, 300);
     }
 

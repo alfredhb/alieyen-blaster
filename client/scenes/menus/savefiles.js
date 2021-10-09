@@ -8,7 +8,7 @@ export default class MenuScene5 extends Phaser.Scene {
     }
 
     init(data) {
-        this.players = data.playerCount;
+        this.players = data.meta.playerCount;
 
         this.constants = new Constants();
 
@@ -56,7 +56,11 @@ export default class MenuScene5 extends Phaser.Scene {
         // Quit button
         const qButton = new QuitButton(this, {
             backMenu: 'gamemodeMenu',
-            data: { playerCount: this.players },
+            data: { 
+                meta: {
+                    playerCount: this.players 
+                },
+            },
         });
 
         this.buttons = [
