@@ -1,11 +1,14 @@
 import Phaser from "phaser";
 
 export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
+    /**
+     * @param {Phaser.Scene} scene 
+     */
     constructor(scene) {
         super(scene, -50, -50, 'alien-grunt-1-1');
         let { width, height } = scene.scale;
 
-        // Add to physics and to canvas
+        // Add to physics and to canvas 
         scene.physics.add.existing(this);
         this.setPosition(width + 50, height + 50);
         this.setDisplaySize(130, 175)
@@ -22,10 +25,30 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
                 {key: 'alien-grunt-1-1'},
                 {key: 'alien-grunt-1-2'},
                 {key: 'alien-grunt-1-3'},
+                {key: 'alien-grunt-1-2'},
             ],
             frameRate: 3,
             repeat: -1,
         })
+    }
+
+    update(time, delta) {
+        if (this.x < -50 || this.x > this.maxX) {
+            this.setActive(false);
+            this.setVisible(false);
+
+            // Respawn logic
+            this.deadVal = true;
+            setTimeout(() => {
+                // Check if level finished in the 300ms
+                if (this == null) {
+                    return;
+                }
+
+                this.stop();
+                this.launch();
+            }, 300);     
+        }
     }
 
     // Randomly choose height, and direction
@@ -47,23 +70,17 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
         this.deadVal = false;
     }
 
-    update(time, delta) {
-        if (this.x < -50 || this.x > this.maxX) {
-            this.setActive(false);
-            this.setVisible(false);
-
-            // Respawn logic
-            this.deadVal = true;
-            setTimeout(() => {
-                // Check if level finished in the 300ms
-                if (this == null) {
-                    return;
-                }
-
-                this.stop();
-                this.launch();
-            }, 300);     
-        }
+    /**
+     * places the sprite statically at x y and makes it visible and active
+     * @param {number} x 
+     * @param {number} y 
+     */
+    place(x, y) {
+        this.setPosition(x, y);
+        this.setDisplaySize(150, 200);
+        this.anims.play('float');
+        this.setActive(true);
+        this.setVisible(true);
     }
 
     // TODO Bug allowing aliens to respawn after this.scene.levelDone flag is set

@@ -17,10 +17,12 @@ export default class ArcadeScene1 extends Phaser.Scene {
      * @param {{meta: {playerCount: number, difficulty: number}, level: {any}?, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}?}} data 
      */
     init(data) {
-        this.players = data.playerCount;
-        this.difficulty = data.difficulty;
+        this.players = data.meta.playerCount;
+        this.difficulty = data.meta.difficulty;
 
         this.constants = new Constants();
+        this.score = 0;
+        this.totalShots = 0;
 
         console.log("initialized TimedMenu for ", this.players, " players")
     }
@@ -53,7 +55,6 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
         // TODO: remove this
         // Temporary timer start and aliens
-        this.score = 0;
         this.timer.paused = false;
         this.alienTimers[0].paused = false;
     }
@@ -92,7 +93,23 @@ export default class ArcadeScene1 extends Phaser.Scene {
             console.log("Scored: ", this.score);
 
             // Transition to report card scene TODO
-            this.scene.start()
+            this.scene.start('arcadeReportScene', {
+                meta: {
+                    playerCount: this.players,
+                    difficulty: this.difficulty,
+                },
+                level: {
+                    score: this.score,
+                    shotsFired: this.totalShots,
+                },
+                scene: {
+                    prevScene: {
+                        name: 'timedArcade',
+                        type: 'ARCADE',
+                    }
+                }
+            }
+            )
         }, 300);
     }
 
@@ -121,8 +138,10 @@ export default class ArcadeScene1 extends Phaser.Scene {
             backMenu: 'arcadeMenu',
             execFunc: () => { if (this.timer) { this.timer.destroy() }},
             data: { 
-                playerCount: this.players,
-                difficulty: this.difficulty,
+                meta: {
+                    playerCount: this.players,
+                    difficulty: this.difficulty,
+                }
             },
         });
     }
@@ -178,6 +197,9 @@ export default class ArcadeScene1 extends Phaser.Scene {
                 this
             );
             bullet.fire(this.turret.x, this.turret.y + 50, angle);
+
+            // Inc total shot count
+            this.totalShots += 1;
         }
     }
 
@@ -229,7 +251,9 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.timerText = this.add.text(
             width * 0.1,
             height * 0.9,
-            this.timer.getRemainingSeconds().toString().substr(0,4), this.constants.MenuButtonStyle());
+            this.timer.getRemainingSeconds().toString().substr(0,4),
+            this.constants.MenuButtonStyle()
+        );
     }
 
     /**
