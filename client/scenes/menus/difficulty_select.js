@@ -10,7 +10,10 @@
         super('difficultySelectMenu');
     }
     
-    // Capture the next scene to progress to after selections are made
+    /**
+     * Capture the next scene to progress to after selections are made
+     * @param {{meta: {playerCount: number, difficulty: number}, level: {any}, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}}} data 
+     */
     init(data) {
         this.nextScene = data.nextScene;
         this.prevScene = data.prevScene; // {scene: string, type: enum{'ARCADE' || STORY'}

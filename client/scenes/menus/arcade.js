@@ -6,7 +6,11 @@ export default class MenuScene3 extends Phaser.Scene {
     constructor() {
         super('arcadeMenu')
     }
-
+    
+    /**
+     * Capture the next scene to progress to after selections are made
+     * @param {{meta: {playerCount: number, difficulty: number}, level: {any}?, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}?}} data 
+     */
     init(data) {
         this.players = data.meta.playerCount;
         this.difficulty = (data.meta.difficulty) ? data.meta.difficulty : 1; // easy unless returned from prev scene

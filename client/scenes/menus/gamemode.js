@@ -5,8 +5,11 @@ export default class MenuScene2 extends Phaser.Scene {
     constructor() {
         super('gamemodeMenu')
     }
-
-    // Capture Player count from PlayerSelectMenu
+    
+    /**
+     * Capture the next scene to progress to after selections are made
+     * @param {{meta: {playerCount: number, difficulty: number?}, level: {any}?, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}?}} data 
+     */
     init(data) {
         this.players = data.meta.playerCount;
 

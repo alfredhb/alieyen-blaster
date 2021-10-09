@@ -11,8 +11,11 @@ export default class ArcadeScene1 extends Phaser.Scene {
     constructor() {
         super('timedArcade')
     }
-
-    // Includes the player selection & difficulty selection made in preLevelArcade
+    
+    /**
+     * Capture the next scene to progress to after selections are made
+     * @param {{meta: {playerCount: number, difficulty: number}, level: {any}?, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}?}} data 
+     */
     init(data) {
         this.players = data.playerCount;
         this.difficulty = data.difficulty;
