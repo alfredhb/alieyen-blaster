@@ -77,8 +77,13 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.aliens.getChildren().forEach(a => a.play('explode'));
 
         setTimeout(() => {
-            this.aliens.destroy(false, true);
-            this.bullets.destroy(false, true);
+            try {
+                this.aliens.destroy(false, true);
+                this.bullets.destroy(false, true);
+            } catch (e) {
+                // Catch any errors thrown here and log.
+                console.log(e);
+            }
 
             // Start Score Calc and Display Logic TODO remove me
             console.log("Scored: ", this.score);
