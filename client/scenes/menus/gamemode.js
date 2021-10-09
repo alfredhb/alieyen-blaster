@@ -8,7 +8,7 @@ export default class MenuScene2 extends Phaser.Scene {
 
     // Capture Player count from PlayerSelectMenu
     init(data) {
-        this.players = data.playerCount;
+        this.players = data.meta.playerCount;
 
         console.log("initialized GamemodeMenu for ", this.players, " players")
     }
@@ -85,7 +85,9 @@ export default class MenuScene2 extends Phaser.Scene {
             this.scene.start(
                 'arcadeMenu',
                 {
-                    playerCount: this.players,
+                    meta: {
+                        playerCount: this.players,
+                    }
                 }
             );
         });

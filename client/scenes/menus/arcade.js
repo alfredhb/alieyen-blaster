@@ -7,8 +7,8 @@ export default class MenuScene3 extends Phaser.Scene {
     }
 
     init(data) {
-        this.players = data.playerCount;
-        this.difficulty = (data.difficulty) ? data.difficulty : 1; // easy unless returned from prev scene
+        this.players = data.meta.playerCount;
+        this.difficulty = (data.meta.difficulty) ? data.meta.difficulty : 1; // easy unless returned from prev scene
 
         console.log("initialized ArcadeMenu for ", this.players, " players on difficulty ", this.difficulty)
     }
@@ -50,7 +50,11 @@ export default class MenuScene3 extends Phaser.Scene {
         // Quit Button
         const quit = new QuitButton(this, {
             backMenu: 'gamemodeMenu',
-            data: { playerCount: this.players },
+            data: { 
+                meta: {
+                    playerCount: this.players 
+                },
+            },
         });
 
         // Timed button
@@ -97,8 +101,10 @@ export default class MenuScene3 extends Phaser.Scene {
         tiButton.on('pointerup', () => {
             this.scene.start('timedArcade',
                 {
-                    playerCount: this.players,
-                    difficulty: this.difficulty,
+                    meta: {
+                        playerCount: this.players,
+                        difficulty: this.difficulty,
+                    }
                 }
             );
         });

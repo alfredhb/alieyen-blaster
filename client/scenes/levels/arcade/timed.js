@@ -6,7 +6,7 @@ import QuitButton from '../../../gameobjects/quit_button';
 const alien_grunt_score = 10;
 
 // TODO: move to separate file
-const zeroPad = (num, places) => String(num).padStart(places, '0')
+const zeroPad = (num, places) => String(num).padStart(places, '0');
 
 // Build Assuming Singleplayer
 export default class ArcadeScene1 extends Phaser.Scene {
@@ -16,8 +16,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
     // Includes the player selection & difficulty selection made in preLevelArcade
     init(data) {
-        this.players = data.playerCount;
-        this.difficulty = data.difficulty;
+        this.players = data.meta.playerCount;
+        this.difficulty = data.meta.difficulty;
 
         console.log("initialized TimedMenu for ", this.players, " players")
     }
@@ -112,8 +112,10 @@ export default class ArcadeScene1 extends Phaser.Scene {
             backMenu: 'arcadeMenu',
             execFunc: () => { if (this.timer) { this.timer.destroy() }},
             data: { 
-                playerCount: this.players,
-                difficulty: this.difficulty,
+                meta: {
+                    playerCount: this.players,
+                    difficulty: this.difficulty,
+                },
             },
         });
     }
