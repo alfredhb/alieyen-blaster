@@ -52,9 +52,14 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
             this.setActive(false);
             this.setVisible(false);
 
-            // any respawn logic
+            // Respawn logic
             this.deadVal = true;
             setTimeout(() => {
+                // Check if level finished in the 300ms
+                if (this == null) {
+                    return;
+                }
+
                 this.stop();
                 this.launch();
             }, 300);     
@@ -73,8 +78,13 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
             this.setVisible(false);
             this.setActive(false);
 
-            // any respawn logic
+            // Respawn logic
             setTimeout(() => {
+                // Check if level finished in the 300ms
+                if (this == null) {
+                    return;
+                }
+
                 this.stop();
                 this.launch();
             }, 300);

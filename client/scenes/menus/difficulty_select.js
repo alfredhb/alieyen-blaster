@@ -70,8 +70,6 @@
         // Start Logic
         this.startSection(width, height);
 
-        
-
         // Quit Button
         const quitButton = new QuitButton(this, {
             backMenu: this.prevScene.scene,

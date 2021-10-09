@@ -19,7 +19,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.players = data.meta.playerCount;
         this.difficulty = data.meta.difficulty;
 
-        console.log("initialized TimedMenu for ", this.players, " players")
+        console.log("initialized TimedScene for ", this.players, " players")
     }
 
     preload() {
@@ -51,6 +51,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
         // TODO: remove this
         // Temporary timer start and aliens
         this.score = 0;
+        this.shotsFired = 0;
         this.timer.paused = false;
         this.alienTimers[0].paused = false;
     }
@@ -84,6 +85,18 @@ export default class ArcadeScene1 extends Phaser.Scene {
             console.log("Scored: ", this.score);
 
             // Transition to report card scene TODO
+            this.scene.start('reportScene',
+                {
+                    meta: {
+                        playerCount: this.players,
+                        difficulty: this.difficulty,
+                    },
+                    level: {
+                        score: this.score,
+                        shotsFired: this.shotsFired,
+                    }
+                }
+            );
         }, 300);
     }
 
@@ -171,6 +184,9 @@ export default class ArcadeScene1 extends Phaser.Scene {
                 this
             );
             bullet.fire(this.turret.x, this.turret.y + 50, angle);
+
+            // increment fire count
+            this.shotsFired += 1;
         }
     }
 
