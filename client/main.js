@@ -9,8 +9,7 @@ import DifficultySelectMenu from './scenes/menus/difficulty_select'
 import GamemodeMenu from './scenes/menus/gamemode';
 import InitialLoad from './scenes/data/initial_load';
 import PlayerSelectMenu from './scenes/menus/player_select';
-import PreLevelScene from './scenes/menus/pre_level';
-import ReportScene from './scenes/levels/report';
+import ArcadeReportScene from './scenes/levels/arcade/report';
 import SavefileMenu from './scenes/menus/savefiles';
 import StartMenu from './scenes/menus/start';
 import TimedArcade from './scenes/levels/arcade/timed';
@@ -28,8 +27,7 @@ var config = {
   },
   scene: [
     InitialLoad, StartMenu, PlayerSelectMenu, GamemodeMenu, SavefileMenu, 
-    PreLevelScene, ArcadeMenu, DifficultySelectMenu, TimedArcade, DefaultPage,
-    ReportScene,
+    ArcadeReportScene, ArcadeMenu, DifficultySelectMenu, TimedArcade, DefaultPage,
   ],
 };
 
