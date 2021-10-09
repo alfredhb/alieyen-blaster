@@ -14,7 +14,8 @@
     init(data) {
         this.nextScene = data.nextScene;
         this.prevScene = data.prevScene; // {scene: string, type: enum{'ARCADE' || STORY'}
-        this.players = data.players;
+
+        this.players = data.meta.players;
 
         // Game data holds player count in a central place
         this.difficulty = 0;
@@ -65,6 +66,11 @@
         // Quit Button
         const quitButton = new QuitButton(this, {
             backMenu: this.prevScene.scene,
+            data: {
+                meta: {
+                    playerCount: this.players,
+                    difficulty: (this.difficulty) ? this.difficulty : 1,
+                }}
         });
     }
 
@@ -163,8 +169,10 @@
                 this.scene.start(
                     this.nextScene,
                     {
-                        players: this.players,
-                        difficulty: this.difficulty,
+                        meta: {
+                            players: this.players,
+                            difficulty: this.difficulty,
+                        }
                     }
                 );
             }
