@@ -15,8 +15,8 @@
      * @param {{meta: {playerCount: number, difficulty: number}, level: {any}, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}}} data 
      */
     init(data) {
-        this.nextScene = data.nextScene;
-        this.prevScene = data.prevScene; // {scene: string, type: enum{'ARCADE' || STORY'}
+        this.nextScene = data.scene.nextScene;
+        this.prevScene = data.scene.prevScene; // {scene: string, type: enum{'ARCADE' || STORY'}
 
         this.players = data.meta.players;
 
@@ -68,7 +68,7 @@
 
         // Quit Button
         const quitButton = new QuitButton(this, {
-            backMenu: this.prevScene.scene,
+            backMenu: this.prevScene.name,
             data: {
                 meta: {
                     playerCount: this.players,
@@ -170,7 +170,7 @@
                 this.timer.remove();
                 this.menuSounds.menuClick.play();
                 this.scene.start(
-                    this.nextScene,
+                    this.nextScene.name,
                     {
                         meta: {
                             players: this.players,
