@@ -29,8 +29,9 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
     preload() {
         // Load Sounds
-        this.menuSounds = {
+        this.levelSounds = {
             menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
+            explode: this.sound.add('explode-3', { loop: false, volume: 0.35 }),
         }
     }
 
@@ -342,6 +343,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
      */
     collisionFunc(bullet, alien) {
         if (!alien.dead() && bullet.active) {
+            this.levelSounds.explode.play();
             bullet.kill();
             alien.kill();
             
