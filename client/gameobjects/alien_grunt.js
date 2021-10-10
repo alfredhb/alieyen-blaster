@@ -29,7 +29,7 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
             ],
             frameRate: 3,
             repeat: -1,
-        })
+        });
     }
 
     update(time, delta) {
@@ -39,15 +39,7 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
 
             // Respawn logic
             this.deadVal = true;
-            setTimeout(() => {
-                // Check if level finished in the 300ms
-                if (this == null) {
-                    return;
-                }
-
-                this.stop();
-                this.launch();
-            }, 300);     
+            this.respawn();   
         }
     }
 
@@ -96,19 +88,23 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
             this.setActive(false);
 
             // Respawn logic
-            setTimeout(() => {
-                // Check if level finished in the 300ms
-                if (this == null) {
-                    return;
-                }
-
-                this.stop();
-                this.launch();
-            }, 300);
+            this.respawn();
         });
     }
 
     dead() {
         return this.deadVal
+    }
+
+    respawn() {
+        setTimeout(() => {
+            // Check if level finished in the 300ms
+            if (this == null) {
+                return;
+            }
+
+            this.stop();
+            this.launch();
+        }, 300);
     }
 }
