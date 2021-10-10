@@ -24,5 +24,20 @@ Meteor.methods({
     } catch {
       throw Meteor.Error("File not found with path: " + path);
     }
-  }
+  },
+
+  /**
+   * @param {string} path 
+   * @returns {string} base64 of asset
+   */
+  loadSoundAsset(path) {
+    try {
+      console.log("path ", path);
+      var asset = fs.readFileSync("../../../../../data/sounds/" + path);
+
+      return asset.toString('base64');
+    } catch (e) {
+      throw Meteor.Error(e);
+    }
+  },
 });
