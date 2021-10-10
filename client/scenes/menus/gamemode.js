@@ -19,7 +19,9 @@ export default class MenuScene2 extends Phaser.Scene {
     preload() {
         // Load Sounds
         this.menuSounds = {
-            menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
+            menuClick: this.sound.add('menu-click', { loop: false, volume: .5 }),
+            arcade: this.sound.add('arcade', { loop: false }),
+            story: this.sound.add('story', { loop: false }),
         }
     }
 
@@ -42,59 +44,52 @@ export default class MenuScene2 extends Phaser.Scene {
         });
 
         // Story button
-        const storyButton = this.add.image(width * 0.25, height * 0.5, 'story-button').setDisplaySize(width * 0.5, height);
-        const storyText = this.add.text(storyButton.x, storyButton.y, 'Story', textStyle).setOrigin(0.5);
-        // TODO: set to TTS of text
-        const storySound = this.menuSounds.menuClick;
+        const storyButton = this.add.image(width * 0.25, height * 0.5, 'story-button');
+        const storyText = this.add.text(storyButton.x, storyButton.y, 'Story', textStyle);
+        storyText.setName('savefileMenu');
+        const storySound = this.menuSounds.story;
     
         // Arcade button
-        const arcadeButton = this.add.image(width * 0.75, height * 0.5, 'arcade-button').setDisplaySize(width * 0.5, height);
-        const arcadeText = this.add.text(arcadeButton.x, arcadeButton.y, 'Arcade', textStyle).setOrigin(0.5);
-        // TODO: set to TTS of text
-        const arcadeSound = this.menuSounds.menuClick;
+        const arcadeButton = this.add.image(width * 0.75, height * 0.5, 'arcade-button');
+        const arcadeText = this.add.text(arcadeButton.x, arcadeButton.y, 'Arcade', textStyle);
+        arcadeText.setName('arcadeMenu');
+        const arcadeSound = this.menuSounds.arcade;
 
         this.buttons = [
             {button: storyButton, text: storyText, sound: storySound},
             {button: arcadeButton, text: arcadeText, sound: arcadeSound},
         ]
         // Create Interactives
-        for (let buttonObj of this.buttons) {
-            buttonObj.button.setInteractive();
+        this.buttons.forEach(b => {
+            b.button.setDisplaySize(width * 0.5, height);
+            b.text.setOrigin(0.5);
+            b.button.setInteractive();
 
-            buttonObj.button.on('pointerover', () => {
-                buttonObj.button.setTint(0xFF0000);
-                buttonObj.text.setTint(0xFFF);
+            b.button.on('pointerover', () => {
+                b.button.setTint(0xFF0000);
+                b.text.setTint(0xFFF);
 
-                // TODO: Add buttonObj.sound.play() when TTS is added of them
-            })
-            buttonObj.button.on('pointerout', () => {
-                buttonObj.button.clearTint();
-                buttonObj.text.clearTint();
-            })
-        }
-
-        // Set action for specific buttons, pass player count to next scenes
-        storyButton.on('pointerup', () => {
-            this.menuSounds.menuClick.play();
-            this.scene.start(
-                'savefileMenu',
-                {
-                    meta: {
-                        playerCount: this.players,
-                    }
+                // Play if not playing already
+                if (!b.sound.isPlaying) {
+                    b.sound.play();
                 }
-            );
-        });
-        arcadeButton.on('pointerup', () => {
-            this.menuSounds.menuClick.play();
-            this.scene.start(
-                'arcadeMenu',
-                {
-                    meta: {
-                        playerCount: this.players,
+
+            }).on('pointerout', () => {
+                b.button.clearTint();
+                b.text.clearTint();
+
+            }).on('pointerup', () => {
+                this.menuSounds.menuClick.play();
+                this.scene.start(
+                    b.text.name,
+                    {
+                        meta: {
+                            playerCount: this.players,
+                        }
                     }
-                }
-            );
+                );
+
+            });
         });
     }
 }
