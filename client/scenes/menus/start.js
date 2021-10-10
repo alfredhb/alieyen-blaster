@@ -8,7 +8,9 @@ export default class MenuScene4 extends Phaser.Scene {
     preload() {
         // Load Sounds
         this.menuSounds = {
-            menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
+            menuClick: this.sound.add('menu-click', { loop: false, volume: .5 }),
+            playTTS: this.sound.add('play', { loop: false }),
+            quitTTS: this.sound.add('quit', { loop: false }),
         }
     }
 
@@ -39,7 +41,7 @@ export default class MenuScene4 extends Phaser.Scene {
             color: "#FF0000",
             fontSize: "50px",
         }).setOrigin(0.5);
-        const plSound = this.menuSounds.menuClick;
+        const plSound = this.menuSounds.playTTS;
 
         // Quit Button
         const qButton = this.add.image(width * 0.95, height * 0.93, '__WHITE').setDisplaySize(width * 0.05, width * 0.05);
@@ -49,7 +51,7 @@ export default class MenuScene4 extends Phaser.Scene {
             strokeThickness: 3,
 			stroke: '#FF0000',
         }).setOrigin(0.5);
-        const qSound = this.menuSounds.menuClick;
+        const qSound = this.menuSounds.quitTTS;
 
         this.buttons = [
             {button: plButton, text: plText, sound: plSound},
@@ -62,7 +64,11 @@ export default class MenuScene4 extends Phaser.Scene {
             buttonObj.button.on('pointerover', () => {
                 buttonObj.button.setTint(0xFF0000);
                 buttonObj.text.setTint(0xFFF);
-                // buttonObj.sound.play(); // Play the saved sound
+
+                // Play if not playing already
+                if (!buttonObj.sound.isPlaying) {
+                    buttonObj.sound.play();
+                }
             });
             buttonObj.button.on('pointerout', () => {
                 buttonObj.button.clearTint();
@@ -81,5 +87,17 @@ export default class MenuScene4 extends Phaser.Scene {
             console.log('Unimplemented');
             qSound.play();
         });
+    }
+
+    /**
+     * Adds a listener / timer to bObj with this behavior:
+     * User hovers over button coninuously for 5 seconds, during that time, 
+     * button sound is played on loop, after 5 seconds, the button is clicked.
+     * @param {{button: Phaser.GameObjects.Image, text: Phaser.GameObjects.Text, sound: Phaser.Sound.BaseSound}} bObj 
+     */
+    hoverClick(bObj) {
+        // TODO: Beta
+
+        return;
     }
 }
