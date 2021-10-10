@@ -9,7 +9,8 @@ export default class DataScene1 extends Phaser.Scene {
         // this.load.setCORS('anonymous');
         this.load.setBaseURL('https://labs.phaser.io');
 
-        this.localImageAssets = [
+        // Enumerate assets
+        this.localImages = [
             // Backgrounds
             {key: "arcade-bg", path: "background/background3.png"},
             {key: "space-bg", path: "background/background1.png"},
@@ -18,6 +19,10 @@ export default class DataScene1 extends Phaser.Scene {
             {key: "arcade-button", path: "buttons/arcade_no_text.png"},
             {key: "gameslot-button", path: "buttons/game_slot.png"},
             {key: "story-button", path: "buttons/story_no_text.png"},
+            {key: 'timed-button', path: "features/clock.png"},
+            {key: 'endless-button', path: "features/infinity.png"},
+            {key: 'lives-button', path: "features/heart.png"},
+            {key: 'gauntlet-button', path: "features/alien.png"},
             // Characters
             {key: "alien-boss", path: "characters/boss_min_1.png"},
             // Animation frames
@@ -29,10 +34,21 @@ export default class DataScene1 extends Phaser.Scene {
             {key: "alien-grunt-1-3", path: "characters/green_alien_1_3.png"},
 
         ]
-        this.onlineImageAssets = [
+        this.onlineImages = [
             {key: 'bullet', path: 'assets/sprites/bullet.png'},
         ]
-        this.soundAssets = [
+        this.localSounds = [
+            // TTS
+            {key: 'arcade', path: 'tts/arcade.mp3'},
+            {key: 'quit', path: 'tts/quit.mp3'},
+            {key: 'play', path: 'tts/play.mp3'},
+            {key: 'story', path: 'tts/story.mp3'},
+            // Sprite sounds
+            {key: 'explode-1', path: 'sprite/explosion-1.mp3'},
+            {key: 'explode-2', path: 'sprite/explosion-2.mp3'},
+            {key: 'explode-3', path: 'sprite/explosion-3.mp3'},
+        ]
+        this.onlineSounds = [
             {key: "menu-click", path: "assets/audio/kyobi/wavs/menuClick.wav"},
         ]
         this.imagesLoaded = 0;
@@ -40,25 +56,26 @@ export default class DataScene1 extends Phaser.Scene {
         // load all assets
         // TODO: Parallelization?
         this.addLoadListener();
+
+        // Load Local Sounds
+        this.loadLocalSounds();
+        
+        // Load Online Sounds
+        for (let asset of this.onlineSounds) {
+            this.load.audio(asset.key, asset.path);
+        }
         
         // Load Local Images
         this.loadLocalImages();
 
         // Load Online Images
         this.loadOnlineImages();
-        
-        // Load Online Sounds
-        for (let asset of this.soundAssets) {
-            this.load.audio(asset.key, asset.path);
-        }
-
-        // Local Sounds would use this.sound.decode([{data: base64, key: id}])
     }
 
     // Must listen for all textures to be loaded before continuing into game
     addLoadListener() {
         const { width, height } = this.scale;
-        let totalAssets = (this.localImageAssets.length + this.onlineImageAssets.length);
+        let totalAssets = (this.localImages.length + this.onlineImages.length);
         let loadBlockWidth = (width * 0.45) / totalAssets
 
         this.textures.on('addtexture', (key, texture) => {
@@ -81,11 +98,11 @@ export default class DataScene1 extends Phaser.Scene {
     }
 
     loadLocalImages() {
-        if (this.localImageAssets.length == 0) {
+        if (this.localImages.length == 0) {
             return;
         }
 
-        for (let asset of this.localImageAssets) {
+        for (let asset of this.localImages) {
             Meteor.call("loadImageAsset", asset.path, (err, res) => {
                 if (err != null) {
                     console.log(err);
@@ -99,8 +116,26 @@ export default class DataScene1 extends Phaser.Scene {
     }
 
     loadOnlineImages() {
-        for (let asset of this.onlineImageAssets) {
+        for (let asset of this.onlineImages) {
             this.load.image(asset.key, asset.path);
+        }
+    }
+
+    // Local Sounds would use this.sound.decode([{data: base64, key: id}])
+    loadLocalSounds() {
+        if (this.localSounds.length == 0) {
+            return;
+        }
+
+        for (let asset of this.localSounds) {
+            Meteor.call("loadSoundAsset", asset.path, (err, res) => {
+                if (err != null) {
+                    console.log(err);
+                    return;
+                }
+
+                this.sound.decodeAudio(asset.key, res);
+            })
         }
     }
 
