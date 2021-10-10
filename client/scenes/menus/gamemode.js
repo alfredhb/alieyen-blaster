@@ -79,7 +79,9 @@ export default class MenuScene2 extends Phaser.Scene {
             this.scene.start(
                 'savefileMenu',
                 {
-                    playerCount: this.players,
+                    meta: {
+                        playerCount: this.players,
+                    }
                 }
             );
         });
