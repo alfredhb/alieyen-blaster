@@ -34,11 +34,37 @@ export default class MenuScene3 extends Phaser.Scene {
         this.add.image(width * 0.5, height * 0.5, 'arcade-bg').setDisplaySize(width, height)
 
         // Title
-        this.add.text(width * 0.5, height * 0.15, 'Arcade', this.constants.MenuTitleStyle()).setOrigin(0.5);
+        this.initTitle(width, height);
 
+        // Buttons
         this.initButtons(width, height);
     }
 
+    /**
+     * Add title and interactive listener which plays tts
+     * @param {number} width 
+     * @param {number} height 
+     */
+    initTitle(width, height) {
+        const title = this.add.text(width * 0.5, height * 0.15, 'Arcade', this.constants.MenuTitleStyle());
+        title.setOrigin(0.5);
+
+        const titleSound = this.sound.add('arcade', { loop: false });
+
+        // interactives
+        title.setInteractive();
+        title.on('pointerover', () => {
+            if (!titleSound.isPlaying) {
+                titleSound.play();
+            }
+        })
+    }
+
+    /**
+     * Add buttons and listeners
+     * @param {number} width 
+     * @param {number} height 
+     */
     initButtons(width, height) {
         // Difficulty Settings Button
         const difButton = this.add.image(width * 0.95, height * 0.07, '__WHITE').setDisplaySize(width * 0.05, width * 0.05);
@@ -56,25 +82,29 @@ export default class MenuScene3 extends Phaser.Scene {
 
         // Timed button
         const tiButton = this.add.image(width * 0.25, height * 0.35, 'gameslot-button');
-        const tiText = this.add.text(tiButton.x, tiButton.y, 'Timed', this.constants.MenuButtonStyle('#000000'));
+        const tiIcon = this.add.image(width * 0.25, height * 0.325, 'timed-button');
+        const tiText = this.add.text(tiButton.x, height * 0.40, 'Timed', this.constants.MenuButtonStyle('#000000'));
 
         // Endless button
         const enButton = this.add.image(width * 0.75, height * 0.35, 'gameslot-button');
-        const enText = this.add.text(enButton.x, enButton.y, 'Endless', this.constants.MenuButtonStyle('#000000'));
+        const enIcon = this.add.image(width * 0.75, height * 0.325, 'endless-button');
+        const enText = this.add.text(enButton.x, height * 0.40, 'Endless', this.constants.MenuButtonStyle('#000000'));
 
         // Lives Button
         const liButton = this.add.image(width * 0.25, height * 0.7, 'gameslot-button');
-        const liText = this.add.text(liButton.x, liButton.y, 'Lives', this.constants.MenuButtonStyle('#000000'));
+        const liIcon = this.add.image(width * 0.25, height * 0.675, 'endless-button');
+        const liText = this.add.text(liButton.x, height * 0.75, 'Lives', this.constants.MenuButtonStyle('#000000'));
 
         // Gauntlet button
         const gaButton = this.add.image(width * 0.75, height * 0.7, 'gameslot-button');
-        const gaText = this.add.text(gaButton.x, gaButton.y, 'Gauntlet', this.constants.MenuButtonStyle('#000000'));
+        const gaIcon = this.add.image(width * 0.75, height * 0.675, 'gauntlet-button');
+        const gaText = this.add.text(gaButton.x, height * 0.75, 'Gauntlet', this.constants.MenuButtonStyle('#000000'));
 
         this.buttons = [
-            {button: tiButton, text: tiText, sound: null},
-            {button: enButton, text: enText, sound: null},
-            {button: liButton, text: liText, sound: null},
-            {button: gaButton, text: gaText, sound: null},
+            {button: tiButton, icon: tiIcon, text: tiText, sound: null},
+            {button: enButton, icon: enIcon, text: enText, sound: null},
+            {button: liButton, icon: liIcon, text: liText, sound: null},
+            {button: gaButton, icon: gaIcon, text: gaText, sound: null},
         ].forEach(b => {
             b.button.setDisplaySize(width * .35, height * .25);
             b.text.setOrigin(0.5);
@@ -82,10 +112,12 @@ export default class MenuScene3 extends Phaser.Scene {
 
             b.button.on('pointerover', () => {
                 b.button.setTint(0xFF0000);
+                b.icon.setTint(0xFFF);
                 b.text.setTint(0xFFF);
             });
             b.button.on('pointerout', () => {
                 b.button.clearTint();
+                b.icon.clearTint();
                 b.text.clearTint();
             });
             b.button.on('pointerup', () => {
@@ -94,7 +126,7 @@ export default class MenuScene3 extends Phaser.Scene {
         });
 
         // Set action for specific buttons
-        // TODO: implement player count saving and other fntns
+        // TODO: move to inside forEach @ L106 using names.
         tiButton.on('pointerup', () => {
             this.scene.start('timedArcade',
                 {
