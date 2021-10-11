@@ -83,22 +83,22 @@ export default class MenuScene3 extends Phaser.Scene {
         // Timed button
         const tiButton = this.add.image(width * 0.25, height * 0.35, 'gameslot-button');
         const tiIcon = this.add.image(width * 0.25, height * 0.325, 'timed-button');
-        const tiText = this.add.text(tiButton.x, height * 0.40, 'Timed', this.constants.MenuButtonStyle('#000000'));
+        const tiText = this.add.text(tiButton.x, height * 0.425, 'Timed', this.constants.MenuButtonStyle('#000000'));
 
         // Endless button
         const enButton = this.add.image(width * 0.75, height * 0.35, 'gameslot-button');
         const enIcon = this.add.image(width * 0.75, height * 0.325, 'endless-button');
-        const enText = this.add.text(enButton.x, height * 0.40, 'Endless', this.constants.MenuButtonStyle('#000000'));
+        const enText = this.add.text(enButton.x, height * 0.425, 'Endless', this.constants.MenuButtonStyle('#000000'));
 
         // Lives Button
         const liButton = this.add.image(width * 0.25, height * 0.7, 'gameslot-button');
         const liIcon = this.add.image(width * 0.25, height * 0.675, 'endless-button');
-        const liText = this.add.text(liButton.x, height * 0.75, 'Lives', this.constants.MenuButtonStyle('#000000'));
+        const liText = this.add.text(liButton.x, height * 0.775, 'Lives', this.constants.MenuButtonStyle('#000000'));
 
         // Gauntlet button
         const gaButton = this.add.image(width * 0.75, height * 0.7, 'gameslot-button');
         const gaIcon = this.add.image(width * 0.75, height * 0.675, 'gauntlet-button');
-        const gaText = this.add.text(gaButton.x, height * 0.75, 'Gauntlet', this.constants.MenuButtonStyle('#000000'));
+        const gaText = this.add.text(gaButton.x, height * 0.775, 'Gauntlet', this.constants.MenuButtonStyle('#000000'));
 
         this.buttons = [
             {button: tiButton, icon: tiIcon, text: tiText, sound: null},
