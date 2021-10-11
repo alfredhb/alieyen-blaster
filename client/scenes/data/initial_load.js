@@ -25,6 +25,7 @@ export default class DataScene1 extends Phaser.Scene {
             {key: 'gauntlet-button', path: "features/alien.png"},
             // Characters
             {key: "alien-boss", path: "characters/boss_min_1.png"},
+            {key: "turret-colored", path: "features/turret_col.png"},
             // Animation frames
             {key: "ex-1", path: "features/ex1.png"},
             {key: "ex-2", path: "features/ex2.png"},

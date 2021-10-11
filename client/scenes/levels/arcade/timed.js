@@ -154,7 +154,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
      */
     addTurret(width, height) {
         // Add Asset
-        this.turret = this.add.isotriangle(width * 0.5, height * 0.9, 96, 64, false, 0xFFF).setDisplaySize(25, 125);
+        this.turret = this.add.image(width * 0.5, height * 0.9, 'turret-colored');
+        this.turret.setDisplaySize(50, 250);
         this.turret.setOrigin(0.5);
         this.turret.setDepth(10);
 
