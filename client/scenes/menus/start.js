@@ -97,6 +97,7 @@ export default class MenuScene4 extends Phaser.Scene {
      */
     hoverClick(bObj) {
         // TODO: Beta
+        // must be used for all buttons, so also move this to separate file
 
         return;
     }
