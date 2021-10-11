@@ -32,7 +32,6 @@ Meteor.methods({
    */
   loadSoundAsset(path) {
     try {
-      console.log("path ", path);
       var asset = fs.readFileSync("../../../../../data/sounds/" + path);
 
       return asset.toString('base64');
