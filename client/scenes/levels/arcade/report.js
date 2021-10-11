@@ -110,7 +110,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
      */
     levelReport(width, height) {
         const scoreText = this.add.text(width * 0.275, height * 0.35, 'SCORE :', this.constants.MenuButtonStyle());
-        const accuracyText = this.add.text(width * 0.275, height * 0.4, 'ACCURACY :', this.constants.MenuButtonStyle());
+        const accuracyText = this.add.text(width * 0.275, height * 0.425, 'ACCURACY :', this.constants.MenuButtonStyle());
         const scoreVal = this.add.text(
             width * 0.675, 
             height * 0.35, 
@@ -119,7 +119,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
         );
         const accuracyVal = this.add.text(
             width * 0.675,
-            height * 0.4, 
+            height * 0.425, 
             (this.levelScore / this.totalShots * 10).toString().substr(0,4) + "%",
             this.constants.MenuButtonStyle("#FF0000")
         );

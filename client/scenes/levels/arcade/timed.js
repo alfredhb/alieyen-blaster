@@ -129,7 +129,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
         // Add Cockpit TODO
 
         // Add Tracking turret
-        this.addTurret(width, height);
+        this.addTurrets(width, height);
 
         // Add Score counter & ending score card
         this.addScoreCounter(width, height);
@@ -148,16 +148,23 @@ export default class ArcadeScene1 extends Phaser.Scene {
     }
 
     /**
-     * TODO: Finish adding bullet physics, remove magic numbers, replace turret icon
+     * TODO: Finish adding bullet physics, remove magic numbers, add 2 player logic
+     * Adds two turrets one on each side of the screen. If this.players == 1, then
+     * mousedown controlls both.
      * @param {number} width 
      * @param {number} height 
      */
-    addTurret(width, height) {
-        // Add Asset
-        this.turret = this.add.image(width * 0.5, height * 0.9, 'turret-colored');
-        this.turret.setDisplaySize(50, 250);
-        this.turret.setOrigin(0.5);
-        this.turret.setDepth(10);
+    addTurrets(width, height) {
+        // Add Assets
+        this.turretLeft = this.add.image(width * 0.05, height * 0.9, 'turret-colored');
+        this.turretLeft.setDisplaySize(50, 250);
+        this.turretLeft.setOrigin(0.5);
+        this.turretLeft.setDepth(10);
+
+        this.turretRight = this.add.image(width * 0.95, height * 0.9, 'turret-colored');
+        this.turretLeft.setDisplaySize(50, 250);
+        this.turretLeft.setOrigin(0.5);
+        this.turretLeft.setDepth(10);
 
         // Add Bullets
         this.bullets = this.physics.add.group({
@@ -168,26 +175,29 @@ export default class ArcadeScene1 extends Phaser.Scene {
         // Add Rotation and Bullet Firing
         this.input.on('pointerdown', (pointer) => {
             // Rotate turret and fire only if within angle
-            let angle = Phaser.Math.Angle.Between(this.turret.x, this.turret.y, pointer.x, pointer.y) + Math.PI / 2;
-            if (Math.abs(angle) > 1.2) {
-                return;
+            let angleLeft = Phaser.Math.Angle.Between(this.turretLeft.x, this.turretLeft.y, pointer.x, pointer.y) + Math.PI / 2;
+            if (!(Math.abs(angleLeft) > 1.5)) {
+                this.turretLeft.setRotation(angleLeft);
+                this.addBullet(this.turretLeft.x, this.turretRight.y, angleLeft);
             }
 
-            this.turret.setRotation(angle);
-
-            // Create Bullet
-            this.addBullet(angle);
+            // Rotate turret and fire only if within angle
+            let angleRight = Phaser.Math.Angle.Between(this.turretRight.x, this.turretRight.y, pointer.x, pointer.y) + Math.PI / 2;
+            if (!(Math.abs(angleRight) > 1.5)) {
+                this.turretRight.setRotation(angleRight);
+                this.addBullet(this.turretRight.x, this.turretRight.y, angleRight);
+            }
         });
     }
 
     /**
-     * TODO: add shot counter to post accuracy in score screen
-     * 
      * Adds a bullet as long as one can be added, with a collision function which
      * removes the colliding alien and increments score.
+     * @param {number} x position of turret
+     * @param {number} y position of turret
      * @param {number} angle
      */
-    addBullet(angle) {
+    addBullet(x, y, angle) {
         let bullet = this.bullets.get();
         if (bullet) {
             // Add collider here
@@ -198,7 +208,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
                 null, 
                 this
             );
-            bullet.fire(this.turret.x, this.turret.y + 50, angle);
+            bullet.fire(x, y + 50, angle);
 
             // Inc total shot count
             this.totalShots += 1;
