@@ -14,8 +14,6 @@ export default class MenuScene5 extends Phaser.Scene {
     init(data) {
         this.players = data.meta.playerCount;
 
-        this.constants = new Constants();
-
         console.log("initialized SafeFileMenu for ", this.players, " players")
     }
 
@@ -28,6 +26,7 @@ export default class MenuScene5 extends Phaser.Scene {
 
     create() {
         const { width, height } = this.scale;
+        this.constants = new Constants(width, height);
 
         // Background
         this.add.image(width * 0.5, height * 0.5, 'story-bg').setDisplaySize(width, height)

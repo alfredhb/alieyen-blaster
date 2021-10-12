@@ -24,8 +24,6 @@ export default class ArcadeReportScene extends Phaser.Scene {
         // Set scene data
         this.prevScene = data.scene.prevScene;
 
-        this.constants = new Constants();
-
         // Specific level report card data
         console.log("initialized ReportScene for ", this.players, " players")
         console.log(data);
@@ -37,7 +35,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
             menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
             levelCompleteTTS: this.sound.add('level-complete', { loop: false }),
             scoreTTS: this.sound.add('score', { loop: false }),
-            accuracyTTS: this.sound.add('accuracy', { loop: false }),
+            // accuracyTTS: this.sound.add('accuracy', { loop: false }),
             replayTTS: this.sound.add('replay', { loop: false }),
             arcadeTTS: this.sound.add('arcade', { loop: false }),
         }
@@ -56,6 +54,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
     create() {
         const { width, height } = this.scale;
+        this.constants = new Constants(width, height);
 
         // Init BG
         const bg = this.add.image(width * 0.5, height * 0.5, 'space-bg');
@@ -132,28 +131,28 @@ export default class ArcadeReportScene extends Phaser.Scene {
      */
     levelReport(width, height) {
         const scoreText = this.add.text(width * 0.275, height * 0.35, 'SCORE :', this.constants.MenuButtonStyle());
-        const accuracyText = this.add.text(width * 0.275, height * 0.425, 'ACCURACY :', this.constants.MenuButtonStyle());
+        // const accuracyText = this.add.text(width * 0.275, height * 0.425, 'ACCURACY :', this.constants.MenuButtonStyle());
         const scoreVal = this.add.text(
             width * 0.675, 
             height * 0.35, 
             this.constants.ZeroPad(this.levelScore, 4), 
             this.constants.MenuButtonStyle("#FF0000")
         );
-        const accuracyVal = this.add.text(
-            width * 0.675,
-            height * 0.425, 
-            (this.levelScore / this.totalShots * 10).toString().substr(0,4) + "%",
-            this.constants.MenuButtonStyle("#FF0000")
-        );
+        // const accuracyVal = this.add.text(
+        //     width * 0.675,
+        //     height * 0.425, 
+        //     (this.levelScore / this.totalShots * 10).toString().substr(0,4) + "%",
+        //     this.constants.MenuButtonStyle("#FF0000")
+        // );
         scoreVal.setOrigin(1, 0);
-        accuracyVal.setOrigin(1, 0);
+        // accuracyVal.setOrigin(1, 0);
 
         // Do we want to show accuracy if bubba will be using an eyetracker which
         // constantly fires bullets?
         // Add TTS
         [
             {text: scoreText, sound: this.menuSounds.scoreTTS},
-            {text: accuracyText, sound: this.menuSounds.accuracyTTS}
+            // {text: accuracyText, sound: this.menuSounds.accuracyTTS}
         ].forEach(t => {
             t.text.setInteractive();
 

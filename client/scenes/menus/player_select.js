@@ -27,7 +27,6 @@
         }
 
         // Add constants
-        this.constants = new Constants();
     }
 
     preload() {
@@ -44,6 +43,7 @@
 
     create() {
         const { width, height } = this.scale;
+        this.constants = new Constants(width, height);
 
         // BG
         const bg = this.add.image(width * 0.5, height * 0.5, 'space-bg');

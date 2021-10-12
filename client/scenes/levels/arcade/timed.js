@@ -20,7 +20,6 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.players = data.meta.playerCount;
         this.difficulty = data.meta.difficulty;
 
-        this.constants = new Constants();
         this.score = 0;
         this.totalShots = 0;
 
@@ -37,6 +36,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
     create() {
         const { width, height } = this.scale;
+        this.constants = new Constants(width, height);
 
         // Init Selection Menu
 
@@ -62,7 +62,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
     update() {
         // Update Timer Text
-        this.timerText.setText(this.timer.getRemainingSeconds().toString().substr(0,4));
+        this.timerVal.setText(this.timer.getRemainingSeconds().toString().substr(0,4));
         this.scoreText.setText("Score: " + this.constants.ZeroPad(this.score, 3));
     }
 
@@ -158,15 +158,15 @@ export default class ArcadeScene1 extends Phaser.Scene {
      */
     addTurrets(width, height) {
         // Add Assets
-        this.turretLeft = this.add.image(width * 0.05, height * 0.9, 'turret-colored');
+        this.turretLeft = this.add.image(width * 0.05, height * 0.85, 'turret-colored');
         this.turretLeft.setDisplaySize(50, 250);
         this.turretLeft.setOrigin(0.5);
         this.turretLeft.setDepth(10);
 
-        this.turretRight = this.add.image(width * 0.95, height * 0.9, 'turret-colored');
-        this.turretLeft.setDisplaySize(50, 250);
-        this.turretLeft.setOrigin(0.5);
-        this.turretLeft.setDepth(10);
+        this.turretRight = this.add.image(width * 0.95, height * 0.85, 'turret-colored');
+        this.turretRight.setDisplaySize(50, 250);
+        this.turretRight.setOrigin(0.5);
+        this.turretRight.setDepth(10);
 
         // Add Bullets
         this.bullets = this.physics.add.group({
@@ -214,6 +214,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
             // Inc total shot count
             this.totalShots += 1;
+            bullet.setDepth(8);
         }
     }
 
@@ -259,16 +260,23 @@ export default class ArcadeScene1 extends Phaser.Scene {
             paused: true,
         });
 
-        // Place Timer on Hud
+        // Place Timer on Hud TIME: 0.00
         // TODO: place over actual spot
         // TODO: convert to const style for common texts
         this.timerText = this.add.text(
-            width * 0.1,
-            height * 0.9,
+            width * 0.025,
+            height * 0.915,
+            'TIME:',
+            this.constants.MenuButtonStyle("0x000000")
+        )
+        this.timerVal = this.add.text(
+            width * 0.1125,
+            height * 0.915,
             this.timer.getRemainingSeconds().toString().substr(0,4),
             this.constants.MenuButtonStyle("0x000000")
         );
         this.timerText.setDepth(11);
+        this.timerVal.setDepth(11);
     }
 
     /**

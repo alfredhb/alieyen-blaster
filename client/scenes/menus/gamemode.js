@@ -34,7 +34,7 @@ export default class MenuScene2 extends Phaser.Scene {
     initButtons(width, height) {
         let textStyle = {
             fontFamily: "Impact",
-            fontSize: "100px",
+            fontSize: (height * 0.11) + "px",
             color: "#FFFFFF",
         }
 

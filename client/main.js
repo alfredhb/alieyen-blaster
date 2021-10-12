@@ -18,7 +18,7 @@ import TimedArcade from './scenes/levels/arcade/timed';
 var config = {
   type: Phaser.AUTO,
   width: (window.innerWidth || document.body.clientWidth) * 0.95,
-  height: (window.innerHeight || document.body.clientHeight) * 0.9,
+  height: (window.innerHeight || document.body.clientHeight) * 0.95,
   physics: {
       default: 'arcade',
       arcade: {

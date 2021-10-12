@@ -15,8 +15,6 @@ export default class MenuScene3 extends Phaser.Scene {
         this.players = data.meta.playerCount;
         this.difficulty = (data.meta.difficulty) ? data.meta.difficulty : 1; // easy unless returned from prev scene
 
-        this.constants = new Constants();
-
         console.log("initialized ArcadeMenu for ", this.players, " players on difficulty ", this.difficulty)
     }
 
@@ -34,6 +32,7 @@ export default class MenuScene3 extends Phaser.Scene {
 
     create() {
         const { width, height } = this.scale;
+        this.constants = new Constants(width, height);
 
         // Background
         this.add.image(width * 0.5, height * 0.5, 'arcade-bg').setDisplaySize(width, height)

@@ -57,7 +57,7 @@ export default class MenuScene4 extends Phaser.Scene {
         const plText = this.add.text(plButton.x, plButton.y, 'Play!', {
             fontFamily: "Impact",
             color: "#FF0000",
-            fontSize: "50px",
+            fontSize: (height * 0.055) + "px",
         }).setOrigin(0.5);
         const plSound = this.menuSounds.playTTS;
 
@@ -65,7 +65,7 @@ export default class MenuScene4 extends Phaser.Scene {
         const qButton = this.add.image(width * 0.95, height * 0.93, '__WHITE').setDisplaySize(width * 0.05, width * 0.05);
         const qText = this.add.text(qButton.x, qButton.y, 'X', {
             color: "#FF0000",
-            fontSize: "75px",
+            fontSize: (height * 0.085) + "px",
             strokeThickness: 3,
 			stroke: '#FF0000',
         }).setOrigin(0.5);

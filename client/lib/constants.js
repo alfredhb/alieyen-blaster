@@ -3,28 +3,34 @@
  * A util lib for common constants across scenes
  */
 export default class Constants {
+    constructor(width, height) {
+        this.width = width;
+        this.height = height;
+    }
+
     /**
      * title text style for menus
+     * Calculates fontsize based on screenheight
      * @returns {Phaser.Types.GameObjects.Text.TextStyle} menu title text style
      */
     MenuTitleStyle = () => {
         return {
             fontFamily: 'impact',
-            fontSize: "75px",
+            fontSize: (this.height * 0.085) + "px",
             color: "#FFF",
         }
     }
 
     /**
-     * 
      * Button text style for menus
+     * Calculates fontsize based on screenheight
      * @param {string?} color hexcode of color to set text to. Default is white
      * @returns {Phaser.Types.GameObjects.Text.TextStyle} menu button text style
      */
     MenuButtonStyle = (color) => {
         return {
             fontFamily: 'impact',
-            fontSize: "50px",
+            fontSize: (this.height * 0.055) + "px",
             color: (color) ? color : "#FFF",
         }
     }
