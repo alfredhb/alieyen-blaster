@@ -27,12 +27,12 @@ Meteor.methods({
     }
 
     try {
-      console.log(process.cwd());
       var asset = fs.readFileSync(pathPrefix + "assets/" + path);
+      var base64 = asset.toString('base64');
 
-      return asset.toString('base64');
+      return base64;
     } catch {
-      throw Meteor.Error("File not found with path: " + path);
+      throw new Meteor.Error("File not found with path: " + path);
     }
   },
 
@@ -49,12 +49,12 @@ Meteor.methods({
     }
 
     try {
-      console.log(process.cwd());
       var asset = fs.readFileSync(pathPrefix + "sounds/" + path);
+      var base64 = asset.toString('base64');
 
-      return asset.toString('base64');
+      return base64;
     } catch (e) {
-      throw Meteor.Error(e);
+      throw new Meteor.Error(e);
     }
   },
 });

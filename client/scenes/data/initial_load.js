@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import Phaser from 'phaser';
 
 export default class DataScene1 extends Phaser.Scene {
