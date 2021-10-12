@@ -18,6 +18,7 @@ Meteor.methods({
   // Loads asset from ./data/assets/{path} and returns a base64 object of it
   loadImageAsset(path) {
     try {
+      console.log(process.cwd());
       var asset = fs.readFileSync("../../../../../public/assets/" + path);
 
       return asset.toString('base64');
@@ -32,6 +33,7 @@ Meteor.methods({
    */
   loadSoundAsset(path) {
     try {
+      console.log(process.cwd());
       var asset = fs.readFileSync("../../../../../public/sounds/" + path);
 
       return asset.toString('base64');
