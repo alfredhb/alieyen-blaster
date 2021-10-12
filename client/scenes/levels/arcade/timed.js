@@ -128,6 +128,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
         // Add Cockpit TODO
         const cockpit = this.add.image(width * 0.5, height * 0.5, 'arcade-hud').setDisplaySize(width, height);
+        cockpit.setDepth(11);
 
         // Add Tracking turret
         this.addTurrets(width, height);
@@ -267,6 +268,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
             this.timer.getRemainingSeconds().toString().substr(0,4),
             this.constants.MenuButtonStyle("0x000000")
         );
+        this.timerText.setDepth(11);
     }
 
     /**

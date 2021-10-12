@@ -19,6 +19,7 @@ export default class DataScene1 extends Phaser.Scene {
             {key: "arcade-hud", path: "background/arcade_hud.png"},
             // Buttons
             {key: "arcade-button", path: "buttons/arcade_no_text.png"},
+            {key: "difficulty-button", path: "features/gear.png"},
             {key: "gameslot-button", path: "buttons/game_slot.png"},
             {key: "story-button", path: "buttons/story_no_text.png"},
             {key: 'timed-button', path: "features/clock.png"},

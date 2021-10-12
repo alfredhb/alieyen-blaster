@@ -24,6 +24,7 @@ export default class MenuScene3 extends Phaser.Scene {
         // Load Sounds
         this.menuSounds = {
             menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
+            difficultyTTS: this.sound.add('difficulty', { loop: false }),
             timedTTS: this.sound.add('timed', { loop: false }),
             endlessTTS: this.sound.add('endless', { loop: false }),
             livesTTS: this.sound.add('lives', { loop: false }),
@@ -40,8 +41,11 @@ export default class MenuScene3 extends Phaser.Scene {
         // Title
         this.initTitle(width, height);
 
+        // Difficulty
+        this.initDifficultyButton(width, height);
+
         // Buttons
-        this.initButtons(width, height);
+        this.initLevelButtons(width, height);
     }
 
     /**
@@ -64,14 +68,54 @@ export default class MenuScene3 extends Phaser.Scene {
         })
     }
 
+    initDifficultyButton(width, height) {
+        // Difficulty Settings Button
+        const difButton = this.add.image(width * 0.95, height * 0.07, '__WHITE');
+        const difIcon = this.add.image(width * 0.95, height * 0.07, 'difficulty-button');
+        difButton.setDisplaySize(width * 0.05, width * 0.05);
+        difButton.setOrigin(0.5);
+        difIcon.setDisplaySize(width * 0.04, width * 0.04);
+        difIcon.setOrigin(0.5);
+
+        // Add listener
+        difButton.setInteractive();
+        difButton.on('pointerover', () => {
+            difButton.setTint(0xFF0000);
+            difIcon.setTint(0xFFF);
+
+            if (!this.menuSounds.difficultyTTS.isPlaying){
+                this.menuSounds.difficultyTTS.play();
+            }
+        }).on('pointerout', () => {
+            difButton.clearTint();
+            difIcon.clearTint();
+        }).on('pointerup', () => {
+            this.menuSounds.menuClick.play();
+            this.scene.start('difficultySelectMenu', {
+                meta: {
+                    playerCount: this.players,
+                },
+                scene: {
+                    prevScene: {
+                        name: 'arcadeMenu',
+                        type: 'ARCADE'
+                    },
+                    nextScene: {
+                        name: 'arcadeMenu',
+                        type: 'ARCADE'
+                    }
+                },
+            });
+        })
+
+    }
+
     /**
      * Add buttons and listeners
      * @param {number} width 
      * @param {number} height 
      */
-    initButtons(width, height) {
-        // Difficulty Settings Button
-        const difButton = this.add.image(width * 0.95, height * 0.07, '__WHITE').setDisplaySize(width * 0.05, width * 0.05);
+    initLevelButtons(width, height) {
         // const
 
         // Quit Button

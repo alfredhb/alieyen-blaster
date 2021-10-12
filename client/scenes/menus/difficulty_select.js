@@ -18,7 +18,7 @@
         this.nextScene = data.scene.nextScene;
         this.prevScene = data.scene.prevScene; // {scene: string, type: enum{'ARCADE' || STORY'}
 
-        this.players = data.meta.players;
+        this.players = data.meta.playerCount;
 
         // Game data holds player count in a central place
         this.difficulty = 0;
@@ -40,6 +40,11 @@
     preload() {
         this.menuSounds = {
             menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
+            difficultyTTS: this.sound.add('difficulty', { loop: false }),
+            easyTTS: this.sound.add('easy', { loop: false }),
+            mediumTTS: this.sound.add('medium', { loop: false }),
+            hardTTS: this.sound.add('hard', { loop: false }),
+            startTTS: this.sound.add('start', { loop: false }),
         }
     }
 
@@ -59,6 +64,9 @@
 
         // Center Box
         this.centerBox(width, height);
+
+        // Title
+        this.initTitle(width, height);
 
         // Difficulty Area
         this.difficultySection(width, height);
@@ -88,6 +96,25 @@
         center.setOrigin(0.5);
     }
 
+    /**
+     * Add title and interactive listener which plays tts
+     * @param {number} width 
+     * @param {number} height 
+     */
+    initTitle(width, height) {
+        const difficultyText = this.add.text(width * 0.5, height * 0.325, 'DIFFICULTY', this.constants.MenuTitleStyle());
+        difficultyText.setOrigin(0.5);
+
+        // interactives
+        difficultyText.setInteractive();
+        difficultyText.on('pointerover', () => {
+            if (!this.menuSounds.difficultyTTS.isPlaying) {
+                this.menuSounds.difficultyTTS.play();
+            }
+        });
+
+    }
+
     difficultySection(width, height) {
         const difficultyText = this.add.text(width * 0.5, height * 0.325, 'DIFFICULTY', this.constants.MenuTitleStyle());
         difficultyText.setOrigin(0.5);
@@ -103,9 +130,9 @@
         hardText.setName('3');
         
         let buttons = [
-            {button: easyButton, text: easyText, sound: null},
-            {button: mediumButton, text: mediumText, sound: null},
-            {button: hardButton, text: hardText, sound: null},
+            {button: easyButton, text: easyText, sound: this.menuSounds.easyTTS},
+            {button: mediumButton, text: mediumText, sound: this.menuSounds.mediumTTS},
+            {button: hardButton, text: hardText, sound: this.menuSounds.hardTTS},
         ];
         buttons.forEach(b => {
             // Style Button
@@ -121,6 +148,9 @@
                 b.button.setTint(0xFF0000);
 
                 // Play TTS here
+                if (!b.sound.isPlaying){ 
+                    b.sound.play();
+                }
             }).on('pointerout', () => {
                 if (!this.difficulty) {
                     b.button.setTint(0x808080);
@@ -158,6 +188,10 @@
         this.startButton.on('pointerover', () => {
             if (this.startReady()) {
                 this.startButton.setTint(0xFF0000);
+
+                if (!this.menuSounds.startTTS.isPlaying) {
+                    this.menuSounds.startTTS.play();
+                }
             }
         }).on('pointerout', () => {
             if (this.startReady()) {
