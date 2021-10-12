@@ -37,5 +37,10 @@ Due to new browser security measures, the user is required to interact with a pa
 * Ex: `npm install @babel/runtime` becomes `meteor npm install @babel/runtime`
 
 ## Meteor is not a Recognized Command
-* If you get the following error or similar when running `$ meteor` - `meteor is not a recognized command`,
+* If you get the following error or similar when running `$ meteor`
+    ```
+    $  'meteor' is not recognized as an internal or external command,
+    operable program or batch file.
+    ```
 * On Mac: please make sure that the path your nodejs libraries are installed at is added to the paths file `/etc/paths`
+* On Windows: please reinstall nodejs and assert that it adds the correct paths when you install meteor. If this doesn't work, please try cloning the repo on a CAEN computer.
