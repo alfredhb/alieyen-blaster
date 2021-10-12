@@ -267,13 +267,13 @@ export default class ArcadeScene1 extends Phaser.Scene {
             width * 0.025,
             height * 0.915,
             'TIME:',
-            this.constants.MenuButtonStyle("0x000000")
+            this.constants.TimerStyle(),
         )
         this.timerVal = this.add.text(
             width * 0.1125,
             height * 0.915,
             this.timer.getRemainingSeconds().toString().substr(0,4),
-            this.constants.MenuButtonStyle("0x000000")
+            this.constants.TimerStyle(),
         );
         this.timerText.setDepth(11);
         this.timerVal.setDepth(11);

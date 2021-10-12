@@ -154,6 +154,7 @@ export default class MenuScene3 extends Phaser.Scene {
             {button: bbButton, icon: bbIcon, text: bbText, sound: this.menuSounds.bossBattleTTS},
         ].forEach(b => {
             b.button.setDisplaySize(width * .35, height * .25);
+            b.icon.setDisplaySize(height * 0.15, height * 0.15);
             b.text.setOrigin(0.5);
             b.button.setInteractive();
 

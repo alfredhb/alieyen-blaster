@@ -36,6 +36,17 @@ export default class Constants {
     }
 
     /**
+     * @returns {Phaser.Types.GameObjects.Text.TextStyle}
+     */
+    TimerStyle = () => {
+        return {
+            fontFamily: 'impact',
+            fontSize: (this.height * 0.045) + "px",
+            color: "0x000000",
+        }
+    }
+
+    /**
      * Adds enough leading zeros to num so that it takes up places amount of digits.
      * @param {number} num 
      * @param {number} places 

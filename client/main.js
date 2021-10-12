@@ -14,6 +14,26 @@ import SavefileMenu from './scenes/menus/savefiles';
 import StartMenu from './scenes/menus/start';
 import TimedArcade from './scenes/levels/arcade/timed';
 
+// Used to detect font since impact isn't supported on iOS
+function isIOS() {
+  return [
+    'iPad Simulator',
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod',
+  ].includes(navigator.platform)
+  || (navigator.userAgent.includes("Mac") && "ontouchedn" in document);
+} 
+
+// If Ipad, inject 50px spacing above canvas
+if (isIOS()) {
+  let div = document.createElement('div');
+  div.style.height = "50px"
+}
+
 // Game Config
 var config = {
   type: Phaser.AUTO,
@@ -32,20 +52,6 @@ var config = {
 };
 
 const game = new Phaser.Game(config);
-
-// Used to detect font since impact isn't supported on iOS
-function isIOS() {
-  return [
-    'iPad Simulator',
-    'iPad Simulator',
-    'iPhone Simulator',
-    'iPod Simulator',
-    'iPad',
-    'iPhone',
-    'iPod',
-  ].includes(navigator.platform)
-  || (navigator.userAgent.includes("Mac") && "ontouchedn" in document);
-} 
 
 // Other Helper Functions
 function loadHighscore() {
