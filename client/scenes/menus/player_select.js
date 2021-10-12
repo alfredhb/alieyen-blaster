@@ -35,6 +35,10 @@
         // TODO add TTS sounds here for 'players' , '1 player' , '2 player', 'start'
         this.menuSounds = {
             menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
+            playersTTS: this.sound.add('players', { loop: false }),
+            onePlayerTTS: this.sound.add('1-player', { loop: false }),
+            twoPlayerTTS: this.sound.add('2-player', { loop: false }),
+            startTTS: this.sound.add('start', { loop: false }),
         }
     }
 
@@ -51,6 +55,9 @@
 
         // Center Box
         this.centerBox(width, height);
+
+        // Title
+        this.initTitle(width, height);
 
         // Players Area
         this.playerSection(width, height);
@@ -75,10 +82,26 @@
         center.setOrigin(0.5);
     }
 
-    playerSection(width, height) {
+    /**
+     * Add title and interactive listener which plays tts
+     * @param {number} width 
+     * @param {number} height 
+     */
+    initTitle(width, height) {
         const playerText = this.add.text(width * 0.5, height * 0.325, 'PLAYERS', this.constants.MenuTitleStyle());
         playerText.setOrigin(0.5);
 
+        // interactives
+        playerText.setInteractive();
+        playerText.on('pointerover', () => {
+            if (!this.menuSounds.playersTTS.isPlaying) {
+                this.menuSounds.playersTTS.play();
+            }
+        });
+
+    }
+
+    playerSection(width, height) {
         const onePlayerButton = this.add.image(width * 0.375, height * 0.45, '__WHITE');
         const twoPlayerButton = this.add.image(width * 0.625, height * 0.45, '__WHITE');
         const onePlayerText = this.add.text(width * 0.375, height * 0.45, '1 PLAYER', this.constants.MenuButtonStyle());
@@ -87,8 +110,8 @@
         twoPlayerText.setName('2');
 
         let buttons = [
-            {button: onePlayerButton, text: onePlayerText, sound: null},
-            {button: twoPlayerButton, text: twoPlayerText, sound: null},
+            {button: onePlayerButton, text: onePlayerText, sound: this.menuSounds.onePlayerTTS},
+            {button: twoPlayerButton, text: twoPlayerText, sound: this.menuSounds.twoPlayerTTS},
         ];
         buttons.forEach(b => {
             // Style buttons
@@ -104,6 +127,9 @@
                 b.button.setTint(0xFF0000);
 
                 // Play TTS here
+                if (!b.sound.isPlaying) {
+                    b.sound.play();
+                }
             }).on('pointerout', () => {
                 if (!this.startReady()) {
                     b.button.setTint(0x808080);
@@ -146,6 +172,11 @@
         this.startButton.on('pointerover', () => {
             if (this.startReady()) {
                 this.startButton.setTint(0xFF0000);
+
+                // Play tts if start is ready
+                if (!this.menuSounds.startTTS.isPlaying) {
+                    this.menuSounds.startTTS.play();
+                }
             }
         }).on('pointerout', () => {
             if (this.startReady()) {

@@ -9,6 +9,7 @@ export default class MenuScene4 extends Phaser.Scene {
         // Load Sounds
         this.menuSounds = {
             menuClick: this.sound.add('menu-click', { loop: false, volume: .5 }),
+            titleTTS: this.sound.add('title', { loop: false }),
             playTTS: this.sound.add('play', { loop: false }),
             quitTTS: this.sound.add('quit', { loop: false }),
         }
@@ -18,19 +19,36 @@ export default class MenuScene4 extends Phaser.Scene {
         const { width, height } = this.scale;
 
         // Background
-        this.add.image(width * 0.5, height * 0.5, 'space-bg').setDisplaySize(width, height)
+        this.add.image(width * 0.5, height * 0.5, 'space-bg').setDisplaySize(width, height);
 
+        this.initTitle(width, height);
+
+        // Buttons
+        this.initButtons(width, height);
+    }
+
+    /**
+     * Add title and interactive listener which plays tts
+     * @param {number} width 
+     * @param {number} height 
+     */
+    initTitle(width, height) {
         // Title
-        this.add.text(width * 0.5, height * 0.15, 'Ali-eye-n Blaster 3000', {
+        const title = this.add.text(width * 0.5, height * 0.15, 'Ali-eye-n Blaster 3000', {
             fontFamily: "Impact",
             fontSize: (width / 11) + "px",
             strokeThickness: 0,
             color: "#FFFFFF",
             aligh: 'center',
         }).setOrigin(0.5);
-
-        // Buttons
-        this.initButtons(width, height);
+        
+        // interactives
+        title.setInteractive();
+        title.on('pointerover', () => {
+            if (!this.menuSounds.titleTTS.isPlaying) {
+                this.menuSounds.titleTTS.play();
+            }
+        })
     }
 
     initButtons(width, height) {

@@ -35,6 +35,11 @@ export default class ArcadeReportScene extends Phaser.Scene {
         // Load Sounds
         this.menuSounds = {
             menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
+            levelCompleteTTS: this.sound.add('level-complete', { loop: false }),
+            scoreTTS: this.sound.add('score', { loop: false }),
+            accuracyTTS: this.sound.add('accuracy', { loop: false }),
+            replayTTS: this.sound.add('replay', { loop: false }),
+            arcadeTTS: this.sound.add('arcade', { loop: false }),
         }
 
         // Init animations
@@ -60,13 +65,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
         this.centerBox(width, height);
 
         // Init report data 
-        const title = this.add.text(
-            width * 0.5,
-            height * 0.2,
-            'Level Complete!',
-            this.constants.MenuTitleStyle()
-        );
-        title.setOrigin(0.5);
+        this.initTitle(width, height);
 
         // score breakdown + accuracy
         this.levelReport(width, height);
@@ -104,6 +103,29 @@ export default class ArcadeReportScene extends Phaser.Scene {
     }
 
     /**
+     * Add title and interactive listener which plays tts
+     * @param {number} width 
+     * @param {number} height 
+     */
+    initTitle(width, height) {
+        const title = this.add.text(
+            width * 0.5,
+            height * 0.2,
+            'Level Complete!',
+            this.constants.MenuTitleStyle()
+        );
+        title.setOrigin(0.5);
+
+        // Add TTS
+        title.setInteractive();
+        title.on('pointerover', () => {
+            if (!this.menuSounds.levelCompleteTTS.isPlaying) {
+                this.menuSounds.levelCompleteTTS.play();
+            }
+        })
+    }
+
+    /**
      * Display score and accuracy from the previous level
      * @param {number} width 
      * @param {number} height 
@@ -128,6 +150,19 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
         // Do we want to show accuracy if bubba will be using an eyetracker which
         // constantly fires bullets?
+        // Add TTS
+        [
+            {text: scoreText, sound: this.menuSounds.scoreTTS},
+            {text: accuracyText, sound: this.menuSounds.accuracyTTS}
+        ].forEach(t => {
+            t.text.setInteractive();
+
+            t.text.on('pointerover', () => {
+                if (!t.sound.isPlaying) {
+                    t.sound.play();
+                }
+            })
+        })
     }
 
     /**
@@ -180,8 +215,8 @@ export default class ArcadeReportScene extends Phaser.Scene {
         arcadeText.setName('arcadeMenu');
 
         let buttons = [
-            {button: replayButton, text: replayText, sound: null},
-            {button: arcadeButton, text: arcadeText, sound: null},
+            {button: replayButton, text: replayText, sound: this.menuSounds.replayTTS},
+            {button: arcadeButton, text: arcadeText, sound: this.menuSounds.arcadeTTS},
         ];
         buttons.forEach(b => {
             // Style buttons
@@ -197,6 +232,9 @@ export default class ArcadeReportScene extends Phaser.Scene {
                 b.button.setTint(0xFF0000);
 
                 // Play TTS here
+                if (!b.sound.isPlaying) {
+                    b.sound.play();
+                }
             }).on('pointerout', () => {
                 b.button.setTint(0x808080);
             }).on('pointerup', () => {

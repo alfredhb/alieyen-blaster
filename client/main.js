@@ -33,6 +33,20 @@ var config = {
 
 const game = new Phaser.Game(config);
 
+// Used to detect font since impact isn't supported on iOS
+function isIOS() {
+  return [
+    'iPad Simulator',
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod',
+  ].includes(navigator.platform)
+  || (navigator.userAgent.includes("Mac") && "ontouchedn" in document);
+} 
+
 // Other Helper Functions
 function loadHighscore() {
   let highscore = 0;

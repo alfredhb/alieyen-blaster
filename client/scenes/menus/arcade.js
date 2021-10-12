@@ -24,6 +24,10 @@ export default class MenuScene3 extends Phaser.Scene {
         // Load Sounds
         this.menuSounds = {
             menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
+            timedTTS: this.sound.add('timed', { loop: false }),
+            endlessTTS: this.sound.add('endless', { loop: false }),
+            livesTTS: this.sound.add('lives', { loop: false }),
+            bossBattleTTS: this.sound.add('boss-battle', { loop: false }),
         }
     }
 
@@ -95,16 +99,16 @@ export default class MenuScene3 extends Phaser.Scene {
         const liIcon = this.add.image(width * 0.25, height * 0.675, 'endless-button');
         const liText = this.add.text(liButton.x, height * 0.775, 'Lives', this.constants.MenuButtonStyle('#000000'));
 
-        // Gauntlet button
-        const gaButton = this.add.image(width * 0.75, height * 0.7, 'gameslot-button');
-        const gaIcon = this.add.image(width * 0.75, height * 0.675, 'gauntlet-button');
-        const gaText = this.add.text(gaButton.x, height * 0.775, 'Gauntlet', this.constants.MenuButtonStyle('#000000'));
+        // Boss Battle button
+        const bbButton = this.add.image(width * 0.75, height * 0.7, 'gameslot-button');
+        const bbIcon = this.add.image(width * 0.75, height * 0.675, 'gauntlet-button');
+        const bbText = this.add.text(bbButton.x, height * 0.775, 'Boss Battle', this.constants.MenuButtonStyle('#000000'));
 
         this.buttons = [
-            {button: tiButton, icon: tiIcon, text: tiText, sound: null},
-            {button: enButton, icon: enIcon, text: enText, sound: null},
-            {button: liButton, icon: liIcon, text: liText, sound: null},
-            {button: gaButton, icon: gaIcon, text: gaText, sound: null},
+            {button: tiButton, icon: tiIcon, text: tiText, sound: this.menuSounds.timedTTS},
+            {button: enButton, icon: enIcon, text: enText, sound: this.menuSounds.endlessTTS},
+            {button: liButton, icon: liIcon, text: liText, sound: this.menuSounds.livesTTS},
+            {button: bbButton, icon: bbIcon, text: bbText, sound: this.menuSounds.bossBattleTTS},
         ].forEach(b => {
             b.button.setDisplaySize(width * .35, height * .25);
             b.text.setOrigin(0.5);
@@ -114,6 +118,11 @@ export default class MenuScene3 extends Phaser.Scene {
                 b.button.setTint(0xFF0000);
                 b.icon.setTint(0xFFF);
                 b.text.setTint(0xFFF);
+
+                // Play TTS
+                if (!b.sound.isPlaying) {
+                    b.sound.play();
+                }
             });
             b.button.on('pointerout', () => {
                 b.button.clearTint();
