@@ -180,7 +180,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
             let angleLeft = Phaser.Math.Angle.Between(this.turretLeft.x, this.turretLeft.y, pointer.x, pointer.y) + Math.PI / 2;
             if (!(Math.abs(angleLeft) > 1.5)) {
                 this.turretLeft.setRotation(angleLeft);
-                this.addBullet(this.turretLeft.x, this.turretRight.y, angleLeft);
+                this.addBullet(this.turretLeft.x, this.turretLeft.y, angleLeft);
             }
 
             // Rotate turret and fire only if within angle

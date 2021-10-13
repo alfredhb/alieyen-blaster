@@ -53,4 +53,18 @@ export default class Constants {
      * @returns {string} num padded to places amount of digits
      */
     ZeroPad = (num, places) => String(num).padStart(places, '0');
+    
+    // Used to detect font since impact isn't supported on iOS
+    isIOS() {
+    return [
+      'iPad Simulator',
+      'iPad Simulator',
+      'iPhone Simulator',
+      'iPod Simulator',
+      'iPad',
+      'iPhone',
+      'iPod',
+    ].includes(navigator.platform)
+    || (navigator.userAgent.includes("Mac") && "ontouchedn" in document);
+  } 
 }
