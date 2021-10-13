@@ -34,6 +34,11 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
         });
     }
 
+    /**
+     * Update function which runs every tick and updates object position
+     * @param {number} time 
+     * @param {number} delta 
+     */
     update(time, delta) {
         if (this.x < -50 || this.x > this.maxX) {
             this.setActive(false);
@@ -97,10 +102,17 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
         });
     }
 
+    /**
+     * If alien is dead
+     * @returns {boolean}
+     */
     dead() {
         return this.deadVal
     }
 
+    /**
+     * After 300ms, stops any sprite animations and calls launch()
+     */
     respawn() {
         setTimeout(() => {
             // Check if level finished in the 300ms

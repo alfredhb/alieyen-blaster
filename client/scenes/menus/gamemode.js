@@ -16,6 +16,9 @@ export default class MenuScene2 extends Phaser.Scene {
         console.log("initialized GamemodeMenu for ", this.players, " players")
     }
 
+    /**
+     * Preload function to run before Create();
+     */
     preload() {
         // Load Sounds
         this.menuSounds = {
@@ -25,12 +28,20 @@ export default class MenuScene2 extends Phaser.Scene {
         }
     }
 
+    /**
+     * Handles element placing on scene
+     */
     create() {
         const { width, height } = this.scale;
         
         this.initButtons(width, height);
     }
 
+    /**
+     * Creates all 3 buttons and sets the interactions with them
+     * @param {number} width 
+     * @param {number} height 
+     */
     initButtons(width, height) {
         let textStyle = {
             fontFamily: "Impact",
@@ -38,7 +49,7 @@ export default class MenuScene2 extends Phaser.Scene {
             color: "#FFFFFF",
         }
 
-        // Quit button
+        // Quit button - Interactions set in constructor
         const quit = new QuitButton(this, {
             backMenu: 'playerSelectMenu'
         });

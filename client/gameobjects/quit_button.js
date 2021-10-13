@@ -3,7 +3,8 @@ import Constants from "../lib/constants";
 
 export default class QuitButton extends Phaser.GameObjects.Group {
     /**
-     * 
+     * Creates a quit button which returns user to 'backMenu' on click, passes
+     * along data to the next scene and executes any provided execFunc
      * @param {Phaser.Scene} scene 
      * @param {{execFunc: function, backMenu: string, data: object}} config 
      */

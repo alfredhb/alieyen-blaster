@@ -25,10 +25,11 @@
                 paused: true,
             });
         }
-
-        // Add constants
     }
 
+    /**
+     * Preload function to run before Create();
+     */
     preload() {
         // All sounds to be loaded
         // TODO add TTS sounds here for 'players' , '1 player' , '2 player', 'start'
@@ -41,6 +42,9 @@
         }
     }
 
+    /**
+     * Handles element creation - bg, title, player selection buttons, start button, quit
+     */
     create() {
         const { width, height } = this.scale;
         this.constants = new Constants(width, height);
@@ -48,10 +52,6 @@
         // BG
         const bg = this.add.image(width * 0.5, height * 0.5, 'space-bg');
         bg.setDisplaySize(width, height);
-
-        // Input
-        // TODO: Delete me
-        this.cursor = this.input.activePointer;
 
         // Center Box
         this.centerBox(width, height);
@@ -71,6 +71,11 @@
         });
     }
 
+    /**
+     * Creates a black box with white outline to place buttons over
+     * @param {number} width 
+     * @param {number} height 
+     */
     centerBox(width, height) {
         const centerOutline = this.add.image(width * 0.5, height * 0.5, '__WHITE');
         centerOutline.setDisplaySize(width * 0.6505, height * 0.5505);
@@ -101,6 +106,12 @@
 
     }
 
+    /**
+     * Creates 1 and 2 player buttons and adds interactivity. On selecting a button,
+     * sets this.players to 1 or 2 and causes start button to strobe red/blue
+     * @param {number} width 
+     * @param {number} height 
+     */
     playerSection(width, height) {
         const onePlayerButton = this.add.image(width * 0.375, height * 0.45, '__WHITE');
         const twoPlayerButton = this.add.image(width * 0.625, height * 0.45, '__WHITE');
@@ -153,6 +164,12 @@
         });
     }
 
+    /**
+     * Creates start button and adds interactivity. If this.players is set,
+     * then start button can be interacted with and clicked to transition to 'gamemodeMenu'
+     * @param {number} width 
+     * @param {number} height 
+     */
     startSection(width, height) {
         this.startButton = this.add.image(width * 0.5, height * 0.65, '__WHITE');
         this.startButton.setDisplaySize(width * 0.375, height * 0.12);
@@ -200,10 +217,17 @@
         });
     }
     
+    /**
+     * If this.players is nonzero
+     * @returns {boolean}
+     */
     startReady() {
         return this.players;
     }
     
+    /**
+     * Toggles startbutton color between blue and red
+     */
     resolveFunc = () => {
         if (this.startButton.tintTopLeft == 0xFF0000) {
             this.startButton.setTint(0x0000FF);
@@ -212,7 +236,11 @@
         }
     }
 
-    // Periodically change color of startButton as long as both players and difficulty are set
+    /**
+     * If this.players is set, then creates a timer which changes the color of
+     * the start button every 1 second between blue and red
+     * @returns {void}
+     */
     styleStart() {
         if (!this.startReady()) {
             return;

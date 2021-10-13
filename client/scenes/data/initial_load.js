@@ -6,6 +6,9 @@ export default class DataScene1 extends Phaser.Scene {
         super('initialLoad')
     }
 
+    /**
+     * Preload function to run before Create();
+     */
     preload() {
         // this.load.setCORS('anonymous');
         this.load.setBaseURL('https://labs.phaser.io');
@@ -95,7 +98,11 @@ export default class DataScene1 extends Phaser.Scene {
         this.loadOnlineImages();
     }
 
-    // Must listen for all textures to be loaded before continuing into game
+    /**
+     * Adds a load listener for which waits for the 'addtexture' event which signifies
+     * a local image was successfully loaded. Then it adds a load progress bit,
+     * and if all images have been loaded, then transitions scenes to 'startMenu'
+     */
     addLoadListener() {
         const { width, height } = this.scale;
         let totalAssets = (this.localImages.length + this.onlineImages.length);
@@ -120,6 +127,10 @@ export default class DataScene1 extends Phaser.Scene {
         })
     }
 
+    /**
+     * Adds all imges in this.localImages to game.textures TextureManager
+     * @returns {void}
+     */
     loadLocalImages() {
         if (this.localImages.length == 0) {
             return;
@@ -138,6 +149,9 @@ export default class DataScene1 extends Phaser.Scene {
         }
     }
 
+    /**
+     * Adds all images which in this.onlineImages are accessible online into game.loader
+     */
     loadOnlineImages() {
         for (let asset of this.onlineImages) {
             this.load.image(asset.key, asset.path);
@@ -145,6 +159,10 @@ export default class DataScene1 extends Phaser.Scene {
     }
 
     // Local Sounds would use this.sound.decode([{data: base64, key: id}])
+    /**
+     * Adds all sounds in this.localSounds to game.sounds SoundManager
+     * @returns {void}
+     */
     loadLocalSounds() {
         if (this.localSounds.length == 0) {
             return;
@@ -162,6 +180,9 @@ export default class DataScene1 extends Phaser.Scene {
         }
     }
 
+    /**
+     * Creates a loading bar which has load progress placed over it to show progress
+     */
     create() {
         const { width, height } = this.scale;
         

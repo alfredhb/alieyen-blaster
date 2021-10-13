@@ -40,9 +40,12 @@ if (constants.isIOS()) {
   div.style.height = "50px"
 }
 
+// Create Game canvas and begin with InitialLoad scene
 const game = new Phaser.Game(config);
 
-// Other Helper Functions
+/**
+ * Sample Call to server for savedata
+ */
 function loadHighscore() {
   let highscore = 0;
   let scoreHolder = "emtpy";

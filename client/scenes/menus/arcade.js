@@ -18,6 +18,9 @@ export default class MenuScene3 extends Phaser.Scene {
         console.log("initialized ArcadeMenu for ", this.players, " players on difficulty ", this.difficulty)
     }
 
+    /**
+     * Preload function to run before Create();
+     */
     preload() {
         // Load Sounds
         this.menuSounds = {
@@ -30,6 +33,9 @@ export default class MenuScene3 extends Phaser.Scene {
         }
     }
 
+    /**
+     * Handles element placement: bg, title, difficulty button, level buttons
+     */
     create() {
         const { width, height } = this.scale;
         this.constants = new Constants(width, height);
@@ -67,6 +73,12 @@ export default class MenuScene3 extends Phaser.Scene {
         })
     }
 
+    /**
+     * Places a difficulty settings menu in top right which on click, transitions
+     * to 'difficultySelectMenu'
+     * @param {number} width 
+     * @param {number} height 
+     */
     initDifficultyButton(width, height) {
         // Difficulty Settings Button
         const difButton = this.add.image(width * 0.95, height * 0.07, '__WHITE');

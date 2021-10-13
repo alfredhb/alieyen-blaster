@@ -5,6 +5,9 @@ export default class MenuScene4 extends Phaser.Scene {
         super('startMenu')
     }
 
+    /**
+     * Preload function to run before Create();
+     */
     preload() {
         // Load Sounds
         this.menuSounds = {
@@ -15,8 +18,11 @@ export default class MenuScene4 extends Phaser.Scene {
         }
     }
 
+    /**
+     * Handles element placing on scene including background, title, and buttons
+     */
     create() {
-        const { width, height } = this.scale;
+        const { width, height } = this.scale; //Canvas dimensions
 
         // Background
         this.add.image(width * 0.5, height * 0.5, 'space-bg').setDisplaySize(width, height);
@@ -51,6 +57,11 @@ export default class MenuScene4 extends Phaser.Scene {
         })
     }
 
+    /**
+     * Creates play and quit button and sets interactivity
+     * @param {number} width 
+     * @param {number} height 
+     */
     initButtons(width, height) {
         // Play Button
         const plButton = this.add.image(width * 0.5, height * 0.7, '__WHITE').setDisplaySize(width * 0.25, height * 0.25);
@@ -109,8 +120,9 @@ export default class MenuScene4 extends Phaser.Scene {
 
     /**
      * Adds a listener / timer to bObj with this behavior:
-     * User hovers over button coninuously for 5 seconds, during that time, 
-     * button sound is played on loop, after 5 seconds, the button is clicked.
+     * User hovers over button coninuously for 3 seconds, during that time, 
+     * button sound is played on loop, after 3 seconds, the button is clicked.
+     * Button tint also progressively changes colors to signify it will be clicked
      * @param {{button: Phaser.GameObjects.Image, text: Phaser.GameObjects.Text, sound: Phaser.Sound.BaseSound}} bObj 
      */
     hoverClick(bObj) {

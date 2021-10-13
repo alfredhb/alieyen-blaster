@@ -52,6 +52,9 @@ export default class ArcadeReportScene extends Phaser.Scene {
         });
     }
 
+    /**
+     * Handles element placement: bg, center box, title, report, sprite, navigation, quit
+     */
     create() {
         const { width, height } = this.scale;
         this.constants = new Constants(width, height);
@@ -90,6 +93,11 @@ export default class ArcadeReportScene extends Phaser.Scene {
         })
     }
 
+    /**
+     * Creates a black box with white outline to place buttons over
+     * @param {number} width 
+     * @param {number} height 
+     */
     centerBox(width, height) {
         const centerOutline = this.add.image(width * 0.5, height * 0.5, '__WHITE');
         centerOutline.setDisplaySize(width * 0.6505, height * 0.7505);
@@ -131,25 +139,25 @@ export default class ArcadeReportScene extends Phaser.Scene {
      */
     levelReport(width, height) {
         const scoreText = this.add.text(width * 0.275, height * 0.35, 'SCORE :', this.constants.MenuButtonStyle());
-        // const accuracyText = this.add.text(width * 0.275, height * 0.425, 'ACCURACY :', this.constants.MenuButtonStyle());
         const scoreVal = this.add.text(
             width * 0.675, 
             height * 0.35, 
             this.constants.ZeroPad(this.levelScore, 4), 
             this.constants.MenuButtonStyle("#FF0000")
         );
+        scoreVal.setOrigin(1, 0);
+
+        // Do we want to show accuracy if bubba will be using an eyetracker which
+        // constantly fires bullets? -- Disabled for Alpha
+        // const accuracyText = this.add.text(width * 0.275, height * 0.425, 'ACCURACY :', this.constants.MenuButtonStyle());
         // const accuracyVal = this.add.text(
         //     width * 0.675,
         //     height * 0.425, 
         //     (this.levelScore / this.totalShots * 10).toString().substr(0,4) + "%",
         //     this.constants.MenuButtonStyle("#FF0000")
         // );
-        scoreVal.setOrigin(1, 0);
         // accuracyVal.setOrigin(1, 0);
 
-        // Do we want to show accuracy if bubba will be using an eyetracker which
-        // constantly fires bullets?
-        // Add TTS
         [
             {text: scoreText, sound: this.menuSounds.scoreTTS},
             // {text: accuracyText, sound: this.menuSounds.accuracyTTS}
