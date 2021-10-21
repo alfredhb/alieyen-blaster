@@ -11,10 +11,16 @@ export default class ArcadeScene1 extends Phaser.Scene {
     constructor() {
         super('timedArcade')
     }
-    
+
+    Turret(turret, cooldownTimer, inCooldown) {
+        this.turret = turret;
+        this.cooldownTimer = cooldownTimer;
+        this.inCooldown = inCooldown;
+    }
+
     /**
      * Capture the next scene to progress to after selections are made
-     * @param {{meta: {playerCount: number, difficulty: number}, level: {any}?, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}?}} data 
+     * @param {{meta: {playerCount: number, difficulty: number}, level: {any}?, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}?}} data
      */
     init(data) {
         this.players = data.meta.playerCount;
@@ -37,6 +43,9 @@ export default class ArcadeScene1 extends Phaser.Scene {
     create() {
         const { width, height } = this.scale;
         this.constants = new Constants(width, height);
+
+        this.turrets = []
+        this.levelFinished = false;
 
         // Init Selection Menu
 
@@ -72,6 +81,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
      * and accuracy.
      */
     endLevel() {
+        this.levelFinished = true;
+
         this.input.removeListener('pointerdown');
 
         // Destroy timers
@@ -117,8 +128,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
     // HUD METHODS
     /**
      * Initializes all player / static graphic components
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     initHud(width, height) {
         // Add Background
@@ -140,7 +151,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
         const quit = new QuitButton(this, {
             backMenu: 'arcadeMenu',
             execFunc: () => { if (this.timer) { this.timer.destroy() }},
-            data: { 
+            data: {
                 meta: {
                     playerCount: this.players,
                     difficulty: this.difficulty,
@@ -150,23 +161,33 @@ export default class ArcadeScene1 extends Phaser.Scene {
     }
 
     /**
+     * Add both turrets
+     * @param {*} width
+     * @param {*} height
+     */
+     addTurrets(width, height) {
+        this.addTurret(width * 0.05, height * 0.85);
+        this.addTurret(width * 0.95, height * 0.85);
+    }
+
+    /**
      * TODO: Finish adding bullet physics, remove magic numbers, add 2 player logic
      * Adds two turrets one on each side of the screen. If this.players == 1, then
      * mousedown controlls both.
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} x
+     * @param {number} y
      */
-    addTurrets(width, height) {
+    addTurret(x, y) {
         // Add Assets
-        this.turretLeft = this.add.image(width * 0.05, height * 0.85, 'turret-colored');
-        this.turretLeft.setDisplaySize(50, 250);
-        this.turretLeft.setOrigin(0.5);
-        this.turretLeft.setDepth(10);
-
-        this.turretRight = this.add.image(width * 0.95, height * 0.85, 'turret-colored');
-        this.turretRight.setDisplaySize(50, 250);
-        this.turretRight.setOrigin(0.5);
-        this.turretRight.setDepth(10);
+        let id = this.turrets.length
+        this.turrets.push({
+            turret: this.add.image(x, y, 'turret-colored'),
+            cooldownTimer: null,
+            inCooldown: false
+        });
+        this.turrets[id].turret.setDisplaySize(50, 250);
+        this.turrets[id].turret.setOrigin(0.5);
+        this.turrets[id].turret.setDepth(10);
 
         // Add Bullets
         this.bullets = this.physics.add.group({
@@ -175,20 +196,40 @@ export default class ArcadeScene1 extends Phaser.Scene {
         });
 
         // Add Rotation and Bullet Firing
-        this.input.on('pointerdown', (pointer) => {
-            // Rotate turret and fire only if within angle
-            let angleLeft = Phaser.Math.Angle.Between(this.turretLeft.x, this.turretLeft.y, pointer.x, pointer.y) + Math.PI / 2;
-            if (!(Math.abs(angleLeft) > 1.5)) {
-                this.turretLeft.setRotation(angleLeft);
-                this.addBullet(this.turretLeft.x, this.turretLeft.y, angleLeft);
+        let fire = (pointer) => {
+            this.input.removeListener('pointerdown');
+
+            if (this.levelFinished) {
+                return;
             }
 
+            this.turrets[id].cooldownTimer = this.time.addEvent({
+                delay: cooldownTime,
+                callback: cooldownDone,
+                callbackScope: this
+            });
+
             // Rotate turret and fire only if within angle
-            let angleRight = Phaser.Math.Angle.Between(this.turretRight.x, this.turretRight.y, pointer.x, pointer.y) + Math.PI / 2;
-            if (!(Math.abs(angleRight) > 1.5)) {
-                this.turretRight.setRotation(angleRight);
-                this.addBullet(this.turretRight.x, this.turretRight.y, angleRight);
+            let angle = Phaser.Math.Angle.Between(this.turrets[id].turret.x, this.turrets[id].turret.y, pointer.x, pointer.y) + Math.PI / 2;
+            if (!(Math.abs(angle) > 1.5)) {
+                this.turrets[id].turret.setRotation(angle);
+                this.addBullet(this.turrets[id].turret.x, this.turrets[id].turret.y, angle);
             }
+        }
+
+        // Add cooldown
+        this.turrets[id].inCooldown = false;
+
+        let cooldownTime = 500; // 0.5 sec
+        let cooldownDone = () => {
+            this.turrets[id].inCooldown = false;
+            this.input.on('pointerdown', (pointer) => {
+                fire(pointer);
+            });
+        }
+
+        this.input.on('pointerdown', (pointer) => {
+            fire(pointer);
         });
     }
 
@@ -204,10 +245,10 @@ export default class ArcadeScene1 extends Phaser.Scene {
         if (bullet) {
             // Add collider here
             let overlapper = this.physics.add.overlap(
-                bullet, 
+                bullet,
                 this.aliens,
                 this.collisionFunc,
-                null, 
+                null,
                 this
             );
             bullet.fire(x, y + 50, angle);
@@ -220,8 +261,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
     /**
      * Adds a score counter location, must be updated by updates
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     addScoreCounter(width, height) {
         this.scoreText = this.add.text(
@@ -236,8 +277,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
     /**
      * Create a final score card detailing how many points scored, and what
      * the points come from, and option to restart or quit
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     addScoreTitleCard(width, height) {
         return;
@@ -246,8 +287,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
     // GAME LOGIC METHODS
     /**
      * Create a time (ms), timer which calls resolveFunc on completion
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     initTimer(width, height) {
         // Create Timer Event
@@ -346,12 +387,12 @@ export default class ArcadeScene1 extends Phaser.Scene {
      */
     initAnimations() {
         this.explode = this.anims.create({
-                key: 'explode', 
+                key: 'explode',
                 frames: [
                     {key: 'ex-1'},
                     {key: 'ex-2'},
                     {key: 'ex-3'},
-                ], 
+                ],
                 repeat: 1,
             });
     }
@@ -360,15 +401,15 @@ export default class ArcadeScene1 extends Phaser.Scene {
      * Callback function when a bullet and an alien overlap. if the alien is
      * alive and the bullet is active, then destroy the alien (allowing respawn)
      * and increment score
-     * @param {Phaser.Physics.Arcade.Sprite} bullet 
-     * @param {Phaser.Physics.Arcade.Sprite} alien 
+     * @param {Phaser.Physics.Arcade.Sprite} bullet
+     * @param {Phaser.Physics.Arcade.Sprite} alien
      */
     collisionFunc(bullet, alien) {
         if (!alien.dead() && bullet.active) {
             this.levelSounds.explode.play();
             bullet.kill();
             alien.kill();
-            
+
             this.score += alien_grunt_score;
         }
     }
