@@ -151,7 +151,7 @@ export default class MenuScene3 extends Phaser.Scene {
 
         // Lives Button
         const liButton = this.add.image(width * 0.25, height * 0.7, 'gameslot-button');
-        const liIcon = this.add.image(width * 0.25, height * 0.675, 'endless-button');
+        const liIcon = this.add.image(width * 0.25, height * 0.675, 'lives-button');
         const liText = this.add.text(liButton.x, height * 0.775, 'Lives', this.constants.MenuButtonStyle('#000000'));
 
         // Boss Battle button

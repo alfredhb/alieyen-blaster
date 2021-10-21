@@ -22,7 +22,7 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "difficulty-button",  "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/gear.png"},
             {"key": "gameslot-button",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/buttons/game_slot.png"},
             {"key": "story-button",       "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/buttons/story_no_text.png"},
-            {"key": "timed-button",       "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/alien.png"},
+            {"key": "timed-button",       "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/clock.png"},
             {"key": "endless-button",     "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/infinity.png"},
             {"key": "lives-button",       "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/heart.png"},
             {"key": "gauntlet-button",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/alien.png"},
