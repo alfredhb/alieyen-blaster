@@ -20,7 +20,7 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "arcade-hud",         "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/background/arcade_hud.png"},
             {"key": "arcade-button",      "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/buttons/arcade_no_text.png"},
             {"key": "difficulty-button",  "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/gear.png"},
-            {"key": "gameslot-button",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/buttons/arcade_no_text.png"},
+            {"key": "gameslot-button",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/buttons/game_slot.png"},
             {"key": "story-button",       "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/buttons/story_no_text.png"},
             {"key": "timed-button",       "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/alien.png"},
             {"key": "endless-button",     "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/infinity.png"},
@@ -120,7 +120,6 @@ export default class DataScene1 extends Phaser.Scene {
             loadBlock.setDepth(10);
             
             this.assetsLoaded += 1;
-            console.log(this.assetsLoaded, this.totalAssets);
             if (this.assetsLoaded == this.totalAssets) {
                 setTimeout(() => {
                     this.scene.start('startMenu');
