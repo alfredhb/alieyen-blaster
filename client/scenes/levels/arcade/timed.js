@@ -12,10 +12,11 @@ export default class ArcadeScene1 extends Phaser.Scene {
         super('timedArcade')
     }
 
-    Turret(turret, cooldownTimer, inCooldown) {
+    Turret(turret, cooldownTimer, inCooldown, cooldownEffect) {
         this.turret = turret;
         this.cooldownTimer = cooldownTimer;
         this.inCooldown = inCooldown;
+        this.cooldownEffect = cooldownEffect;
     }
 
     /**
@@ -73,6 +74,25 @@ export default class ArcadeScene1 extends Phaser.Scene {
         // Update Timer Text
         this.timerVal.setText(this.timer.getRemainingSeconds().toString().substr(0,4));
         this.scoreText.setText("Score: " + this.constants.ZeroPad(this.score, 3));
+
+        for (let id in this.turrets) {
+            let turret = this.turrets[id];
+            if (turret.cooldownTimer) {
+                let progress = turret.cooldownTimer.getProgress();
+                if (progress == 1) {
+                    turret.cooldownEffect.visible = false;
+                } else {
+                    turret.cooldownEffect.visible = true;
+                    let render = Math.floor(360 * progress);
+                    turret.cooldownEffect.clear();
+                    turret.cooldownEffect.fillStyle(0xFF0000, 0.4);
+                    turret.cooldownEffect.moveTo(0, 0);
+                    turret.cooldownEffect.arc(0, 0, 32, Phaser.Math.DegToRad(270), Phaser.Math.DegToRad(render - 90), true);
+                    turret.cooldownEffect.fillPath();
+                }
+            }
+        }
+
     }
 
     /**
@@ -183,7 +203,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.turrets.push({
             turret: this.add.image(x, y, 'turret-colored'),
             cooldownTimer: null,
-            inCooldown: false
+            inCooldown: false,
+            cooldownEffect: null
         });
         this.turrets[id].turret.setDisplaySize(50, 250);
         this.turrets[id].turret.setOrigin(0.5);
@@ -231,6 +252,10 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.input.on('pointerdown', (pointer) => {
             fire(pointer);
         });
+
+        this.turrets[id].cooldownEffect = this.add.graphics();
+        this.turrets[id].cooldownEffect.setPosition(x, y);
+        this.turrets[id].cooldownEffect.setDepth(20);
     }
 
     /**
