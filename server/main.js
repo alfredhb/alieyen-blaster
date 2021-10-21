@@ -4,7 +4,12 @@ import 'fs';
 const fs = require("fs")
 const cwd_arr = fs.realpathSync(process.cwd()).split("\\");
 const isLocalDev = cwd_arr[cwd_arr.length - 3] == "build";
+let pathPrefix = "";
+if (isLocalDev) {
   pathPrefix = "../../../../../public/";
+} else {
+  pathPrefix = "../web.browser/";
+}
 
 Meteor.methods({
   // Loads asset from ./data/assets/{path} and returns a base64 object of it
