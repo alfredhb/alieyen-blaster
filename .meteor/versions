@@ -19,10 +19,10 @@ ddp-client@2.5.0
 ddp-common@1.4.0
 ddp-server@2.5.0
 diff-sequence@1.1.1
-dynamic-import@0.7.1
+dynamic-import@0.7.2
 ecmascript@0.15.3
 ecmascript-runtime@0.8.0
-ecmascript-runtime-client@0.12.0
+ecmascript-runtime-client@0.12.1
 ecmascript-runtime-server@0.11.0
 ejson@1.1.1
 es5-shim@4.8.0
@@ -45,7 +45,7 @@ minifier-js@2.7.1
 minimongo@1.7.0
 mobile-experience@1.1.0
 mobile-status-bar@1.1.0
-modern-browsers@0.1.6
+modern-browsers@0.1.7
 modules@0.17.0
 modules-runtime@0.12.0
 modules-runtime-hot@0.13.0

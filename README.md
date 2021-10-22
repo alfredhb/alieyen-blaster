@@ -6,8 +6,17 @@ Setup Steps:
 1. install npm: ([NodeJS](https://nodejs.org/en/download/))
 2. install meteor: `$ npm install -g meteor`
 3. clone repository
-4. Within repository directory, run initial meteor app setup: `$ meteor`
-5. The final message should be:
+4. Connect to development database.
+    * MacOS/Linux, run the following command and skip step 5.
+        ```
+        $ MONGO_URL=mongodb+srv://superDBUser:zK4LcSBJ3r5bSRbl@alieyen-blaster.lojho.mongodb.net/game-data meteor
+        ```
+    * Windows. run the following command and continue to step 5.
+        ```
+        $ set MONGO_URL=mongodb+srv://superDBUser:zK4LcSBJ3r5bSRbl@alieyen-blaster.lojho.mongodb.net/game-data
+        ```
+5. Within repository directory, run initial meteor app setup: `$ meteor`
+6. The final message should be:
 
     ```
     $ meteor

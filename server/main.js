@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
 import 'fs';
 
+// Setup Directory Layout
 const fs = require("fs")
 const cwd_arr = fs.realpathSync(process.cwd()).split("\\");
 const isLocalDev = cwd_arr[cwd_arr.length - 3] == "build";
@@ -10,6 +12,10 @@ if (isLocalDev) {
 } else {
   pathPrefix = "../web.browser/";
 }
+
+// Export Collections
+export const SaveData = new Mongo.Collection("save-files");
+export const MetaData = new Mongo.Collection("meta-data");
 
 Meteor.methods({
   // Loads asset from ./data/assets/{path} and returns a base64 object of it
@@ -27,15 +33,24 @@ Meteor.methods({
    * Reads global difficulty var from /public/game/difficulty.number
    */
   getDifficulty() {
-    throw new Meteor.Error("Unimplemented!")
+    var d = MetaData.findOne("difficulty", { "fields": { value: 1 } });
+
+    return d.value;
   },
 
   /**
    * Checks that difficulty.number isn't already d, then sets it
-   * @param {number} d 
+   * @param {number} difficulty 
    * @returns {boolean} whether difficulty was changes
    */
-  setDifficulty(d) {
-    throw new Meteor.Error("Unimplemented!")
+  setDifficulty(difficulty) {
+    var d = MetaData.findOne("difficulty", { "fields": { value: 1 } });
+
+    if (d.value == difficulty) {
+      return false
+    } 
+
+    MetaData.update("difficulty", { $set: { "value" : difficulty } });
+    return true;
   },
 });
