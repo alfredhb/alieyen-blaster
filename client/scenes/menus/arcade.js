@@ -13,7 +13,7 @@ export default class MenuScene3 extends Phaser.Scene {
      */
     init(data) {
         this.players = data.meta.playerCount;
-        this.difficulty = (data.meta.difficulty) ? data.meta.difficulty : 1; // easy unless returned from prev scene
+        this.difficulty = data.meta.difficulty; // easy unless returned from prev scene
 
         console.log("initialized ArcadeMenu for ", this.players, " players on difficulty ", this.difficulty)
     }
@@ -134,7 +134,8 @@ export default class MenuScene3 extends Phaser.Scene {
             backMenu: 'gamemodeMenu',
             data: { 
                 meta: {
-                    playerCount: this.players 
+                    playerCount: this.players,
+                    difficulty: this.difficulty,
                 },
             },
         });

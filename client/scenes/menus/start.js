@@ -1,8 +1,24 @@
+import { Meteor } from 'meteor/meteor';
 import Phaser from 'phaser';
 
 export default class MenuScene4 extends Phaser.Scene {
     constructor() {
         super('startMenu')
+    }
+
+    /**
+     * Loads up game data such as difficulty from DB and passes along to future scenes
+     */
+    init() {
+        Meteor.call("getDifficulty", (err, res) => {
+            if (err != null) {
+                console.log(err);
+                this.difficulty = 1;
+            }
+
+            this.difficulty = res;
+            console.log("Fetched Difficulty as " + this.difficulty);
+        })
     }
 
     /**
@@ -110,7 +126,12 @@ export default class MenuScene4 extends Phaser.Scene {
 
         // Set action for specific buttons
         plButton.on('pointerup', () => {
-            this.scene.start('playerSelectMenu');
+            this.scene.start(
+                'playerSelectMenu', {
+                    meta: {
+                        difficulty: this.difficulty
+                    }
+                });
         });
         qButton.on('pointerup', () => {
             console.log('Unimplemented');

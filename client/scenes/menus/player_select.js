@@ -9,11 +9,15 @@
     constructor() {
         super('playerSelectMenu');
     }
-    
-    // Initialize any scene vars
-    init() {
+ 
+    /**
+     * Initialize any scene vars
+     * @param {{meta: {playerCount: number, difficulty: number}}} data 
+     */
+    init(data) {
         // player count - Used in all levels
-        this.players = 0;
+        this.players = (data.meta.playerCount) ? data.meta.playerCount : 0;
+        this.difficulty = data.meta.difficulty;
 
         // Re-initialize timer if it persists from previous instance of MenuScene8
         if (this.timer) {
@@ -210,6 +214,7 @@
                     {
                         meta: {
                             playerCount: 1, // TODO add player handling in later scenes
+                            difficulty: this.difficulty,
                         }
                     }
                 );

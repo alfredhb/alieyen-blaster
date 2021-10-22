@@ -1,12 +1,12 @@
 /**
  * The menu seen in this slide: https://docs.google.com/presentation/d/1k2VFrhd0RngtsdU3UQYzQbVgNASu-717JjrWl4YOyiE/edit#slide=id.gf155f0bac5_0_40
  */
+import { Meteor } from 'meteor/meteor';
+import Phaser from "phaser";
+import Constants from "../../lib/constants";
+import QuitButton from "../../gameobjects/quit_button";
 
- import Phaser from "phaser";
- import Constants from "../../lib/constants";
- import QuitButton from "../../gameobjects/quit_button";
- 
- export default class MenuScene9 extends Phaser.Scene {constructor() {
+export default class MenuScene9 extends Phaser.Scene {constructor() {
         super('difficultySelectMenu');
     }
     
@@ -21,7 +21,15 @@
         this.players = data.meta.playerCount;
 
         // Game data holds player count in a central place
-        this.difficulty = 0;
+        Meteor.call("getDifficulty", (err, res) => {
+            if (err != null) {
+                console.log(err);
+                this.difficulty = 1;
+            }
+
+            this.difficulty = res;
+            console.log("fetched difficulty as " + this.difficulty);
+        })
         
         if (this.timer) {
             this.timer = this.time.addEvent({
@@ -80,8 +88,10 @@
             data: {
                 meta: {
                     playerCount: this.players,
-                    difficulty: (this.difficulty) ? this.difficulty : 1,
-                }}
+                    difficulty: this.difficulty,
+                }
+            },
+            execFunc: this.persistDifficulty
         });
     }
 
@@ -165,9 +175,6 @@
                 buttons.forEach(b => b.button.setTint(0x808080));
                 b.button.setTint(0x0000FF);
 
-                // TODO: Remove me
-                console.log("set difficulty to ", this.difficulty)
-
                 this.menuSounds.menuClick.play();
                 this.styleStart();
             })
@@ -202,12 +209,14 @@
         }).on('pointerup', () => {
             if (this.startReady()) {
                 this.timer.remove();
+                this.persistDifficulty();
+
                 this.menuSounds.menuClick.play();
                 this.scene.start(
                     this.nextScene.name,
                     {
                         meta: {
-                            players: this.players,
+                            playerCount: this.players,
                             difficulty: this.difficulty,
                         }
                     }
@@ -226,6 +235,21 @@
         } else {
             this.startButton.setTint(0xFF0000);
         }
+    }
+
+    /**
+     * Saves set difficulty to db
+     * @param {number} d 
+     */
+    persistDifficulty = () => {
+        Meteor.call("setDifficulty", this.difficulty, (err, res) => {
+            if (err != null) {
+                console.log(err);
+            }
+
+            console.log((res) ? "successfully set difficulty to " + this.difficulty 
+            : "difficulty already set to " + this.difficulty);
+        })
     }
 
     // Periodically change color of startButton as long as both players and difficulty are set
