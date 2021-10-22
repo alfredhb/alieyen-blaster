@@ -34,8 +34,18 @@ Meteor.methods({
    */
   getDifficulty() {
     var d = MetaData.findOne("difficulty", { "fields": { value: 1 } });
+    if (d) {
+      return d.value
+    }
 
-    return d.value;
+    // entry doesn't exist. Create one.
+    MetaData.insert(
+      {
+        "_id": "difficulty", 
+        "value": 1
+      }
+    );
+    return 1;
   },
 
   /**

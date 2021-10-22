@@ -13,6 +13,7 @@ export default class MenuScene5 extends Phaser.Scene {
      */
     init(data) {
         this.players = data.meta.playerCount;
+        this.difficulty = data.meta.difficulty;
 
         console.log("initialized SafeFileMenu for ", this.players, " players")
     }
@@ -61,7 +62,8 @@ export default class MenuScene5 extends Phaser.Scene {
             backMenu: 'gamemodeMenu',
             data: { 
                 meta: {
-                    playerCount: this.players 
+                    playerCount: this.players,
+                    difficulty: this.difficulty,
                 },
             },
         });

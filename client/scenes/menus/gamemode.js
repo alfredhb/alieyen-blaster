@@ -12,6 +12,7 @@ export default class MenuScene2 extends Phaser.Scene {
      */
     init(data) {
         this.players = data.meta.playerCount;
+        this.difficulty = data.meta.difficulty;
 
         console.log("initialized GamemodeMenu for ", this.players, " players")
     }
@@ -51,7 +52,13 @@ export default class MenuScene2 extends Phaser.Scene {
 
         // Quit button - Interactions set in constructor
         const quit = new QuitButton(this, {
-            backMenu: 'playerSelectMenu'
+            backMenu: 'playerSelectMenu',
+            data: {
+                meta: {
+                    playerCount: this.players,
+                    difficulty: this.difficulty,
+                }
+            }
         });
 
         // Story button
@@ -96,6 +103,7 @@ export default class MenuScene2 extends Phaser.Scene {
                     {
                         meta: {
                             playerCount: this.players,
+                            difficulty: this.difficulty
                         }
                     }
                 );
