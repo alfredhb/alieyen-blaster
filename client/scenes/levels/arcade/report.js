@@ -139,6 +139,8 @@ export default class ArcadeReportScene extends Phaser.Scene {
      * @param {number} height
      */
     levelReport(width, height) {
+        let ttsArr = [];
+
         const score1Text = this.add.text(width * 0.275, height * 0.35, 'PLAYER 1 SCORE :', this.constants.MenuButtonStyle());
         const score1Val = this.add.text(
             width * 0.675,
@@ -147,15 +149,19 @@ export default class ArcadeReportScene extends Phaser.Scene {
             this.constants.MenuButtonStyle("#FF0000")
         );
         score1Val.setOrigin(1, 0);
+        ttsArr.push({text: score1Text, sound: this.menuSounds.scoreTTS});
 
-        const score2Text = this.add.text(width * 0.275, height * 0.425, 'PLAYER 2 SCORE :', this.constants.MenuButtonStyle());
-        const score2Val = this.add.text(
-            width * 0.675,
-            height * 0.425,
-            this.constants.ZeroPad(this.levelScore2, 4),
-            this.constants.MenuButtonStyle("#FF0000")
-        );
-        score2Val.setOrigin(1, 0);
+        if (this.players === 2) {
+            const score2Text = this.add.text(width * 0.275, height * 0.425, 'PLAYER 2 SCORE :', this.constants.MenuButtonStyle());
+            const score2Val = this.add.text(
+                width * 0.675,
+                height * 0.425,
+                this.constants.ZeroPad(this.levelScore2, 4),
+                this.constants.MenuButtonStyle("#FF0000")
+            );
+            score2Val.setOrigin(1, 0);
+            ttsArr.push({text: score2Text, sound: this.menuSounds.scoreTTS});
+        }
 
         // Do we want to show accuracy if bubba will be using an eyetracker which
         // constantly fires bullets? -- Disabled for Alpha
@@ -168,11 +174,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
         // );
         // accuracyVal.setOrigin(1, 0);
 
-        [
-            {text: score1Text, sound: this.menuSounds.scoreTTS},
-            {text: score2Text, sound: this.menuSounds.scoreTTS},
-            // {text: accuracyText, sound: this.menuSounds.accuracyTTS}
-        ].forEach(t => {
+        ttsArr.forEach(t => {
             t.text.setInteractive();
 
             t.text.on('pointerover', () => {

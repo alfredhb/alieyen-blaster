@@ -185,8 +185,10 @@ export default class ArcadeScene1 extends Phaser.Scene {
      * @param {*} height
      */
      addTurrets(width, height) {
-        this.addTurret(width * 0.05, height * 0.85, 50, height * 0.1, true);
-        this.addTurret(width * 0.95, height * 0.85, width - 250, height * 0.1, false);
+        this.addTurret(width * 0.05, height * 0.85, 50, height * 0.1, false);
+        if (this.players === 2) {
+            this.addTurret(width * 0.95, height * 0.85, width - 250, height * 0.1, true);
+        }
     }
 
     /**
