@@ -34,7 +34,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
         if (this.timer) {
             this.timer = this.time.addEvent({
                 delay: 1000,
-                callback: this.resolveFunc,
+                callback: this.invertColors,
                 callbackScope: this,
                 loop: true,
                 paused: true,
@@ -169,7 +169,10 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
                 } else {
                     b.button.setTint(0x0000FF);
                 }
-            }).on('pointerup', () => {
+            });
+
+            // Add hoverclick and normal click
+            this.constants.HoverClick(this, b.button, () => {
                 // Set difficulty & show on button (clear old tints and set new)
                 this.difficulty = Number(b.text.name);
                 buttons.forEach(b => b.button.setTint(0x808080));
@@ -177,7 +180,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
 
                 this.menuSounds.menuClick.play();
                 this.styleStart();
-            })
+            });
         });
     }
 
@@ -206,7 +209,10 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
             } else {
                 this.startButton.setTint(0x808080);
             }
-        }).on('pointerup', () => {
+        });
+
+        // Add hoverclick and normal click
+        this.constants.HoverClick(this, this.startButton, () => {
             if (this.startReady()) {
                 this.timer.remove();
                 this.persistDifficulty();
@@ -222,14 +228,14 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
                     }
                 );
             }
-        });
+        })
     }
     
     startReady() {
         return this.difficulty;
     }
     
-    resolveFunc = () => {
+    invertColors = () => {
         if (this.startButton.tintTopLeft == 0xFF0000) {
             this.startButton.setTint(0x0000FF);
         } else {
@@ -267,7 +273,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
         this.startButton.setTint(0x0000FF);
         this.timer = this.time.addEvent({
             delay: 1000,
-            callback: this.resolveFunc,
+            callback: this.invertColors,
             callbackScope: this,
             loop: true,
             paused: false,

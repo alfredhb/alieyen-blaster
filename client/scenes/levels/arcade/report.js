@@ -244,7 +244,10 @@ export default class ArcadeReportScene extends Phaser.Scene {
                 }
             }).on('pointerout', () => {
                 b.button.setTint(0x808080);
-            }).on('pointerup', () => {
+            });
+
+            // Add hoverclick and normal click
+            this.constants.HoverClick(this, b.button, () => {
                 this.menuSounds.menuClick.play();
 
                 // Transition to different scene based on text name

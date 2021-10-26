@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import QuitButton from '../../gameobjects/quit_button';
+import Constants from '../../lib/constants';
 
 export default class MenuScene2 extends Phaser.Scene {
     constructor() {
@@ -34,6 +35,7 @@ export default class MenuScene2 extends Phaser.Scene {
      */
     create() {
         const { width, height } = this.scale;
+        this.constants = new Constants(width, height);
         
         this.initButtons(width, height);
     }
@@ -96,7 +98,10 @@ export default class MenuScene2 extends Phaser.Scene {
                 b.button.clearTint();
                 b.text.clearTint();
 
-            }).on('pointerup', () => {
+            });
+
+            // Add hoverclick and normal click
+            this.constants.HoverClick(this, b.button, () => {
                 this.menuSounds.menuClick.play();
                 this.scene.start(
                     b.text.name,

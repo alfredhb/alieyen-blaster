@@ -41,7 +41,9 @@ export default class QuitButton extends Phaser.GameObjects.Group {
             button.clearTint();
             text.clearTint();
         });
-        button.on('pointerup', () => {
+        
+        // Add hoverclick and normal click
+        this.constants.HoverClick(scene, button, () => {
             clickSound.play();
             if (config.execFunc) { config.execFunc(); }
             scene.scene.start(config.backMenu, config.data);

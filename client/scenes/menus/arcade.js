@@ -100,7 +100,10 @@ export default class MenuScene3 extends Phaser.Scene {
         }).on('pointerout', () => {
             difButton.clearTint();
             difIcon.clearTint();
-        }).on('pointerup', () => {
+        });
+
+        // Add hoverclick and normalclick
+        this.constants.HoverClick(this, difButton, () => {
             this.menuSounds.menuClick.play();
             this.scene.start('difficultySelectMenu', {
                 meta: {
@@ -117,7 +120,7 @@ export default class MenuScene3 extends Phaser.Scene {
                     }
                 },
             });
-        })
+        });
 
     }
 
@@ -144,21 +147,25 @@ export default class MenuScene3 extends Phaser.Scene {
         const tiButton = this.add.image(width * 0.25, height * 0.35, 'gameslot-button');
         const tiIcon = this.add.image(width * 0.25, height * 0.325, 'timed-button');
         const tiText = this.add.text(tiButton.x, height * 0.425, 'Timed', this.constants.MenuButtonStyle('#000000'));
+        tiText.setName('timedArcade');
 
         // Endless button
         const enButton = this.add.image(width * 0.75, height * 0.35, 'gameslot-button');
         const enIcon = this.add.image(width * 0.75, height * 0.325, 'endless-button');
         const enText = this.add.text(enButton.x, height * 0.425, 'Endless', this.constants.MenuButtonStyle('#000000'));
+        enText.setName('arcadeMenu'); // TODO: change me
 
         // Lives Button
         const liButton = this.add.image(width * 0.25, height * 0.7, 'gameslot-button');
         const liIcon = this.add.image(width * 0.25, height * 0.675, 'lives-button');
         const liText = this.add.text(liButton.x, height * 0.775, 'Lives', this.constants.MenuButtonStyle('#000000'));
+        liText.setName('arcadeMenu'); // TODO: change me
 
         // Boss Battle button
         const bbButton = this.add.image(width * 0.75, height * 0.7, 'gameslot-button');
         const bbIcon = this.add.image(width * 0.75, height * 0.675, 'gauntlet-button');
         const bbText = this.add.text(bbButton.x, height * 0.775, 'Boss Battle', this.constants.MenuButtonStyle('#000000'));
+        bbText.setName('arcadeMenu'); // TODO: change me
 
         this.buttons = [
             {button: tiButton, icon: tiIcon, text: tiText, sound: this.menuSounds.timedTTS},
@@ -189,22 +196,19 @@ export default class MenuScene3 extends Phaser.Scene {
             b.button.on('pointerup', () => {
                 this.menuSounds.menuClick.play();
             });
-        });
 
-        // Set action for specific buttons
-        // TODO: move to inside forEach @ L106 using names.
-        tiButton.on('pointerup', () => {
-            this.scene.start('timedArcade',
-                {
-                    meta: {
-                        playerCount: this.players,
-                        difficulty: this.difficulty,
+            // Add Hoverclick and normal click
+            this.constants.HoverClick(this, b.button, () => {
+                this.menuSounds.menuClick.play();
+                this.scene.start(b.text.name,
+                    {
+                        meta: {
+                            playerCount: this.players,
+                            difficulty: this.difficulty,
+                        }
                     }
-                }
-            );
-        });
-        enButton.on('pointerup', () => {
-            console.log('Unimplemented');
+                );
+            })
         });
     }
 }
