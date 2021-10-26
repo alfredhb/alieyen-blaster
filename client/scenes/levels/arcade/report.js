@@ -7,10 +7,10 @@ export default class ArcadeReportScene extends Phaser.Scene {
     constructor() {
         super('arcadeReportScene');
     }
-    
+
     /**
      * Capture the next scene to progress to after selections are made
-     * @param {{meta: {playerCount: number, difficulty: number}, level: {score: number, shotsFired: number}, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}}} data 
+     * @param {{meta: {playerCount: number, difficulty: number}, level: {score1: number, score2: number, shotsFired: number}, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}}} data
      */
     init(data) {
         // Set game metadata
@@ -18,8 +18,9 @@ export default class ArcadeReportScene extends Phaser.Scene {
         this.difficulty = data.meta.difficulty;
 
         // Set level data
-        this.levelScore = data.level.score;
-        this.totalShots = data.level.shotsFired;
+        this.levelScore1 = data.level.score1;
+        this.levelScore2 = data.level.score2;
+        // this.totalShots = data.level.shotsFired;
 
         // Set scene data
         this.prevScene = data.scene.prevScene;
@@ -42,12 +43,12 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
         // Init animations
         this.explode = this.anims.create({
-            key: 'explode', 
+            key: 'explode',
             frames: [
                 {key: 'ex-1', duration: 100},
                 {key: 'ex-2', duration: 100},
                 {key: 'ex-3', duration: 100},
-            ], 
+            ],
             repeat: 1,
         });
     }
@@ -62,11 +63,11 @@ export default class ArcadeReportScene extends Phaser.Scene {
         // Init BG
         const bg = this.add.image(width * 0.5, height * 0.5, 'space-bg');
         bg.setDisplaySize(width, height);
-        
+
         // Init Center Section (black w white border)
         this.centerBox(width, height);
 
-        // Init report data 
+        // Init report data
         this.initTitle(width, height);
 
         // score breakdown + accuracy
@@ -95,8 +96,8 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
     /**
      * Creates a black box with white outline to place buttons over
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     centerBox(width, height) {
         const centerOutline = this.add.image(width * 0.5, height * 0.5, '__WHITE');
@@ -111,8 +112,8 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
     /**
      * Add title and interactive listener which plays tts
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     initTitle(width, height) {
         const title = this.add.text(
@@ -134,32 +135,42 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
     /**
      * Display score and accuracy from the previous level
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     levelReport(width, height) {
-        const scoreText = this.add.text(width * 0.275, height * 0.35, 'SCORE :', this.constants.MenuButtonStyle());
-        const scoreVal = this.add.text(
-            width * 0.675, 
-            height * 0.35, 
-            this.constants.ZeroPad(this.levelScore, 4), 
+        const score1Text = this.add.text(width * 0.275, height * 0.35, 'PLAYER 1 SCORE :', this.constants.MenuButtonStyle());
+        const score1Val = this.add.text(
+            width * 0.675,
+            height * 0.35,
+            this.constants.ZeroPad(this.levelScore1, 4),
             this.constants.MenuButtonStyle("#FF0000")
         );
-        scoreVal.setOrigin(1, 0);
+        score1Val.setOrigin(1, 0);
+
+        const score2Text = this.add.text(width * 0.275, height * 0.425, 'PLAYER 2 SCORE :', this.constants.MenuButtonStyle());
+        const score2Val = this.add.text(
+            width * 0.675,
+            height * 0.425,
+            this.constants.ZeroPad(this.levelScore2, 4),
+            this.constants.MenuButtonStyle("#FF0000")
+        );
+        score2Val.setOrigin(1, 0);
 
         // Do we want to show accuracy if bubba will be using an eyetracker which
         // constantly fires bullets? -- Disabled for Alpha
         // const accuracyText = this.add.text(width * 0.275, height * 0.425, 'ACCURACY :', this.constants.MenuButtonStyle());
         // const accuracyVal = this.add.text(
         //     width * 0.675,
-        //     height * 0.425, 
+        //     height * 0.425,
         //     (this.levelScore / this.totalShots * 10).toString().substr(0,4) + "%",
         //     this.constants.MenuButtonStyle("#FF0000")
         // );
         // accuracyVal.setOrigin(1, 0);
 
         [
-            {text: scoreText, sound: this.menuSounds.scoreTTS},
+            {text: score1Text, sound: this.menuSounds.scoreTTS},
+            {text: score2Text, sound: this.menuSounds.scoreTTS},
             // {text: accuracyText, sound: this.menuSounds.accuracyTTS}
         ].forEach(t => {
             t.text.setInteractive();
@@ -175,8 +186,8 @@ export default class ArcadeReportScene extends Phaser.Scene {
     /**
      * Creates an alien grunt which can be clicked to explode for fun (dummy)
      * click agent is invisible box behind alien?
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     initSprite(width, height) {
         // Create Alien
@@ -210,8 +221,8 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
     /**
      * Navigation which either replays the last level, or returns to the arcade menu
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     navigationSection(width, height) {
         const replayButton = this.add.image(width * 0.375, height * 0.75, '__WHITE');
