@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import Phaser from 'phaser';
+import Constants from '../../lib/constants';
 
 export default class DataScene1 extends Phaser.Scene {
     constructor() {
@@ -11,6 +12,7 @@ export default class DataScene1 extends Phaser.Scene {
      */
     preload() {
         const { width, height } = this.scale;
+        this.constants = new Constants(width, height);
 
         // Enumerate assets
         this.onlineImages = [
@@ -119,7 +121,7 @@ export default class DataScene1 extends Phaser.Scene {
             )
             loadBlock.setDisplaySize(loadBlockWidth, width * 0.025);
             loadBlock.setOrigin(0, 0.5);
-            loadBlock.setTint(0xFF0000);
+            loadBlock.setTint(this.constants.Red);
             loadBlock.setDepth(10);
             
             this.assetsLoaded += 1;

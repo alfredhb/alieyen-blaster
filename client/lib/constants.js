@@ -9,6 +9,12 @@ export default class Constants {
         this.hoverMiliseconds = 1000;
     }
 
+    Blue = 0x0000FF;
+    Green = 0x00ff00;
+    Gray = 0x808080;
+    Red = 0xFF0000;
+
+
     /**
      * title text style for menus
      * Calculates fontsize based on screenheight
@@ -23,6 +29,17 @@ export default class Constants {
     }
 
     /**
+     * @returns {Phaser.Types.GameObjects.Text.TextStyle}
+     */
+    TimerStyle = () => {
+        return {
+            fontFamily: 'impact',
+            fontSize: (this.height * 0.045) + "px",
+            color: "0x000000",
+        }
+    };
+
+    /**
      * Button text style for menus
      * Calculates fontsize based on screenheight
      * @param {string?} color hexcode of color to set text to. Default is white
@@ -33,17 +50,6 @@ export default class Constants {
             fontFamily: 'impact',
             fontSize: (this.height * 0.055) + "px",
             color: (color) ? color : "#FFF",
-        }
-    }
-
-    /**
-     * @returns {Phaser.Types.GameObjects.Text.TextStyle}
-     */
-    TimerStyle = () => {
-        return {
-            fontFamily: 'impact',
-            fontSize: (this.height * 0.045) + "px",
-            color: "0x000000",
         }
     }
 

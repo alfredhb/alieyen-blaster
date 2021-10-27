@@ -1,14 +1,16 @@
 import Phaser from "phaser";
+import Constants from "../lib/constants";
 
 export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     constructor(scene) {
         super(scene, 0, 0, 'bullet');
+        this.constants = new Constants(0, 0);
 
         scene.physics.add.existing(this);
 
         this.setDisplaySize(10, 175);
         this.setOrigin(0.5);
-        this.setTint(0xFF0000);
+        this.setTint(this.constants.Red);
 
         this.speed = Phaser.Math.GetSpeed(2500, 1);
     }

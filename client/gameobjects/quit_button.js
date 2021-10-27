@@ -30,7 +30,7 @@ export default class QuitButton extends Phaser.GameObjects.Group {
         // Add interactives
         button.setInteractive();
         button.on('pointerover', () => {
-            button.setTint(0xFF0000);
+            button.setTint(this.constants.Red);
             text.setTint(0xFFF);
 
             if (!hoverSound.isPlaying) {

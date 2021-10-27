@@ -94,7 +94,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
                     turret.cooldownEffect.visible = true;
                     let render = Math.floor(360 * progress);
                     turret.cooldownEffect.clear();
-                    turret.cooldownEffect.fillStyle(0xFF0000, 0.4);
+                    turret.cooldownEffect.fillStyle(this.constants.Red, 0.4);
                     turret.cooldownEffect.moveTo(0, 0);
                     turret.cooldownEffect.arc(0, 0, 32, Phaser.Math.DegToRad(270), Phaser.Math.DegToRad(render - 90), true);
                     turret.cooldownEffect.fillPath();
