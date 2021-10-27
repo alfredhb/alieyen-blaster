@@ -33,7 +33,7 @@ export default class MenuScene5 extends Phaser.Scene {
         this.add.image(width * 0.5, height * 0.5, 'story-bg').setDisplaySize(width, height)
 
         // Title
-        const title = this.add.text(width * 0.5, height * 0.15, 'Game Slots', this.constants.MenuTitleStyle());
+        const title = this.add.text(width * 0.5, height * 0.15, 'Game Slots', this.constants.MenuTitleStyles);
         title.setOrigin(0.5);
         
 

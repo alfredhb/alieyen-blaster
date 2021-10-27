@@ -59,7 +59,7 @@ export default class MenuScene3 extends Phaser.Scene {
      * @param {number} height 
      */
     initTitle(width, height) {
-        const title = this.add.text(width * 0.5, height * 0.15, 'Arcade', this.constants.MenuTitleStyle());
+        const title = this.add.text(width * 0.5, height * 0.15, 'Arcade', this.constants.MenuTitleStyles);
         title.setOrigin(0.5);
 
         const titleSound = this.sound.add('arcade', { loop: false });

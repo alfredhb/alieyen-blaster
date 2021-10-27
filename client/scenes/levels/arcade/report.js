@@ -120,7 +120,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
             width * 0.5,
             height * 0.2,
             'Level Complete!',
-            this.constants.MenuTitleStyle()
+            this.constants.MenuTitleStyles
         );
         title.setOrigin(0.5);
 

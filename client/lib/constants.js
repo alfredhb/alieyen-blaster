@@ -16,13 +16,11 @@ export default class Constants {
      * Calculates fontsize based on screenheight
      * @returns {Phaser.Types.GameObjects.Text.TextStyle} menu title text style
      */
-    MenuTitleStyle = () => {
-        return {
-            fontFamily: 'impact',
-            fontSize: (this.height * 0.085) + "px",
-            color: "#FFF",
-        }
-    }
+    MenuTitleStyle = {
+        fontFamily: 'impact',
+        fontSize: (this.height * 0.085) + "px",
+        color: "#FFF",
+    };
 
     /**
      * Button text style for menus

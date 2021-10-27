@@ -97,7 +97,7 @@
      * @param {number} height
      */
     initTitle(width, height) {
-        const playerText = this.add.text(width * 0.5, height * 0.325, 'PLAYERS', this.constants.MenuTitleStyle());
+        const playerText = this.add.text(width * 0.5, height * 0.325, 'PLAYERS', this.constants.MenuTitleStyle);
         playerText.setOrigin(0.5);
 
         // interactives
