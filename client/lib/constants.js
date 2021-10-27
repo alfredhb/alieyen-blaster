@@ -23,6 +23,15 @@ export default class Constants {
     };
 
     /**
+     * @returns {Phaser.Types.GameObjects.Text.TextStyle}
+     */
+    TimerStyle = {
+        fontFamily: 'impact',
+        fontSize: (this.height * 0.045) + "px",
+        color: "0x000000",
+    };
+
+    /**
      * Button text style for menus
      * Calculates fontsize based on screenheight
      * @param {string?} color hexcode of color to set text to. Default is white
@@ -34,15 +43,6 @@ export default class Constants {
             fontSize: (this.height * 0.055) + "px",
             color: (color) ? color : "#FFF",
         }
-    }
-
-    /**
-     * @returns {Phaser.Types.GameObjects.Text.TextStyle}
-     */
-    TimerStyle = {
-        fontFamily: 'impact',
-        fontSize: (this.height * 0.045) + "px",
-        color: "0x000000",
     }
 
     /**
