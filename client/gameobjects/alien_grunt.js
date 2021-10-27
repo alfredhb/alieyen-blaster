@@ -10,11 +10,11 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
 
         // Add to physics and to canvas 
         scene.physics.add.existing(this);
+        this.setInteractive();
         this.setPosition(width + 50, height + 50);
         this.setDisplaySize(width * 0.09, height * 0.2)
         this.setSize(this.width * 0.2, this.height * 0.4);
         this.setOrigin(0.5);
-        console.log(width, this.width, height, this.height);
 
         this.maxX = width + 65;
         this.maxY = height + 65;

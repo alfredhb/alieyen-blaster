@@ -151,7 +151,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
         score1Val.setOrigin(1, 0);
         ttsArr.push({text: score1Text, sound: this.menuSounds.scoreTTS});
 
-        if (this.players === 2) {
+        if (this.players == 2) {
             const score2Text = this.add.text(width * 0.275, height * 0.425, 'PLAYER 2 SCORE :', this.constants.MenuButtonStyle());
             const score2Val = this.add.text(
                 width * 0.675,
