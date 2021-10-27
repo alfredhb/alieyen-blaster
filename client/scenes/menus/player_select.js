@@ -4,15 +4,15 @@
  import Phaser from "phaser";
  import Constants from "../../lib/constants";
  import QuitButton from "../../gameobjects/quit_button";
- 
+
  export default class MenuScene8 extends Phaser.Scene {
     constructor() {
         super('playerSelectMenu');
     }
- 
+
     /**
      * Initialize any scene vars
-     * @param {{meta: {playerCount: number, difficulty: number}}} data 
+     * @param {{meta: {playerCount: number, difficulty: number}}} data
      */
     init(data) {
         // player count - Used in all levels
@@ -65,7 +65,7 @@
 
         // Players Area
         this.playerSection(width, height);
-        
+
         // Start Logic
         this.startSection(width, height);
 
@@ -77,8 +77,8 @@
 
     /**
      * Creates a black box with white outline to place buttons over
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     centerBox(width, height) {
         const centerOutline = this.add.image(width * 0.5, height * 0.5, '__WHITE');
@@ -93,8 +93,8 @@
 
     /**
      * Add title and interactive listener which plays tts
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     initTitle(width, height) {
         const playerText = this.add.text(width * 0.5, height * 0.325, 'PLAYERS', this.constants.MenuTitleStyle());
@@ -113,8 +113,8 @@
     /**
      * Creates 1 and 2 player buttons and adds interactivity. On selecting a button,
      * sets this.players to 1 or 2 and causes start button to strobe red/blue
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     playerSection(width, height) {
         const onePlayerButton = this.add.image(width * 0.375, height * 0.45, '__WHITE');
@@ -171,8 +171,8 @@
     /**
      * Creates start button and adds interactivity. If this.players is set,
      * then start button can be interacted with and clicked to transition to 'gamemodeMenu'
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     startSection(width, height) {
         this.startButton = this.add.image(width * 0.5, height * 0.65, '__WHITE');
@@ -180,9 +180,9 @@
         this.startButton.setTint(0x808080);
         this.startButton.setOrigin(0.5);
         const startText = this.add.text(
-            width * 0.5, 
-            height * 0.65, 
-            'START', 
+            width * 0.5,
+            height * 0.65,
+            'START',
             this.constants.MenuButtonStyle()
         );
         startText.setOrigin(0.5);
@@ -216,7 +216,7 @@
                     'gamemodeMenu',
                     {
                         meta: {
-                            playerCount: 1, // TODO add player handling in later scenes
+                            playerCount: this.players, // TODO add player handling in later scenes
                             difficulty: this.difficulty,
                         }
                     }
@@ -224,7 +224,7 @@
             }
         });
     }
-    
+
     /**
      * If this.players is nonzero
      * @returns {boolean}
@@ -232,7 +232,7 @@
     startReady() {
         return this.players;
     }
-    
+
     /**
      * Toggles startbutton color between blue and red
      */

@@ -17,11 +17,14 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
      * Fires a bullet from x, y with angle direction and velocity determined by
      * this.speed split into its x and y components. Sets as visible and active
      * for collisions
-     * @param {number} x 
-     * @param {number} y 
+     * @param {number} turret_id
+     * @param {number} x
+     * @param {number} y
      * @param {number} direction angle in radians
      */
-    fire (x, y, direction) {
+    fire (turret_id, x, y, direction) {
+        this.turret_id = turret_id;
+
         this.xSpeed = this.speed * Math.sin(direction) * 1000;
         this.ySpeed = -this.speed * Math.cos(direction) * 1000;
 
@@ -34,10 +37,10 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     }
 
     /**
-     * Checks whether bullet is out of frame, if so then sets it to false and 
+     * Checks whether bullet is out of frame, if so then sets it to false and
      * unable to collide.
-     * @param {number} time 
-     * @param {number} delta 
+     * @param {number} time
+     * @param {number} delta
      */
     update (time, delta) {
         if (this.y < -50) {

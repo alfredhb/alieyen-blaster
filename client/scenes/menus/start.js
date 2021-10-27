@@ -141,18 +141,4 @@ export default class MenuScene4 extends Phaser.Scene {
             this.constants.HoverClick(this, b.button, b.func)
         });
     }
-
-    /**
-     * Adds a listener / timer to bObj with this behavior:
-     * User hovers over button coninuously for 3 seconds, during that time, 
-     * button sound is played on loop, after 3 seconds, the button is clicked.
-     * Button tint also progressively changes colors to signify it will be clicked
-     * @param {{button: Phaser.GameObjects.Image, text: Phaser.GameObjects.Text, sound: Phaser.Sound.BaseSound}} bObj 
-     */
-    hoverClick(bObj) {
-        // TODO: Beta
-        // must be used for all buttons, so also move this to separate file
-
-        return;
-    }
 }
