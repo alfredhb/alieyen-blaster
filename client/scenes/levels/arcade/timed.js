@@ -43,6 +43,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
             menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
             explode: this.sound.add('explode-3', { loop: false, volume: 0.35 }),
         }
+
     }
 
     create() {

@@ -210,14 +210,15 @@ export default class ArcadeReportScene extends Phaser.Scene {
             box.setOrigin(0.5);
 
             box.setInteractive();
-            box.on('pointerup', () => {
+            this.constants.HoverClick(this, box, () => {
+                this.sound.play('explode-3', { volume: 0.25 });
                 alien.play('explode');
                 alien.on('animationcomplete', () => {
                     setTimeout(() => {
                         alien.play('float');
                     }, 300);
                 })
-            })
+            });
         }
     }
 
@@ -257,7 +258,10 @@ export default class ArcadeReportScene extends Phaser.Scene {
                 }
             }).on('pointerout', () => {
                 b.button.setTint(0x808080);
-            }).on('pointerup', () => {
+            });
+
+            // Add hoverclick and normal click
+            this.constants.HoverClick(this, b.button, () => {
                 this.menuSounds.menuClick.play();
 
                 // Transition to different scene based on text name

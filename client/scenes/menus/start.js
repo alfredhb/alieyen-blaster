@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import Phaser from 'phaser';
+import Constants from '../../lib/constants';
 
 export default class MenuScene4 extends Phaser.Scene {
     constructor() {
@@ -39,6 +40,9 @@ export default class MenuScene4 extends Phaser.Scene {
      */
     create() {
         const { width, height } = this.scale; //Canvas dimensions
+
+        // Constants
+        this.constants = new Constants(width, height);
 
         // Background
         this.add.image(width * 0.5, height * 0.5, 'space-bg').setDisplaySize(width, height);
@@ -87,6 +91,17 @@ export default class MenuScene4 extends Phaser.Scene {
             fontSize: (height * 0.055) + "px",
         }).setOrigin(0.5);
         const plSound = this.menuSounds.playTTS;
+        const plFunc = () => {
+            this.menuSounds.menuClick.play();
+            this.scene.start(
+                'playerSelectMenu',
+                {
+                    meta: {
+                        difficulty: this.difficulty
+                    }
+                }
+            );
+        };
 
         // Quit Button
         const qButton = this.add.image(width * 0.95, height * 0.93, '__WHITE').setDisplaySize(width * 0.05, width * 0.05);
@@ -97,45 +112,33 @@ export default class MenuScene4 extends Phaser.Scene {
 			stroke: '#FF0000',
         }).setOrigin(0.5);
         const qSound = this.menuSounds.quitTTS;
-
-        this.buttons = [
-            {button: plButton, text: plText, sound: plSound},
-            {button: qButton, text: qText, sound: qSound}
-        ];
-        // Create Interactives
-        for (let buttonObj of this.buttons) {
-            buttonObj.button.setInteractive();
-
-            buttonObj.button.on('pointerover', () => {
-                buttonObj.button.setTint(0xFF0000);
-                buttonObj.text.setTint(0xFFF);
-
-                // Play if not playing already
-                if (!buttonObj.sound.isPlaying) {
-                    buttonObj.sound.play();
-                }
-            });
-            buttonObj.button.on('pointerout', () => {
-                buttonObj.button.clearTint();
-                buttonObj.text.clearTint();
-            });
-            buttonObj.button.on('pointerup', () => {
-                this.menuSounds.menuClick.play();
-            })
-        }
-
-        // Set action for specific buttons
-        plButton.on('pointerup', () => {
-            this.scene.start(
-                'playerSelectMenu', {
-                    meta: {
-                        difficulty: this.difficulty
-                    }
-                });
-        });
-        qButton.on('pointerup', () => {
+        const qFunc = () => {
             console.log('Unimplemented');
             qSound.play();
+        };
+
+        this.buttons = [
+            {button: plButton, text: plText, sound: plSound, func: plFunc},
+            {button: qButton, text: qText, sound: qSound, func: qFunc}
+        ].forEach(b => {
+            b.button.setInteractive();
+
+            b.button.on('pointerover', () => {
+                b.button.setTint(0xFF0000);
+                b.text.setTint(0xFFF);
+
+                // Play if not playing already
+                if (!b.sound.isPlaying) {
+                    b.sound.play();
+                }
+            });
+            b.button.on('pointerout', () => {
+                b.button.clearTint();
+                b.text.clearTint();
+            });
+
+            // Add hoverclick and normal click
+            this.constants.HoverClick(this, b.button, b.func)
         });
     }
 

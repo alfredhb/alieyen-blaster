@@ -5,6 +5,8 @@ export default class Constants {
     constructor(width, height) {
         this.width = width;
         this.height = height;
+
+        this.hoverMiliseconds = 1000;
     }
 
     /**
@@ -68,5 +70,74 @@ export default class Constants {
         'iPod',
         ].includes(navigator.platform)
         || (navigator.userAgent.includes("Mac") && "ontouchedn" in document);
-  } 
+    }
+
+    /**
+     * cancels and resets the given timer
+     * @param {Phaser.Time.TimerEvent} timer 
+     */
+    cancelHover(timer) {
+        timer.paused = true;
+        timer.elapsed = 0;
+
+        this.hoverFill.setVisible(false);
+        this.hoverFill.stop();
+
+        // Show cursor
+        document.body.style.cursor = "url(https://storage.googleapis.com/alieyen-blaster/public/assets/features/cursor.png) 19 19, pointer";
+    } 
+    
+    /**
+     * Adds listeners to button. Checks for X seconds that
+     * no pointerout events are registered. While this happens, fills the mouse
+     * with a bright blue color. At X seconds, clicks the button. Adds provided
+     * callbackFunc to pointerup event too!
+     * @param {Phaser.Scene} scene
+     * @param {Phaser.GameObjects.Image} button 
+     * @param {function} callbackFunc What to call to 'click' the button
+     */
+    HoverClick(scene, button, callbackFunc) {
+        this.hoverFill = scene.add.sprite(-50, -50, 'cursor-fill-2', 0).setDepth(30);
+        this.hoverTimerActive = false;
+        let hoverTimer = scene.time.addEvent({
+            delay: this.hoverMiliseconds,
+            callback: () => {
+                this.cancelHover(hoverTimer);
+                callbackFunc()
+            },
+            loop: false,
+            paused: true,
+            repeat: -1,
+        });
+
+        button.on('pointerover', () => {
+            // Kill an active timer
+            if (this.hoverTimerActive) this.cancelHover(hoverTimer);
+
+            this.hoverFill.setPosition(
+                scene.input.activePointer.x,
+                scene.input.activePointer.y
+            )
+
+            document.body.style.cursor = 'none';
+            this.hoverFill.setVisible(true);
+            this.hoverFill.play('cursor-fill-animation-2');
+            hoverTimer.paused = false;
+            
+        }).on('pointermove', () => {
+            this.hoverFill.setPosition(
+                scene.input.activePointer.x,
+                scene.input.activePointer.y
+            );
+
+        }).on('pointerout', () => {
+            // cancel any active timer
+            this.cancelHover(hoverTimer);
+        }).on('pointerup', () => {
+            this.cancelHover(hoverTimer);
+            callbackFunc();
+        });
+    }
+
+
 }

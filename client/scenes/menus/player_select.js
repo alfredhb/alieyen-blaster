@@ -23,7 +23,7 @@
         if (this.timer) {
             this.timer = this.time.addEvent({
                 delay: 1000,
-                callback: this.resolveFunc,
+                callback: this.invertColors,
                 callbackScope: this,
                 loop: true,
                 paused: true,
@@ -153,18 +153,18 @@
                 } else {
                     b.button.setTint(0x0000FF);
                 }
-            }).on('pointerup', () => {
+            });
+
+            // Add hoverclick and normal click
+            this.constants.HoverClick(this, b.button, () => {
                 // Set player count & show on button (clear old tints and set new)
-                this.players = Number(b.text.name);
+                this.players = b.text.name;
                 buttons.forEach(b => b.button.setTint(0x808080));
                 b.button.setTint(0x0000FF);
-
-                // TODO: Remove me
-                console.log("set player count to ", this.players)
-
+    
                 this.menuSounds.menuClick.play();
                 this.styleStart();
-            })
+            });
         });
     }
 
@@ -205,7 +205,10 @@
             } else {
                 this.startButton.setTint(0x808080);
             }
-        }).on('pointerup', () => {
+        });
+
+        // Add hoverclick and normal click
+        this.constants.HoverClick(this, this.startButton, () => {
             if (this.startReady()) {
                 this.timer.remove();
                 this.menuSounds.menuClick.play();
@@ -233,7 +236,7 @@
     /**
      * Toggles startbutton color between blue and red
      */
-    resolveFunc = () => {
+    invertColors = () => {
         if (this.startButton.tintTopLeft == 0xFF0000) {
             this.startButton.setTint(0x0000FF);
         } else {
@@ -260,7 +263,7 @@
         this.startButton.setTint(0x0000FF);
         this.timer = this.time.addEvent({
             delay: 1000,
-            callback: this.resolveFunc,
+            callback: this.invertColors,
             callbackScope: this,
             loop: true,
             paused: false,

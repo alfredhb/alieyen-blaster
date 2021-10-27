@@ -87,7 +87,9 @@ export default class MenuScene5 extends Phaser.Scene {
             b.button.on('pointerout', () => {
                 b.button.clearTint();
             });
-            b.button.on('pointerup', () => {
+
+            // Adds hoverclick and normal click
+            this.constants.HoverClick(this, b.button, () => {
                 this.menuSounds.menuClick.play();
                 console.log('Unimplemented');
             });

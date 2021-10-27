@@ -4,6 +4,8 @@ body {
   text-align: center;
   margin: 0% 0%;
   background-color: rgb(32, 32, 32);
+
+  cursor: url(https://storage.googleapis.com/alieyen-blaster/public/assets/features/cursor.png) 19 19, pointer;
 }
 
 h2 {
