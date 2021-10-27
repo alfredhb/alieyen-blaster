@@ -248,7 +248,6 @@ export default class ArcadeScene1 extends Phaser.Scene {
             });
 
             // Rotate turret and fire only if within angle
-            console.log(pointer, pointer.x, pointer.y)
             let angle = Phaser.Math.Angle.Between(this.turrets[id].turret.x, this.turrets[id].turret.y, pointer.x, pointer.y) + Math.PI / 2;
             if (!(Math.abs(angle) > 1.5)) {
                 this.turrets[id].turret.setRotation(angle);
@@ -263,7 +262,6 @@ export default class ArcadeScene1 extends Phaser.Scene {
             //     return;
             // }
             this.input.on(pointerEvent, (pointer) => {
-                console.log(pointerEvent)
                 fire(this.pointers[id]);
             });
         }
@@ -293,7 +291,6 @@ export default class ArcadeScene1 extends Phaser.Scene {
      * @param {number} angle
      */
     addBullet(turret_id, x, y, angle) {
-        console.log(turret_id, x, y, angle)
         let bullet = this.bullets[turret_id].get();
         if (bullet) {
             // Add collider here
@@ -433,7 +430,6 @@ export default class ArcadeScene1 extends Phaser.Scene {
      * @param {Phaser.Physics.Arcade.Sprite} alien
      */
     collisionFunc(bullet, alien) {
-        console.log("collided", bullet, alien);
         if (!alien.dead() && bullet.active) {
             this.levelSounds.explode.play();
             bullet.kill();
