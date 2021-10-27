@@ -152,14 +152,14 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
             b.text.setOrigin(0.5);
 
             if (this.difficulty == Number(b.text.name)) {
-                b.button.setTint(0x0000FF);
+                b.button.setTint(this.constants.Blue);
             }
 
             // Make Interactive
             b.button.setInteractive();
 
             b.button.on('pointerover', () => {
-                b.button.setTint(0xFF0000);
+                b.button.setTint(this.constants.Red);
 
                 // Play TTS here
                 if (!b.sound.isPlaying){ 
@@ -171,7 +171,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
                 } else if (this.difficulty != Number(b.text.name)) {
                     b.button.setTint(this.constants.Gray);
                 } else {
-                    b.button.setTint(0x0000FF);
+                    b.button.setTint(this.constants.Blue);
                 }
             });
 
@@ -180,7 +180,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
                 // Set difficulty & show on button (clear old tints and set new)
                 this.difficulty = Number(b.text.name);
                 buttons.forEach(b => b.button.setTint(this.constants.Gray));
-                b.button.setTint(0x0000FF);
+                b.button.setTint(this.constants.Blue);
 
                 this.menuSounds.menuClick.play();
                 this.styleStart();
@@ -201,7 +201,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
 
         this.startButton.on('pointerover', () => {
             if (this.startReady()) {
-                this.startButton.setTint(0xFF0000);
+                this.startButton.setTint(this.constants.Red);
 
                 if (!this.menuSounds.startTTS.isPlaying) {
                     this.menuSounds.startTTS.play();
@@ -240,10 +240,10 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
     }
     
     invertColors = () => {
-        if (this.startButton.tintTopLeft == 0xFF0000) {
-            this.startButton.setTint(0x0000FF);
+        if (this.startButton.tintTopLeft == this.constants.Red) {
+            this.startButton.setTint(this.constants.Blue);
         } else {
-            this.startButton.setTint(0xFF0000);
+            this.startButton.setTint(this.constants.Red);
         }
     }
 
@@ -274,7 +274,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
         }
 
         // Create timer which strobes start button from red to green
-        this.startButton.setTint(0x0000FF);
+        this.startButton.setTint(this.constants.Blue);
         this.timer = this.time.addEvent({
             delay: 1000,
             callback: this.invertColors,

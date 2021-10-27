@@ -91,7 +91,7 @@ export default class MenuScene3 extends Phaser.Scene {
         // Add listener
         difButton.setInteractive();
         difButton.on('pointerover', () => {
-            difButton.setTint(0xFF0000);
+            difButton.setTint(this.constants.Red);
             difIcon.setTint(0xFFF);
 
             if (!this.menuSounds.difficultyTTS.isPlaying){
@@ -179,7 +179,7 @@ export default class MenuScene3 extends Phaser.Scene {
             b.button.setInteractive();
 
             b.button.on('pointerover', () => {
-                b.button.setTint(0xFF0000);
+                b.button.setTint(this.constants.Red);
                 b.icon.setTint(0xFFF);
                 b.text.setTint(0xFFF);
 

@@ -139,7 +139,7 @@
             b.button.setInteractive();
 
             b.button.on('pointerover', () => {
-                b.button.setTint(0xFF0000);
+                b.button.setTint(this.constants.Red);
 
                 // Play TTS here
                 if (!b.sound.isPlaying) {
@@ -151,7 +151,7 @@
                 } else if (this.players != Number(b.text.name)) {
                     b.button.setTint(this.constants.Gray);
                 } else {
-                    b.button.setTint(0x0000FF);
+                    b.button.setTint(this.constants.Blue);
                 }
             });
 
@@ -160,7 +160,7 @@
                 // Set player count & show on button (clear old tints and set new)
                 this.players = b.text.name;
                 buttons.forEach(b => b.button.setTint(this.constants.Gray));
-                b.button.setTint(0x0000FF);
+                b.button.setTint(this.constants.Blue);
     
                 this.menuSounds.menuClick.play();
                 this.styleStart();
@@ -192,7 +192,7 @@
 
         this.startButton.on('pointerover', () => {
             if (this.startReady()) {
-                this.startButton.setTint(0xFF0000);
+                this.startButton.setTint(this.constants.Red);
 
                 // Play tts if start is ready
                 if (!this.menuSounds.startTTS.isPlaying) {
@@ -237,10 +237,10 @@
      * Toggles startbutton color between blue and red
      */
     invertColors = () => {
-        if (this.startButton.tintTopLeft == 0xFF0000) {
-            this.startButton.setTint(0x0000FF);
+        if (this.startButton.tintTopLeft == this.constants.Red) {
+            this.startButton.setTint(this.constants.Blue);
         } else {
-            this.startButton.setTint(0xFF0000);
+            this.startButton.setTint(this.constants.Red);
         }
     }
 
@@ -260,7 +260,7 @@
         }
 
         // Create timer which strobes start button from red to green
-        this.startButton.setTint(0x0000FF);
+        this.startButton.setTint(this.constants.Blue);
         this.timer = this.time.addEvent({
             delay: 1000,
             callback: this.invertColors,

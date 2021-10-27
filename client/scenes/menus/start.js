@@ -124,7 +124,7 @@ export default class MenuScene4 extends Phaser.Scene {
             b.button.setInteractive();
 
             b.button.on('pointerover', () => {
-                b.button.setTint(0xFF0000);
+                b.button.setTint(this.constants.Red);
                 b.text.setTint(0xFFF);
 
                 // Play if not playing already

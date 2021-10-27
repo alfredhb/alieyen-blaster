@@ -250,7 +250,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
             b.button.setInteractive();
 
             b.button.on('pointerover', () => {
-                b.button.setTint(0xFF0000);
+                b.button.setTint(this.constants.Red);
 
                 // Play TTS here
                 if (!b.sound.isPlaying) {

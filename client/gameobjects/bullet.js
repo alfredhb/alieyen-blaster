@@ -8,7 +8,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 
         this.setDisplaySize(10, 175);
         this.setOrigin(0.5);
-        this.setTint(0xFF0000);
+        this.setTint(this.constants.Red);
 
         this.speed = Phaser.Math.GetSpeed(2500, 1);
     }
