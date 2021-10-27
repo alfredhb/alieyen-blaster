@@ -112,7 +112,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
      * @param {number} height 
      */
     initTitle(width, height) {
-        const difficultyText = this.add.text(width * 0.5, height * 0.325, 'DIFFICULTY', this.constants.MenuTitleStyles);
+        const difficultyText = this.add.text(width * 0.5, height * 0.325, 'DIFFICULTY', this.constants.MenuTitleStyle());
         difficultyText.setOrigin(0.5);
 
         // interactives
@@ -126,7 +126,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
     }
 
     difficultySection(width, height) {
-        const difficultyText = this.add.text(width * 0.5, height * 0.325, 'DIFFICULTY', this.constants.MenuTitleStyles);
+        const difficultyText = this.add.text(width * 0.5, height * 0.325, 'DIFFICULTY', this.constants.MenuTitleStyle());
         difficultyText.setOrigin(0.5);
 
         const easyButton = this.add.image(width * 0.325, height * .45, '__WHITE');
