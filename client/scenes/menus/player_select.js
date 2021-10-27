@@ -132,7 +132,7 @@
             // Style buttons
             b.button.setDisplaySize(width * .2, height * 0.08);
             b.button.setOrigin(0.5);
-            b.button.setTint(0x808080);
+            b.button.setTint(this.constants.Gray);
             b.text.setOrigin(0.5);
 
             // Make Interactive
@@ -147,9 +147,9 @@
                 }
             }).on('pointerout', () => {
                 if (!this.startReady()) {
-                    b.button.setTint(0x808080);
+                    b.button.setTint(this.constants.Gray);
                 } else if (this.players != Number(b.text.name)) {
-                    b.button.setTint(0x808080);
+                    b.button.setTint(this.constants.Gray);
                 } else {
                     b.button.setTint(0x0000FF);
                 }
@@ -159,7 +159,7 @@
             this.constants.HoverClick(this, b.button, () => {
                 // Set player count & show on button (clear old tints and set new)
                 this.players = b.text.name;
-                buttons.forEach(b => b.button.setTint(0x808080));
+                buttons.forEach(b => b.button.setTint(this.constants.Gray));
                 b.button.setTint(0x0000FF);
     
                 this.menuSounds.menuClick.play();
@@ -177,7 +177,7 @@
     startSection(width, height) {
         this.startButton = this.add.image(width * 0.5, height * 0.65, '__WHITE');
         this.startButton.setDisplaySize(width * 0.375, height * 0.12);
-        this.startButton.setTint(0x808080);
+        this.startButton.setTint(this.constants.Gray);
         this.startButton.setOrigin(0.5);
         const startText = this.add.text(
             width * 0.5,
@@ -203,7 +203,7 @@
             if (this.startReady()) {
                 this.styleStart();
             } else {
-                this.startButton.setTint(0x808080);
+                this.startButton.setTint(this.constants.Gray);
             }
         });
 

@@ -9,6 +9,8 @@ export default class Constants {
         this.hoverMiliseconds = 1000;
     }
 
+    Gray = 0x808080;
+
     /**
      * title text style for menus
      * Calculates fontsize based on screenheight

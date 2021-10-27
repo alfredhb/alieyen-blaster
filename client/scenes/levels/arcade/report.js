@@ -243,7 +243,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
             // Style buttons
             b.button.setDisplaySize(width * .2, height * 0.08);
             b.button.setOrigin(0.5);
-            b.button.setTint(0x808080);
+            b.button.setTint(this.constants.Gray);
             b.text.setOrigin(0.5);
 
             // Make Interactive
@@ -257,7 +257,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
                     b.sound.play();
                 }
             }).on('pointerout', () => {
-                b.button.setTint(0x808080);
+                b.button.setTint(this.constants.Gray);
             });
 
             // Add hoverclick and normal click
