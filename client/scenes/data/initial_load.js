@@ -34,7 +34,7 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "alien-grunt-1-1",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_1_1.png"},
             {"key": "alien-grunt-1-2",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_1_2.png"},
             {"key": "alien-grunt-1-3",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_1_3.png"}
-        ]
+        ];
 
         this.onlineSounds = [
             {"key": "menu-click",       "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/men-click.wav"},
@@ -94,6 +94,9 @@ export default class DataScene1 extends Phaser.Scene {
         for (let sound of this.onlineSounds) {
             this.load.audio(sound.key, sound.path);
         }
+
+        // Load Sprite Sheet
+        this.loadSpriteSheets();
     }
 
     /**
@@ -105,7 +108,7 @@ export default class DataScene1 extends Phaser.Scene {
      */
     addLoadListener(width, height) {
         this.assetsLoaded = 0;
-        this.totalAssets = this.onlineImages.length;
+        this.totalAssets = this.onlineImages.length + 1/* # of spritesheets */;
         let loadBlockWidth = (width * 0.45) / this.totalAssets;
 
         this.textures.on('addtexture', (k, t) => {
@@ -126,6 +129,17 @@ export default class DataScene1 extends Phaser.Scene {
                 }, 1000);
             }
         });
+    }
+
+    /**
+     * Loads any sprite sheets stored in GCS with custom frame width/height
+     */
+    loadSpriteSheets() {
+        this.load.spritesheet(
+            'cursor-fill-2',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/features/cursor-sheet-v2.png',
+            { frameWidth: 40, frameHeight: 40 },
+        );
     }
 
     // Local Sounds would use this.sound.decode([{data: base64, key: id}])
@@ -149,5 +163,22 @@ export default class DataScene1 extends Phaser.Scene {
                 this.sound.decodeAudio(asset.key, res);
             })
         }
+    }
+
+    /**
+     * Create animations from loaded spritesheets
+     */
+    createAnimations() {
+        this.anims.create({
+            key: 'cursor-fill-animation-2',
+            frames: this.anims.generateFrameNumbers('cursor-fill-2', { start: 0 }),
+            frameRate: 20,
+            repeat: 0,
+        });
+    }
+
+    // After spritesheets are loaded, creates the animations from them
+    create() {
+        this.createAnimations();
     }
 }

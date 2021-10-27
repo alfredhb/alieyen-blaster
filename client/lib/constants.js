@@ -81,6 +81,10 @@ export default class Constants {
         timer.elapsed = 0;
 
         this.hoverFill.setVisible(false);
+        this.hoverFill.stop();
+
+        // Show cursor
+        document.body.style.cursor = "url(https://storage.googleapis.com/alieyen-blaster/public/assets/features/cursor.png) 19 19, pointer";
     } 
     
     /**
@@ -93,11 +97,14 @@ export default class Constants {
      * @param {function} callbackFunc What to call to 'click' the button
      */
     HoverClick(scene, button, callbackFunc) {
-        this.hoverFill = scene.add.circle(-50, -50, 30, 0X0000FF).setDepth(30);
+        this.hoverFill = scene.add.sprite(-50, -50, 'cursor-fill-2', 0).setDepth(30);
         this.hoverTimerActive = false;
         let hoverTimer = scene.time.addEvent({
             delay: this.hoverMiliseconds,
-            callback: callbackFunc,
+            callback: () => {
+                this.cancelHover(hoverTimer);
+                callbackFunc()
+            },
             loop: false,
             paused: true,
             repeat: -1,
@@ -111,7 +118,10 @@ export default class Constants {
                 scene.input.activePointer.x,
                 scene.input.activePointer.y
             )
+
+            document.body.style.cursor = 'none';
             this.hoverFill.setVisible(true);
+            this.hoverFill.play('cursor-fill-animation-2');
             hoverTimer.paused = false;
             
         }).on('pointermove', () => {
@@ -123,7 +133,10 @@ export default class Constants {
         }).on('pointerout', () => {
             // cancel any active timer
             this.cancelHover(hoverTimer);
-        }).on('pointerup', callbackFunc);
+        }).on('pointerup', () => {
+            this.cancelHover(hoverTimer);
+            callbackFunc();
+        });
     }
 
 

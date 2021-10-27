@@ -151,6 +151,10 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
             b.button.setTint(0x808080);
             b.text.setOrigin(0.5);
 
+            if (this.difficulty == Number(b.text.name)) {
+                b.button.setTint(0x0000FF);
+            }
+
             // Make Interactive
             b.button.setInteractive();
 
