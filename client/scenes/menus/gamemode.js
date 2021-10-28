@@ -9,13 +9,18 @@ export default class MenuScene2 extends Phaser.Scene {
     
     /**
      * Capture the next scene to progress to after selections are made
-     * @param {{meta: {playerCount: number, difficulty: number?}, level: {any}?, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}?}} data 
+     * @param {{meta: {playerCount: number, difficulty: number, players: string[]}, level: {any}?, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}?}} data 
      */
     init(data) {
-        this.players = data.meta.playerCount;
+        this.playerCount = data.meta.playerCount;
         this.difficulty = data.meta.difficulty;
+        this.players = data.meta.players || [];
 
-        console.log("initialized GamemodeMenu for ", this.players, " players")
+        if (!this.players.length) {
+            console.log("Players Not Passed Back!!");
+        }
+
+        console.log("initialized GamemodeMenu for ", this.playerCount, " players being: ", this.players.toString())
     }
 
     /**
@@ -57,8 +62,9 @@ export default class MenuScene2 extends Phaser.Scene {
             backMenu: 'playerSelectMenu',
             data: {
                 meta: {
-                    playerCount: this.players,
+                    playerCount: this.playerCount,
                     difficulty: this.difficulty,
+                    // Don't pass back player selection to player_select.js
                 }
             }
         });
@@ -107,8 +113,9 @@ export default class MenuScene2 extends Phaser.Scene {
                     b.text.name,
                     {
                         meta: {
-                            playerCount: this.players,
-                            difficulty: this.difficulty
+                            playerCount: this.playerCount,
+                            difficulty: this.difficulty,
+                            players: this.players,
                         }
                     }
                 );
