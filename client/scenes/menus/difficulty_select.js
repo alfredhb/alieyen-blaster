@@ -12,13 +12,14 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
     
     /**
      * Capture the next scene to progress to after selections are made
-     * @param {{meta: {playerCount: number, difficulty: number}, level: {any}, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}}} data 
+     * @param {{meta: {playerCount: number, difficulty: number, players: string[]}, level: {any}, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}}} data 
      */
     init(data) {
         this.nextScene = data.scene.nextScene;
         this.prevScene = data.scene.prevScene; // {scene: string, type: enum{'ARCADE' || STORY'}
 
-        this.players = data.meta.playerCount;
+        this.playerCount = data.meta.playerCount;
+        this.players = data.meta.players;
 
         // Game data holds player count in a central place
         Meteor.call("getDifficulty", (err, res) => {
@@ -87,8 +88,9 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
             backMenu: this.prevScene.name,
             data: {
                 meta: {
-                    playerCount: this.players,
+                    playerCount: this.playerCount,
                     difficulty: this.difficulty,
+                    players: this.players,
                 }
             },
             execFunc: this.persistDifficulty
@@ -226,8 +228,9 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
                     this.nextScene.name,
                     {
                         meta: {
-                            playerCount: this.players,
+                            playerCount: this.playerCount,
                             difficulty: this.difficulty,
+                            players: this.players,
                         }
                     }
                 );

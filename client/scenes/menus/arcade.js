@@ -9,13 +9,16 @@ export default class MenuScene3 extends Phaser.Scene {
     
     /**
      * Capture the next scene to progress to after selections are made
-     * @param {{meta: {playerCount: number, difficulty: number}, level: {any}?, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}?}} data 
+     * @param {{meta: {playerCount: number, difficulty: number, players: string[]}, level: {any}?, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}?}} data 
      */
     init(data) {
-        this.players = data.meta.playerCount;
+        this.playerCount = data.meta.playerCount;
         this.difficulty = data.meta.difficulty; // easy unless returned from prev scene
+        this.players = data.meta.players;
 
-        console.log("initialized ArcadeMenu for ", this.players, " players on difficulty ", this.difficulty)
+        console.log("initialized ArcadeMenu for " + this.playerCount +
+        " players  players being: " + this.players.toString() + " on difficulty "
+        + this.difficulty);
     }
 
     /**
@@ -51,6 +54,18 @@ export default class MenuScene3 extends Phaser.Scene {
 
         // Buttons
         this.initLevelButtons(width, height);
+
+        // Quit Button
+        const quit = new QuitButton(this, {
+            backMenu: 'gamemodeMenu',
+            data: { 
+                meta: {
+                    playerCount: this.playerCount,
+                    difficulty: this.difficulty,
+                    players: this.players,
+                },
+            },
+        });
     }
 
     /**
@@ -107,7 +122,8 @@ export default class MenuScene3 extends Phaser.Scene {
             this.menuSounds.menuClick.play();
             this.scene.start('difficultySelectMenu', {
                 meta: {
-                    playerCount: this.players,
+                    playerCount: this.playerCount,
+                    players: this.players
                 },
                 scene: {
                     prevScene: {
@@ -130,18 +146,6 @@ export default class MenuScene3 extends Phaser.Scene {
      * @param {number} height 
      */
     initLevelButtons(width, height) {
-        // const
-
-        // Quit Button
-        const quit = new QuitButton(this, {
-            backMenu: 'gamemodeMenu',
-            data: { 
-                meta: {
-                    playerCount: this.players,
-                    difficulty: this.difficulty,
-                },
-            },
-        });
 
         // Timed button
         const tiButton = this.add.image(width * 0.25, height * 0.35, 'gameslot-button');
@@ -203,8 +207,9 @@ export default class MenuScene3 extends Phaser.Scene {
                 this.scene.start(b.text.name,
                     {
                         meta: {
-                            playerCount: this.players,
+                            playerCount: this.playerCount,
                             difficulty: this.difficulty,
+                            players: this.players,
                         }
                     }
                 );

@@ -26,11 +26,12 @@ export default class ArcadeScene1 extends Phaser.Scene {
 
     /**
      * Capture the next scene to progress to after selections are made
-     * @param {{meta: {playerCount: number, difficulty: number}, level: {any}?, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}?}} data
+     * @param {{meta: {playerCount: number, difficulty: number, players: string[]}, level: {any}?, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}?}} data
      */
     init(data) {
-        this.players = data.meta.playerCount;
+        this.playerCount = data.meta.playerCount;
         this.difficulty = data.meta.difficulty;
+        this.players = data.meta.players; // [0] == player1, [1] ?== player2 |'bubba' means eye tracking
 
 
         // Level Data
@@ -41,7 +42,9 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.totalShots = 0;
         this.levelFinished = false;
 
-        console.log("initialized TimedMenu for ", this.players, " players")
+        console.log("initialized TimedMenu for " + this.playerCount + " players.\n"
+        + "Player 1 is: " + this.players[0] + ((this.playerCount == 2) ? 
+        (", Player 2 is: " + this.players[1]) : ""));
     }
 
     preload() {
@@ -133,12 +136,13 @@ export default class ArcadeScene1 extends Phaser.Scene {
             // Transition to report card scene TODO
             this.scene.start('arcadeReportScene', {
                 meta: {
-                    playerCount: this.players,
+                    playerCount: this.playerCount,
                     difficulty: this.difficulty,
+                    players: this.players,
                 },
                 level: {
                     score1: this.turrets[0].score,
-                    score2: (this.players == 2) ? this.turrets[1].score : null,
+                    score2: (this.playerCount == 2) ? this.turrets[1].score : null,
                     shotsFired: this.totalShots,
                 },
                 scene: {
@@ -177,8 +181,9 @@ export default class ArcadeScene1 extends Phaser.Scene {
             execFunc: () => { if (this.timer) { this.timer.destroy() }},
             data: {
                 meta: {
-                    playerCount: this.players,
+                    playerCount: this.playerCount,
                     difficulty: this.difficulty,
+                    players: this.players,
                 }
             },
         });
@@ -194,7 +199,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.addTurret(width * 0.05, height * 0.85, width * 0.1, height * 0.1, 'pointerup');
 
         // Add another turret and pointer
-        if (this.players == 2) {
+        if (this.playerCount == 2) {
             this.pointers.push(this.input.mousePointer); // Adds touch pointer, change with updatable player names
             this.addTurret(width * 0.95, height * 0.85, width * 0.9, height * 0.1, 'pointermove');
         }
