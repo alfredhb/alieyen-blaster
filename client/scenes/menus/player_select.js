@@ -41,11 +41,20 @@
         // All sounds to be loaded
         // TODO add TTS sounds here for 'players' , '1 player' , '2 player', 'start'
         this.menuSounds = {
+            bubbaTTS: this.sound.add('bubba', { loop: false }),
+            friendTTS: this.sound.add('friend', { loop: false }),
+            leahTTS: this.sound.add('leah', { loop: false }),
             menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
+            allPlayerSelTTS: this.sound.add('players-selected', { loop: false }),
             playersTTS: this.sound.add('players', { loop: false }),
             onePlayerTTS: this.sound.add('1-player', { loop: false }),
             twoPlayerTTS: this.sound.add('2-player', { loop: false }),
+            readyTTS: this.sound.add('ready-to-play', { loop: false }),
             startTTS: this.sound.add('start', { loop: false }),
+            selTTS: this.sound.add('selected', { loop: false }),
+            selAlreadyTTS: this.sound.add('selected-already', { loop: false }),
+            whop1TTS: this.sound.add('who-p1', { loop: false }),
+            whop2TTS: this.sound.add('who-p2', { loop: false }),
         }
     }
 
@@ -62,7 +71,8 @@
 
         // Init person section
         this.initPersonSection(width, height);
-        this.personSectionInteraction(width, height);
+        this.personTitleInteraction();
+        this.personButtonInteraction(width, height);
 
         // Center Box
         this.centerBox(width, height);
@@ -125,10 +135,28 @@
 
         // TODO add correct TTS
         this.personButtons = [
-            {button: bubbaButton, text: bubbaText, sound: this.menuSounds.onePlayerTTS},
-            {button: leahButton, text: leahText, sound: this.menuSounds.twoPlayerTTS},
-            {button: friendButton, text: friendText, sound: this.menuSounds.twoPlayerTTS},
+            {button: bubbaButton, text: bubbaText, sound: this.menuSounds.bubbaTTS},
+            {button: leahButton, text: leahText, sound: this.menuSounds.leahTTS},
+            {button: friendButton, text: friendText, sound: this.menuSounds.friendTTS},
         ];
+    }
+
+    /**
+     * Adds tts interaction to all person titles
+     */
+    personTitleInteraction() {
+        [
+            {text: this.p1Text, sound: this.menuSounds.whop1TTS},
+            {text: this.p2Text, sound: this.menuSounds.whop2TTS},
+            {text: this.readyText, sound: this.menuSounds.readyTTS},
+        ].forEach(t => {
+            t.text.setInteractive();
+            t.text.on('pointerover', () => {
+                if (t.text.depth > 0 && !t.sound.isPlaying) {
+                    t.sound.play();
+                }
+            });
+        });
     }
 
     /**
@@ -136,7 +164,7 @@
      * @param {number} width 
      * @param {number} height 
      */
-    personSectionInteraction(width, height) { 
+    personButtonInteraction(width, height) { 
         this.personButtons.forEach(b => {
             // Style buttons
             b.button.setDisplaySize(width * .15, height * 0.08);
@@ -151,7 +179,7 @@
                 b.button.setTint(this.constants.Red);
 
                 // Play TTS here
-                if (!b.sound.isPlaying) {
+                if (b.button.depth > 0 && !b.sound.isPlaying) {
                     b.sound.play();
                 }
             }).on('pointerout', () => {
@@ -167,10 +195,14 @@
             this.constants.HoverClick(this, b.button, () => {
                 if (this.playerCount <= this.players.length) {
                     // Play TTS like All players selected
+                    this.sound.pauseAll();
+                    this.menuSounds.allPlayerSelTTS.play();
                     return;
                 }
                 if (this.players.find(p => p.text.name == b.text.name)) {
                     // Play TtS like player already selected
+                    this.sound.pauseAll();
+                    this.menuSounds.selAlreadyTTS.play()
                     return;
                 }
 
@@ -184,12 +216,14 @@
                 this.menuSounds.menuClick.play();
 
                 // Play tts like 'bubba selected'
+                this.menuSounds.selTTS.play({delay: 0.25});
 
                 // Style start if all players accounted for, else show next title
                 if (this.playerCount == this.players.length) {
                     this.p1Text.setDepth(-1);
                     this.p2Text.setDepth(-1);
                     this.readyText.setDepth(2);
+                    this.menuSounds.readyTTS.play({delay: 0.5});
                     this.styleStart();
                 } else {
                     this.p1Text.setDepth(-1);
@@ -327,15 +361,14 @@
 
             // Add hoverclick and normal click
             this.constants.HoverClick(this, b.button, () => {
+                this.promptPersonSelection(width, height);
+                
                 // Set player count & show on button (clear old tints and set new)
                 this.playerCount = b.text.name;
                 this.playerButtons.forEach(b => b.button.setTint(this.constants.Gray));
                 b.button.setTint(this.constants.Blue);
     
                 this.menuSounds.menuClick.play();
-                // this.styleStart();
-                this.promptPersonSelection(width, height);
-                
             });
         });
     }
