@@ -63,4 +63,24 @@ Meteor.methods({
     MetaData.update("difficulty", { $set: { "value" : difficulty } });
     return true;
   },
+
+  /**
+   * Finds the value of the highscore entry of '${gamemode}-${level}-highscore'.
+   * If lower than score, then updates the DB entry with score and player. Finally
+   * returns the highscore object
+   * @param {'arcade' | 'story'} gamemode 
+   * @param {string} level 
+   * @param {{player: string, score: number}} scoreObj 
+   * @returns {{player: string, score: number}}
+   */
+  getHighScore(gamemode, level, scoreObj) {
+    var id = (gamemode + "-" + level + "-highscore");
+    var h = SaveData.findOne(id, { "fields": { player: 1, value: 1 } });
+    if (h && h.value >= scoreObj.score) {
+      return {player: h.player, score: h.value};
+    }
+
+    SaveData.update(id, { $set: { "value": scoreObj.score, "player": scoreObj.player } });
+    return scoreObj;
+  }
 });
