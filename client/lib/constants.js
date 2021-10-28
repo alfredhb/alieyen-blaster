@@ -145,5 +145,25 @@ export default class Constants {
         });
     }
 
+    /**
+     * Sets tint of object to color specified by the button's name and creates
+     *  a timer which reverts tint to color
+     * @param {Phaser.Scene} scene 
+     * @param {Phaser.GameObjects.Image} object 
+     * @param {number} color
+     * @param {number} delay 
+     */
+    FlashColor(scene, object, color, delay) {
+        object.setTint(object.name);
 
+        scene.time.addEvent({
+            delay: delay,
+            callback: () => {
+                object.setTint(color);
+            },
+            callbackScope: scene,
+            loop: false,
+            paused: false,
+        })
+    }
 }
