@@ -14,6 +14,11 @@ export default class Constants {
     Gray = 0x808080;
     Red = 0xFF0000;
 
+    PersonColors = {
+        "bubba": this.Green,
+        "leah": this.Red,
+        "friend": this.Blue,
+    }
 
     /**
      * title text style for menus
@@ -51,6 +56,14 @@ export default class Constants {
             fontSize: (this.height * 0.055) + "px",
             color: (color) ? color : "#FFF",
         }
+    }
+
+    /**
+     * Capitalizes the first letter of str
+     * @param {string} str 
+     */
+    Capitalize = (str) => {
+        return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
     /**

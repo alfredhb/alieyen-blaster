@@ -127,11 +127,11 @@
         const leahText = this.add.text(width * 0.5, height * 0.6, 'Leah', this.constants.MenuButtonStyle());
         const friendText = this.add.text(width * 0.675, height * 0.6, 'Friend', this.constants.MenuButtonStyle());
         bubbaButton.setName(this.constants.Green);
-        bubbaText.setName("Bubba");
+        bubbaText.setName("bubba");
         leahButton.setName(this.constants.Red);
-        leahText.setName("Leah");
+        leahText.setName("leah");
         friendButton.setName(this.constants.Blue);
-        friendText.setName("Friend");
+        friendText.setName("friend");
 
         // TODO add correct TTS
         this.personButtons = [
@@ -223,7 +223,8 @@
                     this.p1Text.setDepth(-1);
                     this.p2Text.setDepth(-1);
                     this.readyText.setDepth(2);
-                    this.menuSounds.readyTTS.play({delay: 0.5});
+
+                    this.menuSounds.readyTTS.play({delay: 1});
                     this.styleStart();
                 } else {
                     this.p1Text.setDepth(-1);

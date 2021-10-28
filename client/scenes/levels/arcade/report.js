@@ -34,11 +34,10 @@ export default class ArcadeReportScene extends Phaser.Scene {
         // Load Sounds
         this.menuSounds = {
             menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
-            levelCompleteTTS: this.sound.add('level-complete', { loop: false }),
-            scoreTTS: this.sound.add('score', { loop: false }),
-            // accuracyTTS: this.sound.add('accuracy', { loop: false }),
-            replayTTS: this.sound.add('replay', { loop: false }),
             arcadeTTS: this.sound.add('arcade', { loop: false }),
+            levelCompleteTTS: this.sound.add('level-complete', { loop: false }),
+            replayTTS: this.sound.add('replay', { loop: false }),
+            scoreTTS: this.sound.add('score', { loop: false }),
         }
 
         // Init animations
@@ -145,7 +144,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
         const score1Text = this.add.text(
             width * 0.275,
             height * 0.35,
-            this.players[0] + "'s Score:", 
+            this.constants.Capitalize(this.players[0]) + "'s Score:", 
             this.constants.MenuButtonStyle()
         );
         const score1Val = this.add.text(
@@ -155,13 +154,13 @@ export default class ArcadeReportScene extends Phaser.Scene {
             this.constants.MenuButtonStyle("#FF0000")
         );
         score1Val.setOrigin(1, 0);
-        ttsArr.push({text: score1Text, sound: this.menuSounds.scoreTTS});
+        ttsArr.push({text: score1Text, sound: this.sound.get(this.players[0])});
 
         if (this.playerCount == 2) {
             const score2Text = this.add.text(
                 width * 0.275, 
                 height * 0.425, 
-                this.players[1] + "'s Score:", 
+                this.constants.Capitalize(this.players[1]) + "'s Score:", 
                 this.constants.MenuButtonStyle()
             );
             const score2Val = this.add.text(
@@ -171,7 +170,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
                 this.constants.MenuButtonStyle("#FF0000")
             );
             score2Val.setOrigin(1, 0);
-            ttsArr.push({text: score2Text, sound: this.menuSounds.scoreTTS});
+            ttsArr.push({text: score2Text, sound: this.sound.get(this.players[1])});
         }
 
         // Do we want to show accuracy if bubba will be using an eyetracker which
@@ -189,8 +188,9 @@ export default class ArcadeReportScene extends Phaser.Scene {
             t.text.setInteractive();
 
             t.text.on('pointerover', () => {
-                if (!t.sound.isPlaying) {
+                if (!this.menuSounds.scoreTTS.isPlaying) {
                     t.sound.play();
+                    this.menuSounds.scoreTTS.play({delay: 0.75})
                 }
             })
         })

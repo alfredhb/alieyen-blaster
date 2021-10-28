@@ -127,7 +127,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
         setTimeout(() => {
             try {
                 this.aliens.destroy(false, true);
-                this.bullets.destroy(false, true);
+                this.bullets.forEach(b => b.destroy(false, true));
             } catch (e) {
                 // Catch any errors thrown here and log.
                 console.log(e);
@@ -296,7 +296,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
      * @param {number} angle
      */
     addBullet(turret_id, x, y, angle) {
-        let bullet = this.bullets[turret_id].get();
+        let bullet = this.bullets[turret_id].get(this.players[turret_id]);
         if (bullet) {
             // Add collider here
             let overlapper = this.physics.add.overlap(
