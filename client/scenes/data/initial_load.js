@@ -30,6 +30,7 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "gauntlet-button",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/alien.png"},
             {"key": "alien-boss",         "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/boss_min_1.png"},
             {"key": "turret-colored",     "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/turret_col.png"},
+            {"key": "alien-bomb",         "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/alien_bomb.png"},
             {"key": "star",               "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/star.png"},
             {"key": "ex-1",               "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/ex1.png"},
             {"key": "ex-2",               "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/ex1.png"},
@@ -76,8 +77,10 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "start",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/start.mp3"},
             {"key": "story",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/story.mp3"},
             {"key": "timed",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/timed.mp3"},
-            {"key": "who-p1",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/who-is-player-1.mp3"},
-            {"key": "who-p2",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/who-is-player-2.mp3"},
+            {"key": "who-p1",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/who-is-player-1.mp3"},
+            {"key": "who-p2",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/who-is-player-2.mp3"},
+            {"key": "energy-charge",    "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/energy-charge.mp3"},
+            {"key": "energy-blast",     "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/energy-blast.mp3"},
             {"key": "explode-1",        "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/explosion-1.mp3"},
             {"key": "explode-2",        "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/explosion-2.mp3"},
             {"key": "explode-3",        "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/explosion-3.mp3"}
@@ -122,7 +125,7 @@ export default class DataScene1 extends Phaser.Scene {
      */
     addLoadListener(width, height) {
         this.assetsLoaded = 0;
-        this.totalAssets = this.onlineImages.length + 1/* # of spritesheets */;
+        this.totalAssets = this.onlineImages.length + 2/* # of spritesheets */;
         let loadBlockWidth = (width * 0.45) / this.totalAssets;
 
         this.textures.on('addtexture', (k, t) => {
@@ -149,11 +152,19 @@ export default class DataScene1 extends Phaser.Scene {
      * Loads any sprite sheets stored in GCS with custom frame width/height
      */
     loadSpriteSheets() {
+        // Cursor-fill
         this.load.spritesheet(
             'cursor-fill-2',
             'https://storage.googleapis.com/alieyen-blaster/public/assets/features/cursor-sheet-v2.png',
             { frameWidth: 40, frameHeight: 40 },
         );
+
+        // Alien Grunt Fire Animation
+        this.load.spritesheet(
+            'alien-grunt-fire-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_fire_114_160.png',
+            { frameWidth: 114, frameHeight: 160 },
+        )
     }
 
     // Local Sounds would use this.sound.decode([{data: base64, key: id}])
@@ -183,10 +194,19 @@ export default class DataScene1 extends Phaser.Scene {
      * Create animations from loaded spritesheets
      */
     createAnimations() {
+        // Cursor animation
         this.anims.create({
             key: 'cursor-fill-animation-2',
             frames: this.anims.generateFrameNumbers('cursor-fill-2', { start: 0 }),
             frameRate: 20,
+            repeat: 0,
+        });
+
+        // Alien Grunt Animation
+        this.anims.create({
+            key: 'alien-grunt-fire',
+            frames: this.anims.generateFrameNumbers('alien-grunt-fire-sheet', { start: 0 }),
+            frameRate: 3,
             repeat: 0,
         });
     }
@@ -194,5 +214,9 @@ export default class DataScene1 extends Phaser.Scene {
     // After spritesheets are loaded, creates the animations from them
     create() {
         this.createAnimations();
+
+        // Add sounds to cache
+        this.sound.add('energy-blast');
+        this.sound.add('energy-charge');
     }
 }
