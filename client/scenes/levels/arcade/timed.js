@@ -122,7 +122,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
         this.alienTimers.forEach(t => t.destroy());
 
         // Kill all sprites
-        this.aliens.getChildren().forEach(a => a.play('explode'));
+        // this.aliens.getChildren().forEach(a => a.play('explode'));
+        this.aliens.getChildren().forEach(a => a.leave());
 
         setTimeout(() => {
             try {
