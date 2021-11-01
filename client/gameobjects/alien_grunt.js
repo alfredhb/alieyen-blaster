@@ -45,6 +45,7 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
             frameRate: 3,
             repeat: -1,
         });
+        this.chargeSound = this.scene.sound.get('energy-charge');
     }
 
     /**
@@ -147,7 +148,7 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
         this.alien_attack = this.scene.add.image(this.x, this.y + this.height * 0.75, 'alien-bomb');
         this.alien_attack.setTint(this.constants.LightBlue);
         this.alien_attack.setDisplaySize(5, 5);
-        this.scene.sound.get('energy-charge').play();
+        this.chargeSound.play();
     }
 
     /**
@@ -174,7 +175,7 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
 
             // Swap audio events
             if (this.alien_attack.displayWidth >= this.constants.Width * 0.055) {
-                this.scene.sound.get('energy-charge').stop();
+                this.chargeSound.stop();
                 this.scene.sound.get('energy-blast').play()
             }
         } else if (this.alien_attack?.displayWidth >= this.constants.Width * 0.055 
@@ -188,7 +189,7 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
         this.deadVal = true;
 
         if (this.alien_attack?.displayWidth < this.constants.Width * 0.055) {
-            this.scene.sound.get('energy-charge').stop();
+            this.chargeSound.stop();
             this.alien_attack.setVisible(false);
             this.alien_attack.setActive(false);
         }
