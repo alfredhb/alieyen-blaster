@@ -266,7 +266,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
      * @param {number} height 
      */
     styleHighScorer(width, height) {
-        if (this.bestScore.score != this.highscore.score &&
+        if (this.bestScore.score != this.highscore.score ||
             this.bestScore.player != this.highscore.player) {
             return;
         }
