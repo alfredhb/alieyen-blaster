@@ -2,9 +2,13 @@
  * A util lib for common constants across scenes
  */
 export default class Constants {
+    /**
+     * @param {number} width 
+     * @param {number} height 
+     */
     constructor(width, height) {
-        this.width = width;
-        this.height = height;
+        this.Width = width;
+        this.Height = height;
 
         this.hoverMiliseconds = 1000;
     }
@@ -12,12 +16,33 @@ export default class Constants {
     Blue = 0x0000FF;
     Green = 0x00ff00;
     Gray = 0x808080;
+    LightBlue = 0x7DF9FF;
     Red = 0xFF0000;
 
     PersonColors = {
         "bubba": this.Green,
         "leah": this.Red,
         "friend": this.Blue,
+    }
+
+    // Basic Speeds of aliens
+    MinSpeed = 100;
+    MaxSpeed = 300;
+
+    /**
+     * Creates speed based on min and max and applies a difficulty multiplier
+     * Multiplier: d == 1: 1, d == 2: 1.5, d == 3: 2
+     * @param {number} d difficulty
+     */
+    GetSpeed = (d) => {
+        return Phaser.Math.GetSpeed(
+            Phaser.Math.RND.between(this.MinSpeed, this.MaxSpeed),
+            1,
+        ) * this.GetDifficultyMultiplier(d);
+    }
+
+    GetDifficultyMultiplier = (d) => {
+        return ((d > 1) ? (d + 1) / 2 : 1 );
     }
 
     /**

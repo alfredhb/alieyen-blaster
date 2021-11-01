@@ -109,7 +109,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
                     players: this.players,
                 }
             }
-        })
+        });
     }
 
     update() {
