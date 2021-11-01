@@ -27,8 +27,8 @@ export default class Constants {
      */
     MenuTitleStyle = () => {
         return {
-            fontFamily: 'impact',
-            fontSize: (this.height * 0.085) + "px",
+            fontFamily: 'impact-custom',
+            fontSize: (this.Height * 0.085) + "px",
             color: "#FFF",
         }
     }
@@ -38,8 +38,8 @@ export default class Constants {
      */
     TimerStyle = () => {
         return {
-            fontFamily: 'impact',
-            fontSize: (this.height * 0.045) + "px",
+            fontFamily: 'impact-custom',
+            fontSize: (this.Height * 0.045) + "px",
             color: "0x000000",
         }
     };
@@ -52,8 +52,8 @@ export default class Constants {
      */
     MenuButtonStyle = (color) => {
         return {
-            fontFamily: 'impact',
-            fontSize: (this.height * 0.055) + "px",
+            fontFamily: 'impact-custom',
+            fontSize: (this.Height * 0.055) + "px",
             color: (color) ? color : "#FFF",
         }
     }

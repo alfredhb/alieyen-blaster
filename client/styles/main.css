@@ -11,3 +11,8 @@ body {
 h2 {
   color: white;
 }
+
+@font-face {
+  font-family: 'impact-custom';
+  src: url(https://storage.googleapis.com/alieyen-blaster/public/config/impact.ttf);
+}

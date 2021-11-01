@@ -61,7 +61,7 @@ export default class MenuScene4 extends Phaser.Scene {
     initTitle(width, height) {
         // Title
         const title = this.add.text(width * 0.5, height * 0.15, 'Ali-eye-n Blaster 3000', {
-            fontFamily: "Impact",
+            fontFamily: "impact-custom",
             fontSize: (width / 11) + "px",
             strokeThickness: 0,
             color: "#FFFFFF",
@@ -86,7 +86,7 @@ export default class MenuScene4 extends Phaser.Scene {
         // Play Button
         const plButton = this.add.image(width * 0.5, height * 0.7, '__WHITE').setDisplaySize(width * 0.25, height * 0.25);
         const plText = this.add.text(plButton.x, plButton.y, 'Play!', {
-            fontFamily: "Impact",
+            fontFamily: "impact-custom",
             color: "#FF0000",
             fontSize: (height * 0.055) + "px",
         }).setOrigin(0.5);
