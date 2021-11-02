@@ -139,7 +139,7 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
         
         // Stop moving and begin animation
         this.setVelocity(0, 0);
-        this.anims.play('alien-grunt-fire');
+        this.anims.play(this.getFireAnimation());
         this.on('animationcomplete', () => {
             this.leave();
         });
@@ -169,8 +169,8 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
 
         if (this.alien_attack?.displayWidth < this.constants.Width * 0.055) {
             this.alien_attack.setDisplaySize(
-                this.alien_attack.displayWidth + 0.25 * this.dMultiplier, 
-                this.alien_attack.displayWidth + 0.25 * this.dMultiplier,
+                this.alien_attack.displayWidth + 0.3 * this.dMultiplier, 
+                this.alien_attack.displayWidth + 0.3 * this.dMultiplier,
             );
 
             // Swap audio events
@@ -239,5 +239,14 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
 
         this.setPosition(this.maxX, this.maxy);
         this.setVisible(false);
+    }
+
+    /**
+     * returns the correct spritesheet based on difficulty
+     */
+    getFireAnimation() {
+        return (this.difficulty == 3) ? 'alien-grunt-fire-hard' :
+                (this.difficulty == 2) ? 'alien-grunt-fire-medium' :
+                'alien-grunt-fire-easy'
     }
 }
