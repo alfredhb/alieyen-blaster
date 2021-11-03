@@ -14,6 +14,8 @@ import SavefileMenu from './scenes/menus/savefiles';
 import StartMenu from './scenes/menus/start';
 import TimedArcade from './scenes/levels/arcade/timed';
 import Constants from './lib/constants';
+import LevelFactory from './scenes/levels/level_factory';
+import TemplateLevelScene from './scenes/levels/template_level';
 
 // Game Config
 var config = {
@@ -29,6 +31,7 @@ var config = {
   scene: [
     InitialLoad, StartMenu, PlayerSelectMenu, GamemodeMenu, SavefileMenu, 
     ArcadeReportScene, ArcadeMenu, DifficultySelectMenu, TimedArcade, DefaultPage,
+    LevelFactory, TemplateLevelScene
   ],
 };
 

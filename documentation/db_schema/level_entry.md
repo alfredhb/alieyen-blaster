@@ -4,7 +4,7 @@
 {
     _id: string,                        //level name *or* scene name
     level: {
-        difficulty_multiplier: num,
+        difficulty_multiplier: [num, num, num],
         objective: ENUM,                //TIMED, LIVES, TIMEKILLS, LIVEKILLS, TIMELIVES
         win_cond: {
             lives: num,
@@ -13,15 +13,15 @@
                 grunt: num,
                 mini_boss: num,
                 boss: num
-            },
-            powerups: false *or* [
-                {
-                    name: string,
-                    enabled: boolean
-                },
-                ...
-            ],
+            }
         }
+        powerups: false *or* [
+            {
+                name: string,
+                enabled: boolean
+            },
+            ...
+        ],
         aliens: {
             grunt: {
                 spawn: boolean,
