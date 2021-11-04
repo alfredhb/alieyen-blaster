@@ -43,12 +43,15 @@ export default class LevelTimer extends Phaser.GameObjects.GameObject {
         );
         this.timerText.setDepth(11).setOrigin(1, 0.5);
         this.timerVal.setDepth(11).setOrigin(0, 0.5);
+
+        // add self to scene
+        scene.add.existing(this);
     }
 
     /**
-     * updates timer text. This MUST be called within the update func for the level
+     * updates timer text on scene.update()
      */
-    update() {
+    preUpdate() {
         this.timerVal.setText(this.timer.getRemainingSeconds().toString().substr(0, 4));
     }
 
