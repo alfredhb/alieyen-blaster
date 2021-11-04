@@ -204,7 +204,8 @@ export default class MenuScene3 extends Phaser.Scene {
             // Add Hoverclick and normal click
             this.constants.HoverClick(this, b.button, () => {
                 this.menuSounds.menuClick.play();
-                this.scene.start("arcadeReadyScene",
+                this.scene.start(
+                    (this.playerCount == 1) ? b.text.name : "arcadeReadyScene",
                     {
                         meta: {
                             playerCount: this.playerCount,

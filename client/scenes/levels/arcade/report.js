@@ -366,7 +366,9 @@ export default class ArcadeReportScene extends Phaser.Scene {
                 this.menuSounds.menuClick.play();
 
                 // Transition to different scene based on text name
-                this.scene.start('arcadeReadyScene',
+                this.scene.start(
+                    (b.text.name == 'arcadeMenu') ? 'arcadeMenu' : 
+                    (this.playerCount == 1) ? b.text.name : 'arcadeReadyScene',
                     {
                         meta: {
                             playerCount: this.playerCount,

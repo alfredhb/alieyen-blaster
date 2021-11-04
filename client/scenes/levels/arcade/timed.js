@@ -223,16 +223,9 @@ export default class ArcadeScene1 extends Phaser.Scene {
      * @param {number} height
      */
      addTurrets(width, height) {
-        this.pointers.push(this.input.mousePointer); // TODO change for updatable player names
-        this.pointers.push(this.input.mousePointer); // TODO change for updatable player names
-        this.addTurret(width * 0.05, height * 0.85, 'pointerup');
-        this.addTurret(width * 0.95, height * 0.85, 'pointerup');
-
-        // Add another turret and pointer
-        // if (this.playerCount == 2) {
-        //     this.pointers.push(this.input.mousePointer); // Adds touch pointer, change with updatable player names
-        //     this.addTurret(width * 0.95, height * 0.85, width * 0.9, height * 0.1, 'pointermove');
-        // }
+        let event = (this.players[this.turn] == 'bubba') ? 'pointermove' : 'pointerup';
+        this.addTurret(width * 0.05, height * 0.85, event);
+        this.addTurret(width * 0.95, height * 0.85, event);
     }
 
     /**
@@ -293,7 +286,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
             //     return;
             // }
             this.input.on(pointerEvent, (pointer) => {
-                fire(this.pointers[id]);
+                fire(this.input.activePointer);
             });
         }
 
@@ -322,7 +315,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
      * @param {number} angle
      */
     addBullet(turret_id, x, y, angle) {
-        let bullet = this.bullets[turret_id].get(this.players[turret_id]);
+        let bullet = this.bullets[turret_id].get(this.players[this.turn]);
         if (bullet) {
             // Add collider here
             let overlapper = this.physics.add.overlap(

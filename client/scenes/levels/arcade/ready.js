@@ -122,11 +122,12 @@ export default class ArcadeReadyScene extends Phaser.Scene {
         let ttsArr = [];
 
         const turnText = this.add.text(
-            width * 0.375,
+            width * 0.5,
             height * 0.45,
             this.constants.Capitalize(this.players[this.turn]) + "'s Turn!",
             this.constants.MenuButtonStyle()
         );
+        turnText.setOrigin(0.5);
         ttsArr.push({text: turnText, sound: this.sound.get(this.players[this.turn])});
 
         ttsArr.forEach(t => {
