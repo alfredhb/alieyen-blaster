@@ -6,6 +6,9 @@
 ### *playerdead*
 * emitted when lives of player reach 0
 
+### *startleveltimer*
+* emitted by template-level to begin the level timer
+
 ### *leveltimerover*
 * emitted when the level timer reaches 0
 
