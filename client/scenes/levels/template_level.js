@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import QuitButton from "../../gameobjects/quit_button";
 import Constants from "../../lib/constants";
 
 export default class TemplateLevelScene extends Phaser.Scene {
@@ -98,6 +99,8 @@ export default class TemplateLevelScene extends Phaser.Scene {
      * Create all UI and logic!
      */
     create() {
+        //UI
+        this.initUI();
 
     }
 
@@ -107,11 +110,40 @@ export default class TemplateLevelScene extends Phaser.Scene {
     initUI() {
         /*
         TODO:
-        - place all content in data.assets
         - place a timer and/or lives counter in appropriate spot based on data.objective + win_cond
-        - place quit button in bottom right which steps player back to arcadeMenu or levelSelectMenu
         - place any score counter in appropriate spot based on data.objective
+        - add denotion of current player
+        - create execFunc for quit once timers are realized
         */
+        let width = this.constants.Width, height = this.constants.Height;
+
+       // Background
+        const bg = this.add.image(width * 0.5, height * 0.5, this.levelData.assets.background);
+        bg.setDisplaySize(width, height);
+
+        // Hud
+        const cockpit = this.add.image(width * 0.5, height * 0.5, this.levelData.assets.hud);
+        cockpit.setDisplaySize(width, height);
+        cockpit.setDepth(11);
+
+        // Turrets
+        const lTurret = this.add.image(width * 0.05, height * 0.85, this.levelData.assets.turret);
+        const rTurret = this.add.image(width * 0.95, height * 0.85, this.levelData.assets.turret);
+        this.turrets = [lTurret, rTurret];
+        this.turrets.forEach(t => {
+            t.setDisplaySize(width * 0.025, height * 0.25);
+            t.setOrigin(0.5);
+            t.setDepth(10);
+        })
+
+        // Quit
+        const quit = new QuitButton(this, {
+            backMenu: (this.levelData.scene.type == 'ARCADE') ? 'arcadeMenu': 'savefileMenu',
+            execFunc: () => { console.log("unimplemented execFunc!") },
+            data: {
+                meta: this.levelData.meta,
+            }
+        });
     }
 
     /**
