@@ -6,10 +6,10 @@ export default class MenuScene3 extends Phaser.Scene {
     constructor() {
         super('arcadeMenu')
     }
-    
+
     /**
      * Capture the next scene to progress to after selections are made
-     * @param {{meta: {playerCount: number, difficulty: number, players: string[]}, level: {any}?, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}?}} data 
+     * @param {{meta: {playerCount: number, difficulty: number, players: string[]}, level: {any}?, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}?}} data
      */
     init(data) {
         this.playerCount = data.meta.playerCount;
@@ -58,7 +58,7 @@ export default class MenuScene3 extends Phaser.Scene {
         // Quit Button
         const quit = new QuitButton(this, {
             backMenu: 'gamemodeMenu',
-            data: { 
+            data: {
                 meta: {
                     playerCount: this.playerCount,
                     difficulty: this.difficulty,
@@ -70,8 +70,8 @@ export default class MenuScene3 extends Phaser.Scene {
 
     /**
      * Add title and interactive listener which plays tts
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     initTitle(width, height) {
         const title = this.add.text(width * 0.5, height * 0.15, 'Arcade', this.constants.MenuTitleStyle());
@@ -91,8 +91,8 @@ export default class MenuScene3 extends Phaser.Scene {
     /**
      * Places a difficulty settings menu in top right which on click, transitions
      * to 'difficultySelectMenu'
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     initDifficultyButton(width, height) {
         // Difficulty Settings Button
@@ -142,8 +142,8 @@ export default class MenuScene3 extends Phaser.Scene {
 
     /**
      * Add buttons and listeners
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     initLevelButtons(width, height) {
 
@@ -204,12 +204,13 @@ export default class MenuScene3 extends Phaser.Scene {
             // Add Hoverclick and normal click
             this.constants.HoverClick(this, b.button, () => {
                 this.menuSounds.menuClick.play();
-                this.scene.start(b.text.name,
+                this.scene.start("arcadeReadyScene",
                     {
                         meta: {
                             playerCount: this.playerCount,
                             difficulty: this.difficulty,
                             players: this.players,
+                            levelName: b.text.name,
                         }
                     }
                 );

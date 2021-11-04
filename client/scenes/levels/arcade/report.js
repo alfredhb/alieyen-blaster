@@ -28,8 +28,8 @@ export default class ArcadeReportScene extends Phaser.Scene {
         this.prevScene = data.scene.prevScene;
 
         // Set Best Score
-        this.bestScore = (this.levelScore1 > this.levelScore2) ? 
-            {score: this.levelScore1, player: this.players[0]} : 
+        this.bestScore = (this.levelScore1 > this.levelScore2) ?
+            {score: this.levelScore1, player: this.players[0]} :
             {score: this.levelScore2, player: this.players[1]}
 
         // Fetch Highscore
@@ -168,7 +168,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
         const score1Text = this.add.text(
             width * 0.275,
             height * 0.275,
-            this.constants.Capitalize(this.players[0]) + "'s Score:", 
+            this.constants.Capitalize(this.players[0]) + "'s Score:",
             this.constants.MenuButtonStyle()
         );
         const score1Val = this.add.text(
@@ -182,9 +182,9 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
         if (this.playerCount == 2) {
             const score2Text = this.add.text(
-                width * 0.275, 
-                height * 0.35, 
-                this.constants.Capitalize(this.players[1]) + "'s Score:", 
+                width * 0.275,
+                height * 0.35,
+                this.constants.Capitalize(this.players[1]) + "'s Score:",
                 this.constants.MenuButtonStyle()
             );
             const score2Val = this.add.text(
@@ -222,12 +222,12 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
     /**
      * Posts the Highscore for this level including player who accomplished it
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     highscoreReport(width, height) {
         const title = this.add.text(
-            width * 0.5, 
+            width * 0.5,
             height * .5,
             'HIGHSCORE',
             this.constants.MenuButtonStyle()
@@ -262,8 +262,8 @@ export default class ArcadeReportScene extends Phaser.Scene {
     /**
      * Places a spinning golden star to the left of the player who just set a highscore
      * or who's score matches their previous highscore
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     styleHighScorer(width, height) {
         if (this.bestScore.score != this.highscore.score ||
@@ -366,12 +366,13 @@ export default class ArcadeReportScene extends Phaser.Scene {
                 this.menuSounds.menuClick.play();
 
                 // Transition to different scene based on text name
-                this.scene.start(b.text.name,
+                this.scene.start('arcadeReadyScene',
                     {
                         meta: {
                             playerCount: this.playerCount,
                             difficulty: this.difficulty,
                             players: this.players,
+                            levelName: b.text.name,
                         }
                     }
                 )
