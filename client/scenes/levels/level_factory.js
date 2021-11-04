@@ -46,7 +46,8 @@ export default class LevelFactory extends Phaser.Scene {
                         },
                         level: res.level,
                         assets: res.assets,
-                        scene: res.scene
+                        scene: res.scene,
+                        name: this.nextScene.name
                     }
                 )
             }
@@ -62,7 +63,8 @@ export default class LevelFactory extends Phaser.Scene {
                     },
                     level: res.level,
                     assets: res.assets,
-                    scene: res.scene
+                    scene: res.scene,
+                    name: this.nextScene.name
                 }
             )
         })
