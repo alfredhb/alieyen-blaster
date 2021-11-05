@@ -212,6 +212,17 @@ export default class MenuScene3 extends Phaser.Scene {
                             difficulty: this.difficulty,
                             players: this.players,
                             levelName: b.text.name,
+                            currentPlayer: this.players[0],
+                        },
+                        scene: {
+                            prevScene: {
+                                name: 'arcadeMenu',
+                                type: 'ARCADE',
+                            },
+                            nextScene: {
+                                name: enIcon.name,
+                                type: 'ARCADE'
+                            }
                         }
                     }
                 );
