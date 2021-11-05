@@ -1,7 +1,8 @@
 import Phaser from "phaser";
 import Constants from "../lib/constants";
+import Alien from "./alien";
 
-export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
+export default class AlienGrunt extends Alien {
     /**
      * @param {Phaser.Scene} scene 
      */
@@ -15,8 +16,8 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);
         this.setInteractive();
         this.setPosition(width + 50, height + 50);
-        this.setDisplaySize(width * 0.09, height * 0.2)
-        this.setSize(this.width * 0.2, this.height * 0.4);
+        this.setDisplaySize(width * 0.03, height * 0.05);
+        this.setSize(this.width * 0.5, this.height * 0.7);
         this.setOrigin(0.5);
 
         this.maxX = width + 65;
@@ -29,9 +30,13 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
          * 3. How quickly aliens charge up to fire - done
          * 4. How many aliens spawn (handled elsewhere)
          */
+        this.canFire = canFire || false;
         this.difficulty = scene.difficulty;
         this.dMultiplier = this.constants.GetDifficultyMultiplier(this.difficulty);
-        this.canFire = canFire || false;
+        if (scene.levelData) {
+            this.difficulty = scene.levelData.meta.difficulty
+            this.dMultiplier = scene.levelData.level.difficulty_multiplier[this.difficulty - 1];
+        }
 
         // Add Animation
         this.anims.create({
@@ -115,8 +120,8 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
     place(x, y) {
         this.setPosition(x, y);
         this.setDisplaySize(
-            this.constants.Width * 0.1, 
-            this.constants.Height * 0.2
+            this.constants.Width * 0.03, 
+            this.constants.Height * 0.05
         );
         this.anims.play('float');
 
@@ -164,7 +169,7 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
 
         if (this.alien_attack?.y >= this.constants.Height) {
             this.alien_attack.setVisible(false);
-            this.scene.events.emit('playerhit');
+            this.scene.events.emit('playerhit', 1 /* alien grunt deals 1 damage */);
         }
 
         if (this.alien_attack?.displayWidth < this.constants.Width * 0.055) {
@@ -182,6 +187,10 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
             && this.alien_attack?.y < this.constants.Height) {
             this.alien_attack.setPosition(this.alien_attack.x, this.alien_attack.y + 2.5);
         }
+    }
+
+    damage(d) {
+        return this.kill();
     }
 
     // Kill alien and its attack if it was charging
@@ -203,6 +212,7 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
             // Respawn logic
             this.respawn();
         });
+        return this.deadVal;
     }
 
     /**
@@ -248,5 +258,12 @@ export default class AlienGrunt extends Phaser.Physics.Arcade.Sprite {
         return (this.difficulty == 3) ? 'alien-grunt-fire-hard' :
                 (this.difficulty == 2) ? 'alien-grunt-fire-medium' :
                 'alien-grunt-fire-easy'
+    }
+
+    /**
+     * @returns {number} type of alien
+     */
+    getType() {
+        return 0; // alien grunt
     }
 }
