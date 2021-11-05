@@ -1,6 +1,5 @@
 import { Meteor } from 'meteor/meteor';
 import Phaser from "phaser";
-import Constatns from "../../lib/constants";
 
 /**
  * This class fetches the associated DB level entry and compiles it into a data
