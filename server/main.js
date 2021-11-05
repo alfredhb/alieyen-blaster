@@ -16,6 +16,7 @@ if (isLocalDev) {
 // Export Collections
 export const SaveData = new Mongo.Collection("save-files");
 export const MetaData = new Mongo.Collection("meta-data");
+export const Levels   = new Mongo.Collection("levels");
 
 Meteor.methods({
   // Loads asset from ./data/assets/{path} and returns a base64 object of it
@@ -82,5 +83,18 @@ Meteor.methods({
 
     SaveData.update(id, { $set: { "value": scoreObj.score, "player": scoreObj.player } });
     return scoreObj;
+  },
+
+  /**
+   * Finds the DB entry in levels with levelId and returns all of its contents
+   * @param {string} levelId 
+   */
+  getLevelData(levelId) {
+    var l = Levels.findOne(levelId);
+    if (l == null) {
+      throw new Meteor.Error("unknown levelId provided " + levelId);
+    }
+
+    return l;
   }
 });

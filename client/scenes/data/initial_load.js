@@ -20,6 +20,7 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "space-bg",           "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/background/background1.png"},
             {"key": "story-bg",           "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/background/background2.png"},
             {"key": "arcade-hud",         "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/background/arcade_hud.png"},
+            {"key": "ship-hud",           "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/background/ship_hud.png"},
             {"key": "arcade-button",      "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/buttons/arcade_no_text.png"},
             {"key": "difficulty-button",  "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/gear.png"},
             {"key": "gameslot-button",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/buttons/game_slot.png"},
