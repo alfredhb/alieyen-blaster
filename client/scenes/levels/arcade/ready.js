@@ -19,13 +19,14 @@ export default class ArcadeReadyScene extends Phaser.Scene {
         this.players = data.meta.players;
         this.levelName = data.meta.levelName;
 
-        // Set level data
-        this.turn = data.hasOwnProperty("level") ? data.level.turn : 0;
+        // Set current Player
+        this.turn = data.meta.hasOwnProperty("currentPlayer") ? data.meta.currentPlayer : 0;
+        data.meta.currentPlayer = this.turn;
 
-        this.readyData = data
+        this.readyData = data;
 
         // Specific level report card data
-        console.log("initialized ReadyScene for ", this.playerCount, " players")
+        console.log("initialized ReadyScene for ", this.playerCount, " players");
     }
 
     preload() {
@@ -182,7 +183,10 @@ export default class ArcadeReadyScene extends Phaser.Scene {
                 this.menuSounds.menuClick.play();
 
                 // Transition to different scene based on text name
-                this.scene.start(b.text.name, this.readyData);
+                this.scene.start(
+                    (b.text.name == this.readyData.scene.nextScene.name) ? 'levelFactory' : b.text.name, 
+                    this.readyData
+                );
             })
         });
     }
