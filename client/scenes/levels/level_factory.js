@@ -82,6 +82,7 @@ export default class LevelFactory extends Phaser.Scene {
                         name: this.nextScene.name
                     }
                 )
+                return;
             }
 
             this.scene.start(
