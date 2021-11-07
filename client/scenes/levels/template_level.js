@@ -1,5 +1,11 @@
 import Phaser from "phaser";
+import Alien from "../../gameobjects/alien";
+import AlienGroup from "../../gameobjects/alien_group";
+import AlienGrunt from "../../gameobjects/alien_grunt";
+import LevelTimer from "../../gameobjects/level_timer";
 import QuitButton from "../../gameobjects/quit_button";
+import ScoreObject from "../../gameobjects/scoreObject";
+import Turrets from "../../gameobjects/turret";
 import Constants from "../../lib/constants";
 
 export default class TemplateLevelScene extends Phaser.Scene {
@@ -72,7 +78,8 @@ export default class TemplateLevelScene extends Phaser.Scene {
      *           type: string
      *       }
      *       report: string
-     *   }
+     *   },
+     *   name: string
      * }} data
      */
     init(data) {
@@ -81,6 +88,11 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
         const { width, height } = this.scale;
         this.constants = new Constants(width, height);
+
+        console.log("Initializing " + this.levelData.name + ".\nDifficulty: " 
+                    + this.levelData.meta.difficulty + "\nPlayers: "
+                    + this.levelData.meta.players.toString() + "\nCurrent Player: "
+                    + this.levelData.meta.currentPlayer);
     }
 
     /**
@@ -92,16 +104,44 @@ export default class TemplateLevelScene extends Phaser.Scene {
         - fetch explode sound, player damage sound (if lives exist),
         any background music, etc 
         - create any new animations
+        - move all animation/sound creation to initial_load
         */
+
+        // Explode Animation
+        this.explode = this.anims.create({
+                key: 'explode',
+                frames: [
+                    {key: 'ex-1'},
+                    {key: 'ex-2'},
+                    {key: 'ex-3'},
+                ],
+                repeat: 1
+            });
+
+        this.sound.add('explode-3', { loop: false, volume: 0.35 });
     }
 
     /**
      * Create all UI and logic!
      */
     create() {
-        //UI
+        // UI
         this.initUI();
 
+        // EndState
+        this.initEndState();
+
+        // Sprites
+        this.initSprites();
+
+        // Turrets
+        this.initTurrets();
+
+        // Powerups
+        this.initPowerups();
+
+        // Start
+        this.startLevel();
     }
 
     /**
@@ -110,10 +150,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
     initUI() {
         /*
         TODO:
-        - place a timer and/or lives counter in appropriate spot based on data.objective + win_cond
-        - place any score counter in appropriate spot based on data.objective
         - add denotion of current player
-        - create execFunc for quit once timers are realized
         */
         let width = this.constants.Width, height = this.constants.Height;
 
@@ -127,23 +164,77 @@ export default class TemplateLevelScene extends Phaser.Scene {
         cockpit.setDepth(11);
 
         // Turrets
-        const lTurret = this.add.image(width * 0.05, height * 0.85, this.levelData.assets.turret);
-        const rTurret = this.add.image(width * 0.95, height * 0.85, this.levelData.assets.turret);
-        this.turrets = [lTurret, rTurret];
-        this.turrets.forEach(t => {
-            t.setDisplaySize(width * 0.025, height * 0.25);
-            t.setOrigin(0.5);
-            t.setDepth(10);
-        })
+        this.turrets = new Turrets(this, this.constants, this.levelData.assets.turret);
 
         // Quit
         const quit = new QuitButton(this, {
             backMenu: (this.levelData.scene.type == 'ARCADE') ? 'arcadeMenu': 'savefileMenu',
-            execFunc: () => { console.log("unimplemented execFunc!") },
+            execFunc: () => { 
+                this.cleanupLevel();
+            },
             data: {
                 meta: this.levelData.meta,
             }
         });
+    }
+
+    /**
+     * Produces the proper endstate logic based on data.level.objective and win 
+     * conditions.
+     */
+    initEndState() {
+        /*
+        TODO:
+        - create endTimer for TIMED, TIMEKILLS, TIMELIVES
+        - create liveCounter logiv for LIVES, LIVEKILLS, TIMELIVES
+        - call any end animations needed
+        */
+        switch (this.levelData.level.objective) {
+            // TIMED
+            case 0:
+                this.levelTimer = new LevelTimer(this, this.constants, this.levelData.level.win_cond.time);
+                this.levelScore = new ScoreObject(this, this.constants);
+
+                // listen for leveltimerover if one doesn't already exist
+                if (!this.events.listenerCount('leveltimerover')) {
+                    this.events.addListener('leveltimerover', () => {
+                        this.endLevel();
+                    });
+                }
+                break;
+                
+            // LIVES
+            case 1:
+                console.log("LIVES mode unimplemented");
+                break;
+
+            // TIMEKILLS
+            case 2:
+                console.log("TIMEKILLS mode unimplemented");
+                break;
+
+            // LIVEKILLS
+            case 3:
+                console.log("LIVEKILLS mode unimplemented");
+                break;
+
+            // TIMELIVES
+            case 4:
+                console.log("TIMELIVES mode unimplemented");
+                break;
+
+            // UNKNOWN
+            default:
+                console.log("Unknown objective found for level " + this.levelData.name);
+                break;
+        }
+
+        // Initilize Kill Tracking
+        this.kills = {
+            grunt: 0,
+            miniBoss: 0,
+            boss: 0,
+        };
     }
 
     /**
@@ -158,6 +249,23 @@ export default class TemplateLevelScene extends Phaser.Scene {
         - determine initial alien spawn timers
         - provide alien spawn with proper damage boolean based on objective
         */
+
+        this.aliens = [];
+        this.alienTimers = [];
+
+        let gruntData = this.levelData.level.aliens.grunt;
+        this.aliens.push(
+            new AlienGroup(this, {
+                classType: AlienGrunt,
+                runChildUpdate: true,
+                maxSize: (gruntData.spawn) ? gruntData.quantity : 0
+            }, this.constants)
+        );
+
+        // Create alien spawntimers
+        this.aliens.forEach(a => {
+            a.createSpawnTimers();
+        });
     }
 
     /**
@@ -165,13 +273,42 @@ export default class TemplateLevelScene extends Phaser.Scene {
      * the correct damage to aliens and provides the correct score
      */
     initTurrets() {
-        /*
-        TODO:
-        - create turret listeners which move based on data.currentPlayer's input method
-        - add collision func for individual alien groups which kill and increment respective scores
-        - add cooldown timer to turrets preventing spam firing
-        - add bullet logic which fires a correctly colored bullet
-        */
+        /**
+         * Callback function when a bullet and an alien overlap. If alien is alive, bullet
+         * and bullet is active, then deal x damage to alien allowing respawn and 
+         * increment respective score
+         * @param {Phaser.Physics.Arcade.Sprite} bullet 
+         * @param {Alien} alien 
+         */
+        let collisionFunc = (bullet, alien) => {
+            /* 
+            TODO:
+            - integrate damage into aliens - refactor kill() to damage() which calls kill()
+            */
+            if (alien.dead() || !bullet.active) {
+                return;
+            }
+
+            bullet.kill();
+            let dead = alien.damage();
+            if (dead) {
+                this.sound.play('explode-3');
+                switch(alien.getType()) {
+                    case 1:
+                        this.kills.miniBoss += 1;
+                        break;
+                    case 2:
+                        this.kills.boss += 1;
+                        break;
+                    default:
+                        this.kills.grunt += 1; 
+                
+                }
+            }
+        }
+        this.aliens.forEach(a => {
+            this.turrets.addFireListener(a, collisionFunc);
+        })
     }
 
     /**
@@ -184,24 +321,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         - create powerups as gameobjects & groups such that spawning is handled elsewhere
         - for each powerup, create it, and push to this.powerups[]
         */
-    }
-
-    /**
-     * Produces the proper endstate logic based on data.level.objective and win 
-     * conditions.
-     */
-    initEndState() {
-        /*
-        TODO:
-        - create endTimer for TIMED, TIMEKILLS, TIMELIVES
-        - create liveCounter logiv for LIVES, LIVEKILLS, TIMELIVES
-        - transition to close cutscene if it exists and:
-        - transition to report screen with appropriate data such that another LF
-        call can take place
-        - destroy all active listeners and sprites
-        - call any end animations needed
-        - ensure garbage is collected so that this template can be used again
-        */
+       console.log("initPowerups Unimplemented");
     }
 
     /**
@@ -211,10 +331,212 @@ export default class TemplateLevelScene extends Phaser.Scene {
     startLevel() {
         /*
         TODO:
-        - start first alien tiemr
         - call this.powerup.foreach.spawn() or something (win_cond dependent)
         - start level timer if it exists
-        - allow turrets to fire
         */
+        // Start Level Timers for specific modes
+        switch (this.levelData.level.objective) {
+            // TIME based
+            case 0:
+            case 2:
+            case 4:
+                this.levelTimer.startTimer();
+                break;
+
+            default:
+                // no action necessary
+                break;
+        }
+
+        // Start each alien's first spawn timer
+        this.aliens.forEach(a => a.spawn());
+    }
+
+    /**
+     * Called when endstate is reached as satisfied by objective. Determines which
+     * endstate is reached: success, fail, neutral, and transitions to correct
+     * cutscene and report
+     */
+    endLevel() {
+        /*
+        TODO:
+        - add success / fail cutscene options to schema
+        - handle cutscene to report transition
+        - if STORY, tranistion to report and update current player for nxt level
+        - make sure report loads correct data based on endstate (game over / level complete)
+        */
+        this.cleanupLevel();
+
+        // append objComplete to leveldata
+        this.levelData.level.objComplete = this.checkObjective(); // boolean (if wincondition is satisfied)
+        if (!this.levelData.level.objComplete) {
+            /*
+            Objective failed! - transition to any held cutscene, if so, carry over
+            report data as well ensuring objective was failed. Else transition directly to report
+            */
+
+            // ends with scene start
+        }
+
+        /*
+        Objective Success! - transition to any held end cutscene, if so, carry over
+        report data as well. else transition directly to typ specific report
+        */
+        
+        if (this.levelData.scene?.cutscene?.close) {
+            // play close cutscene, ends with scene start, set current player to next
+        }
+
+        this.transitionScene();
+    }
+
+    /**
+     * Whether objective was satisfied
+     * @returns {boolean}
+     */
+    checkObjective() {
+        switch (this.levelData.level.objective) {
+            // TIMED
+            case 0:
+                this.calculateScore();
+                return true; // timer is out, neutral result
+                
+            // LIVES
+            case 1:
+                console.log("LIVES mode unimplemented");
+                return false; // Check lives count to be nonzero
+
+            // TIMEKILLS
+            case 2:
+                console.log("TIMEKILLS mode unimplemented");
+                return false; // timer is out && kills match
+
+            // LIVEKILLS
+            case 3:
+                console.log("LIVEKILLS mode unimplemented");
+                return false; // check lives count to be nonzero && kills satisfied
+
+            // TIMELIVES
+            case 4:
+                console.log("TIMELIVES mode unimplemented");
+                return false; // check lives count to be nonzero && timer is out
+
+            // UNKNOWN
+            default:
+                console.log("Unknown objective found for level " + this.levelData.name);
+                return false;
+        }
+    }
+    
+    /**
+     * Either transitions to report if currentplayer is last player OR storymode,
+     * else reloads the same scene with currentplayer += 1
+     */
+    transitionScene() {
+        // reload same scene with new player
+        if (this.levelData.meta.playerCount != 1 && this.levelData.meta.currentPlayer == 0 
+                && this.levelData.scene.type == 'ARCADE') {
+            this.scene.start(
+                'arcadeReadyScene', {
+                    meta: {
+                        playerCount: this.levelData.meta.playerCount,
+                        difficulty: this.levelData.meta.difficulty, 
+                        players: this.levelData.meta.players,
+                        currentPlayer: 1,
+                        levelName: 'levelFactory',
+                    },
+                    level: this.levelData.level, // pass score
+                    scene: {
+                        prevScene: { 
+                            name: 'arcadeMenu',
+                            type: 'ARCADE',
+                        },
+                        nextScene: {
+                            name: this.levelData.name,
+                            type: this.levelData.scene.type
+                        }
+                    }
+                }
+            )
+            return;
+        }
+
+        this.scene.start(
+            this.levelData.scene.report,
+            {
+                meta: this.levelData.meta,
+                level: this.levelData.level,
+                scene: {
+                    prevScene: {
+                        name: this.levelData.name,
+                        type: this.levelData.scene.type,
+                    },
+                    nextScene: this.levelData.scene.next,
+                }
+            }
+        );
+    }
+
+    /**
+     * Calculates level score based on kills and appends it to the correct score
+     * value of this.leveldata.level.score# based on current player
+     */
+    calculateScore() {
+        this.levelData.level['score' + (this.levelData.meta.currentPlayer + 1)] = this.levelScore.calculateScore();
+        console.log(this.levelData.level);
+        return;
+    }
+
+    /**
+     * Calls destructors on all scene data which would interfere with a new level
+     * being placed over when LevelFactory transitions here again
+     */
+    cleanupLevel() {
+        /* 
+        TODO:
+        - delete placed images
+        - delete powerups
+        */
+        // remove event listeners
+        try{
+            this.input.removeAllListeners();
+        } catch (e) {
+            console.log(e);
+        }
+
+        // remove overlappers
+        try {
+            this.bulletColliders.forEach(c => c.destroy());
+        } catch (e) {
+            console.log(e);
+        }
+
+        // destroy bullets
+        try {
+            this.bullets.destroy(false, true);
+        } catch (e) {
+            console.log(e);
+        }
+
+        // destroy level timer
+        if (this.levelTimer) {
+            this.levelTimer.destroy();
+            this.time.removeAllEvents();
+        }
+
+        // destroy spawntimers
+        this.alienTimers.forEach(tArr => {
+            tArr.forEach(t => t.destroy());
+        });
+
+        // destroy aliens
+        this.aliens.forEach(aGroup => {
+            try {
+                aGroup.getChildren().forEach(a => a.leave());
+                aGroup.destroy(false, true);
+            } catch (e) {
+                console.log(e);
+            }
+        });
     }
 }
