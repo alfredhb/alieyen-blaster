@@ -27,12 +27,12 @@ export default class MenuScene3 extends Phaser.Scene {
     preload() {
         // Load Sounds
         this.menuSounds = {
-            menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
-            difficultyTTS: this.sound.add('difficulty', { loop: false }),
-            timedTTS: this.sound.add('timed', { loop: false }),
-            endlessTTS: this.sound.add('endless', { loop: false }),
-            livesTTS: this.sound.add('lives', { loop: false }),
-            bossBattleTTS: this.sound.add('boss-battle', { loop: false }),
+            menuClick: this.sound.get('menu-click'),
+            difficultyTTS: this.sound.get('difficulty'),
+            timedTTS: this.sound.get('timed'),
+            endlessTTS: this.sound.get('endless'),
+            livesTTS: this.sound.get('lives'),
+            bossBattleTTS: this.sound.get('boss-battle'),
         }
     }
 
@@ -77,7 +77,7 @@ export default class MenuScene3 extends Phaser.Scene {
         const title = this.add.text(width * 0.5, height * 0.15, 'Arcade', this.constants.MenuTitleStyle());
         title.setOrigin(0.5);
 
-        const titleSound = this.sound.add('arcade', { loop: false });
+        const titleSound = this.sound.get('arcade');
 
         // interactives
         title.setInteractive();

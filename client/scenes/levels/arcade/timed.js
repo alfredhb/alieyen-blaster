@@ -50,8 +50,8 @@ export default class ArcadeScene1 extends Phaser.Scene {
     preload() {
         // Load Sounds
         this.levelSounds = {
-            menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
-            explode: this.sound.add('explode-3', { loop: false, volume: 0.35 }),
+            menuClick: this.sound.get('menu-click'),
+            explode: this.sound.get('explode-3'),
         }
 
     }
@@ -435,15 +435,7 @@ export default class ArcadeScene1 extends Phaser.Scene {
      * Create any global animations unrelated to a specific sprite
      */
     initAnimations() {
-        this.explode = this.anims.create({
-                key: 'explode',
-                frames: [
-                    {key: 'ex-1'},
-                    {key: 'ex-2'},
-                    {key: 'ex-3'},
-                ],
-                repeat: 1,
-            });
+        this.explode = this.anims.get('explode');
     }
 
     /**

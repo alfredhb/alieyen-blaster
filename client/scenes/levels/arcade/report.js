@@ -79,23 +79,15 @@ export default class ArcadeReportScene extends Phaser.Scene {
     preload() {
         // Load Sounds
         this.menuSounds = {
-            menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
-            arcadeTTS: this.sound.add('arcade', { loop: false }),
-            levelCompleteTTS: this.sound.add('level-complete', { loop: false }),
-            replayTTS: this.sound.add('replay', { loop: false }),
-            scoreTTS: this.sound.add('score', { loop: false }),
+            menuClick: this.sound.get('menu-click'),
+            arcadeTTS: this.sound.get('arcade'),
+            levelCompleteTTS: this.sound.get('level-complete'),
+            replayTTS: this.sound.get('replay'),
+            scoreTTS: this.sound.get('score'),
         }
 
         // Init animations
-        this.explode = this.anims.create({
-            key: 'explode',
-            frames: [
-                {key: 'ex-1', duration: 100},
-                {key: 'ex-2', duration: 100},
-                {key: 'ex-3', duration: 100},
-            ],
-            repeat: 1,
-        });
+        this.explode = this.anims.get('explode');
     }
 
     /**
@@ -330,11 +322,11 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
             box.setInteractive();
             this.constants.HoverClick(this, box, () => {
-                this.sound.play('explode-3', { volume: 0.25 });
+                this.sound.play('explode-3', { loop: false, volume: 0.25 });
                 alien.play('explode');
                 alien.on('animationcomplete', () => {
                     setTimeout(() => {
-                        alien.play('float');
+                        alien.play('alien-grunt-float');
                     }, 300);
                 })
             });

@@ -39,17 +39,7 @@ export default class AlienGrunt extends Alien {
         }
 
         // Add Animation
-        this.anims.create({
-            key: 'float',
-            frames: [
-                {key: 'alien-grunt-1-1'},
-                {key: 'alien-grunt-1-2'},
-                {key: 'alien-grunt-1-3'},
-                {key: 'alien-grunt-1-2'},
-            ],
-            frameRate: 3,
-            repeat: -1,
-        });
+        this.anims.get('alien-grunt-float');
         this.chargeSound = this.scene.sound.get('energy-charge');
     }
 
@@ -86,7 +76,7 @@ export default class AlienGrunt extends Alien {
         
         this.setPosition((direction > 0) ? -50 : this.maxX, y);
         this.setVelocity(this.xSpeed, this.ySpeed);
-        this.anims.play('float');
+        this.anims.play('alien-grunt-float');
         this.setActive(true);
         this.setVisible(true);
 
@@ -123,7 +113,7 @@ export default class AlienGrunt extends Alien {
             this.constants.Width * 0.03, 
             this.constants.Height * 0.05
         );
-        this.anims.play('float');
+        this.anims.play('alien-grunt-float');
 
         this.setActive(true);
         this.setVisible(true);
@@ -204,7 +194,7 @@ export default class AlienGrunt extends Alien {
         }
 
         // Stop any charge sound and play animation
-        this.play('explode');
+        this.play('explode', { loop: false, volume: 0.25 });
         this.on('animationcomplete', () => {
             this.setVisible(false);
             this.setActive(false);

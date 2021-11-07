@@ -26,7 +26,7 @@ export default class MenuScene5 extends Phaser.Scene {
     preload() {
         // Load Sounds
         this.menuSounds = {
-            menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
+            menuClick: this.sound.get('menu-click'),
         }
     }
 
