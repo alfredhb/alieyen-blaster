@@ -59,9 +59,8 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
      * @param {TemplateLevelScene} scene 
      * @param {Constants} constants 
      * @param {string} asset 
-     * @param {string} currentPlayer 
      */
-    constructor(scene, constants, asset, currentPlayer) {
+    constructor(scene, constants, asset) {
         super(scene);
 
         // Create Turret images
@@ -82,8 +81,7 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
             t.cooldownEffect.setDepth(11);
         })
 
-        // Save current player
-        this.currentPlayer = currentPlayer
+        this.currentPlayer = this.scene.levelData.meta.players[this.scene.levelData.meta.currentPlayer]
 
         // Init 
         this.scene.bullets = this.scene.physics.add.group({
