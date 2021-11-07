@@ -46,6 +46,17 @@ export default class LevelFactory extends Phaser.Scene {
         Meteor.call('getLevelData', this.nextScene.name, (err, res) => {
             if (err != null) {
                 console.log(err);
+
+                this.scene.start(
+                    (data.scene.nextScene.type == 'ARCADE') ? 'arcadeMenu' : 'savefileMenu', 
+                    {
+                        meta: {
+                            playerCount: this.playerCount,
+                            players: this.players,
+                            difficulty: this.difficulty,
+                        }
+                    })
+
                 return;
             }
 
