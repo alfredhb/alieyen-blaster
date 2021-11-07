@@ -12,13 +12,30 @@ export default class LevelFactory extends Phaser.Scene {
 
     /**
      * Capture the next scene to progress to after selections are made
-     * @param {{meta: {playerCount: number, difficulty: number, players: string[]}, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}}} data
+     * @param {{
+     * meta: {
+     *  playerCount: number, 
+     *  difficulty: number, 
+     *  players: string[]
+     * }, 
+     *  level: any?,
+     *  scene: { 
+     *      prevScene: { 
+     *          name: string, 
+     *          type: string
+     *  }, 
+     *      nextScene: { 
+     *          name: string, 
+     *          type: string
+     *      }
+     *  }
+     * }} data
      */
     init(data) {
         // Metadata capture
         this.playerCount = data.meta.playerCount;
         this.players = data.meta.players;
-        this.currentPlayer = this.players[0]; // TODO update with currentplayer logic
+        this.currentPlayer = data.meta?.currentPlayer | 0;
         this.difficulty = data.meta.difficulty;
 
         // Scene data capture
@@ -30,6 +47,11 @@ export default class LevelFactory extends Phaser.Scene {
             if (err != null) {
                 console.log(err);
                 return;
+            }
+
+            // if data.level has previous score, save it
+            if (data?.level?.hasOwnProperty("score" + (this.currentPlayer))) {
+                res.level["score" + (this.currentPlayer)] = data.level["score" + (this.currentPlayer)]; 
             }
 
             // Go to cutscene first
