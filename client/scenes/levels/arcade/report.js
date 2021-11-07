@@ -11,17 +11,42 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
     /**
      * Capture the next scene to progress to after selections are made
-     * @param {{meta: {playerCount: number, difficulty: number, players: string[]}, level: {score1: number, score2: number, shotsFired: number}, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}}} data
+     * @param {{
+     *  meta: {
+     *      playerCount: number, 
+     *      difficulty: number, 
+     *      players: string[]
+     *  }, 
+     *  level: {
+     *      objective: number,
+     *      objComplete: boolean,
+     *      score1: number?, 
+     *      score2: number?, 
+     *      shotsFired: number,
+     *  }, 
+     *  scene: { 
+     *      prevScene: { 
+     *          name: string, 
+     *          type: string
+     *      }, 
+     *      nextScene: { 
+     *          name: string, 
+     *          type: string
+     *      }
+     *  }
+     * }} data
      */
     init(data) {
+        this.levelData = data;
+
         // Set game metadata
         this.playerCount = data.meta.playerCount;
         this.difficulty = data.meta.difficulty;
         this.players = data.meta.players;
 
         // Set level data
-        this.levelScore1 = data.level.score1;
-        this.levelScore2 = data.level.score2 || 0;
+        this.levelScore1 = data.level.score1 | 0;
+        this.levelScore2 = data.level.score2 | 0;
         // this.totalShots = data.level.shotsFired;
 
         // Set scene data
@@ -143,18 +168,22 @@ export default class ArcadeReportScene extends Phaser.Scene {
         const title = this.add.text(
             width * 0.5,
             height * 0.175,
-            'Level Complete!',
+            (this.levelData.level.objComplete) ? 'Level Complete!' : 'You Lost!',
             this.constants.MenuTitleStyle()
         );
         title.setOrigin(0.5);
 
         // Add TTS
         title.setInteractive();
-        title.on('pointerover', () => {
-            if (!this.menuSounds.levelCompleteTTS.isPlaying) {
-                this.menuSounds.levelCompleteTTS.play();
-            }
-        })
+        if (this.levelData.level.objComplete) {
+            title.on('pointerover', () => {
+                if (!this.menuSounds.levelCompleteTTS.isPlaying) {
+                    this.menuSounds.levelCompleteTTS.play();
+                }
+            });
+        } else {
+            // Play levelfailed tts
+        }
     }
 
     /**
@@ -196,17 +225,6 @@ export default class ArcadeReportScene extends Phaser.Scene {
             score2Val.setOrigin(1, 0);
             ttsArr.push({text: score2Text, sound: this.sound.get(this.players[1])});
         }
-
-        // Do we want to show accuracy if bubba will be using an eyetracker which
-        // constantly fires bullets? -- Disabled for Alpha
-        // const accuracyText = this.add.text(width * 0.275, height * 0.425, 'ACCURACY :', this.constants.MenuButtonStyle());
-        // const accuracyVal = this.add.text(
-        //     width * 0.675,
-        //     height * 0.425,
-        //     (this.levelScore / this.totalShots * 10).toString().substr(0,4) + "%",
-        //     this.constants.MenuButtonStyle("#FF0000")
-        // );
-        // accuracyVal.setOrigin(1, 0);
 
         ttsArr.forEach(t => {
             t.text.setInteractive();
@@ -360,25 +378,59 @@ export default class ArcadeReportScene extends Phaser.Scene {
             }).on('pointerout', () => {
                 b.button.setTint(this.constants.Gray);
             });
+        });
 
-            // Add hoverclick and normal click
-            this.constants.HoverClick(this, b.button, () => {
-                this.menuSounds.menuClick.play();
+        this.addClick(buttons);
+    }
 
-                // Transition to different scene based on text name
-                this.scene.start(
-                    (b.text.name == 'arcadeMenu') ? 'arcadeMenu' : 
-                    (this.playerCount == 1) ? b.text.name : 'arcadeReadyScene',
-                    {
-                        meta: {
-                            playerCount: this.playerCount,
-                            difficulty: this.difficulty,
-                            players: this.players,
-                            levelName: b.text.name,
+    /**
+     * adds hover click for each navigation button. Replay sends to levelfactory
+     * @param {{button: Phaser.GameObjects.Image, text: Phaser.GameObjects.Text, sound: Phaser.Sound.BaseSound}[]} b 
+     */
+    addClick(b) {
+        // hoverclick for replay
+        this.constants.HoverClick(this, b[0].button, () => {
+            this.menuSounds.menuClick.play();
+
+            this.scene.start(
+                (this.playerCount == 1) ? 'levelFactory': 'arcadeReadyScene',
+                {
+                    meta: {
+                        playerCount: this.playerCount,
+                        difficulty: this.difficulty,
+                        players: this.players,
+                        levelName: b[0].text.name,
+                        currentPlayer: 0,
+                    },
+                    scene: {
+                        prevScene: {
+                            name: 'arcadeMenu',
+                            type: 'ARCADE',
+                        },
+                        nextScene: {
+                            name: this.levelData.scene.prevScene.name,
+                            type: this.levelData.scene.prevScene.type
                         }
                     }
-                )
-            })
+                }
+            )
+        });
+
+        // hoverclick for arcade
+        this.constants.HoverClick(this, b[1].button, () => {
+            this.menuSounds.menuClick.play();
+
+            this.scene.start(
+                'arcadeMenu',
+                {
+                    meta: {
+                        playerCount: this.playerCount,
+                        difficulty: this.difficulty,
+                        players: this.players,
+                        currentPlayer: this.players[0],
+                    }
+                }
+            )
         });
     }
 }

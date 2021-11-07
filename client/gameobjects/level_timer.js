@@ -26,7 +26,7 @@ export default class LevelTimer extends Phaser.GameObjects.GameObject {
         // Create Hud spot
         const bg = scene.add.image(constants.Width * 0.5, constants.Height * 0.1, '__WHITE');
         bg.setDisplaySize(constants.Width * 0.2, constants.Height * 0.075);
-        bg.setOrigin(0.5);
+        bg.setDepth(11).setOrigin(0.5);
         
         // Create timer text and val
         this.timerText = scene.add.text(

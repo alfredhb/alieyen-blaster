@@ -12,7 +12,7 @@ export default class MenuScene3 extends Phaser.Scene {
      * @param {{meta: {playerCount: number, difficulty: number, players: string[]}, level: {any}?, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}?}} data
      */
     init(data) {
-        this.playerCount = data.meta.playerCount;
+        this.playerCount = Number(data.meta.playerCount);
         this.difficulty = data.meta.difficulty; // easy unless returned from prev scene
         this.players = data.meta.players;
 
@@ -151,7 +151,14 @@ export default class MenuScene3 extends Phaser.Scene {
         const tiButton = this.add.image(width * 0.25, height * 0.35, 'gameslot-button');
         const tiIcon = this.add.image(width * 0.25, height * 0.325, 'timed-button');
         const tiText = this.add.text(tiButton.x, height * 0.425, 'Timed', this.constants.MenuButtonStyle('#000000'));
-        tiText.setName('timedArcade');
+        tiText.setName('levelFactory');
+        tiIcon.setName('timedLevelArcade');
+
+        // OldTimed
+        // const tiButton = this.add.image(width * 0.25, height * 0.35, 'gameslot-button');
+        // const tiIcon = this.add.image(width * 0.25, height * 0.325, 'timed-button');
+        // const tiText = this.add.text(tiButton.x, height * 0.425, 'old timed', this.constants.MenuButtonStyle('#000000'));
+        // tiText.setName('timedArcade');
 
         // Endless button
         const enButton = this.add.image(width * 0.75, height * 0.35, 'gameslot-button');
@@ -212,6 +219,17 @@ export default class MenuScene3 extends Phaser.Scene {
                             difficulty: this.difficulty,
                             players: this.players,
                             levelName: b.text.name,
+                            currentPlayer: 0,
+                        },
+                        scene: {
+                            prevScene: {
+                                name: 'arcadeMenu',
+                                type: 'ARCADE',
+                            },
+                            nextScene: {
+                                name: b.icon.name,
+                                type: 'ARCADE'
+                            }
                         }
                     }
                 );
