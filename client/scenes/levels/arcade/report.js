@@ -226,17 +226,6 @@ export default class ArcadeReportScene extends Phaser.Scene {
             ttsArr.push({text: score2Text, sound: this.sound.get(this.players[1])});
         }
 
-        // Do we want to show accuracy if bubba will be using an eyetracker which
-        // constantly fires bullets? -- Disabled for Alpha
-        // const accuracyText = this.add.text(width * 0.275, height * 0.425, 'ACCURACY :', this.constants.MenuButtonStyle());
-        // const accuracyVal = this.add.text(
-        //     width * 0.675,
-        //     height * 0.425,
-        //     (this.levelScore / this.totalShots * 10).toString().substr(0,4) + "%",
-        //     this.constants.MenuButtonStyle("#FF0000")
-        // );
-        // accuracyVal.setOrigin(1, 0);
-
         ttsArr.forEach(t => {
             t.text.setInteractive();
 
@@ -392,24 +381,6 @@ export default class ArcadeReportScene extends Phaser.Scene {
         });
 
         this.addClick(buttons);
-            // // Add hoverclick and normal click
-            // this.constants.HoverClick(this, b.button, () => {
-            //     this.menuSounds.menuClick.play();
-
-            //     // Transition to different scene based on text name
-            //     this.scene.start(
-            //         (b.text.name == 'arcadeMenu') ? 'arcadeMenu' : 
-            //         (this.playerCount == 1) ? b.text.name : 'arcadeReadyScene',
-            //         {
-            //             meta: {
-            //                 playerCount: this.playerCount,
-            //                 difficulty: this.difficulty,
-            //                 players: this.players,
-            //                 levelName: b.text.name,
-            //             }
-            //         }
-            //     )
-            // })
     }
 
     /**
