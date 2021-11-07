@@ -33,7 +33,7 @@ export default class AlienGrunt extends Alien {
         this.canFire = canFire || false;
         this.difficulty = scene.difficulty;
         this.dMultiplier = this.constants.GetDifficultyMultiplier(this.difficulty);
-        if (scene.levelData) {
+        if (scene.levelData?.level.difficulty_multiplier) {
             this.difficulty = scene.levelData.meta.difficulty
             this.dMultiplier = scene.levelData.level.difficulty_multiplier[this.difficulty - 1];
         }
