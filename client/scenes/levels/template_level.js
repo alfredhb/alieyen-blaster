@@ -108,17 +108,9 @@ export default class TemplateLevelScene extends Phaser.Scene {
         */
 
         // Explode Animation
-        this.explode = this.anims.create({
-                key: 'explode',
-                frames: [
-                    {key: 'ex-1'},
-                    {key: 'ex-2'},
-                    {key: 'ex-3'},
-                ],
-                repeat: 1
-            });
+        this.explode = this.anims.get('explode');
 
-        this.sound.add('explode-3', { loop: false, volume: 0.35 });
+        this.sound.get('explode-3');
     }
 
     /**

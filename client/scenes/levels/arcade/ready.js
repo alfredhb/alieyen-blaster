@@ -32,10 +32,10 @@ export default class ArcadeReadyScene extends Phaser.Scene {
     preload() {
         // Load Sounds
         this.menuSounds = {
-            menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
-            arcadeTTS: this.sound.add('arcade', { loop: false }),
-            readyToPlayTTS: this.sound.add('ready-to-play', { loop: false }),
-            playTTS: this.sound.add('play', { loop: false }),
+            menuClick: this.sound.get('menu-click'),
+            arcadeTTS: this.sound.get('arcade'),
+            readyToPlayTTS: this.sound.get('ready-to-play'),
+            playTTS: this.sound.get('play'),
         }
     }
 

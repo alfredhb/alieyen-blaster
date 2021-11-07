@@ -32,59 +32,61 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "alien-boss",         "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/boss_min_1.png"},
             {"key": "turret-colored",     "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/turret_col.png"},
             {"key": "alien-bomb",         "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/alien_bomb.png"},
+            {"key": "full-heart",         "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/full_heart.png"},
+            {"key": "empty-heart",        "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/empty_heart.png"},
             {"key": "star",               "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/star.png"},
-            {"key": "ex-1",               "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/ex1.png"},
-            {"key": "ex-2",               "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/ex1.png"},
-            {"key": "ex-3",               "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/ex3.png"},
-            {"key": "alien-grunt-1-1",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_1_1.png"},
-            {"key": "alien-grunt-1-2",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_1_2.png"},
-            {"key": "alien-grunt-1-3",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_1_3.png"}
-        ];
+            {"key": "alien-grunt",        "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_1_1.png"},
+       ];
 
+       /**
+        * @attributes {string} key
+        * @attributes {string} path
+        * @attributes {Phaser.Sound.SoundConfig} config
+        */
         this.onlineSounds = [
-            {"key": "menu-click",       "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/men-click.wav"},
-            {"key": "1-player",         "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/1_player.mp3"},
-            {"key": "2-player",         "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/2_player.mp3"},
-            {"key": "accuracy",         "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/accuracy.mp3"},
-            {"key": "players-selected", "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/all-players-selected.mp3"},
-            {"key": "title",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/alien_blaster_3000.mp3"},
-            {"key": "arcade",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/arcade.mp3"},
-            {"key": "boss-battle",      "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/boss_battle.mp3"},
-            {"key": "bubba",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/bubba.mp3"},
-            {"key": "difficulty",       "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/difficulty.mp3"},
-            {"key": "easy",             "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/easy.mp3"},
-            {"key": "endless",          "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/endless.mp3"},
-            {"key": "friend",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/friend.mp3"},
-            {"key": "game-slots",       "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/game_slots.mp3"},
-            {"key": "hard",             "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/hard.mp3"},
-            {"key": "highscore",        "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/highscore.mp3"},
-            {"key": "leah",             "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/leah.mp3"},
-            {"key": "level-complete",   "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/level_complete.mp3"},
-            {"key": "lives",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/lives.mp3"},
-            {"key": "medium",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/medium.mp3"},
-            {"key": "new-highscore",    "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/new-highscore.mp3"},
-            {"key": "play",             "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/play.mp3"},
-            {"key": "players",          "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/players.mp3"},
-            {"key": "quit",             "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/quit.mp3"},
-            {"key": "ready-to-play",    "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/ready-to-play.mp3"},
-            {"key": "replay",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/replay.mp3"},
-            {"key": "selected",         "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/selected.mp3"},
-            {"key": "selected-already", "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/selected-already.mp3"},
-            {"key": "slot-1",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/slot_1.mp3"},
-            {"key": "slot-2",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/slot_2.mp3"},
-            {"key": "slot-3",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/slot_3.mp3"},
-            {"key": "slot-4",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/slot_4.mp3"},
-            {"key": "score",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/score.mp3"},
-            {"key": "start",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/start.mp3"},
-            {"key": "story",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/story.mp3"},
-            {"key": "timed",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/timed.mp3"},
-            {"key": "who-p1",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/who-is-player-1.mp3"},
-            {"key": "who-p2",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/who-is-player-2.mp3"},
-            {"key": "energy-charge",    "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/energy-charge.mp3"},
-            {"key": "energy-blast",     "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/energy-blast.mp3"},
-            {"key": "explode-1",        "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/explosion-1.mp3"},
-            {"key": "explode-2",        "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/explosion-2.mp3"},
-            {"key": "explode-3",        "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/explosion-3.mp3"}
+            {"key": "menu-click",       "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/men-click.wav",            "config": { loop: false, volume: 0.5 }},
+            {"key": "1-player",         "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/1_player.mp3",                "config": { loop: false }},
+            {"key": "2-player",         "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/2_player.mp3",                "config": { loop: false }},
+            {"key": "accuracy",         "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/accuracy.mp3",                "config": { loop: false }},
+            {"key": "players-selected", "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/all-players-selected.mp3",    "config": { loop: false }},
+            {"key": "title",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/alien_blaster_3000.mp3",      "config": { loop: false }},
+            {"key": "arcade",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/arcade.mp3",                  "config": { loop: false }},
+            {"key": "boss-battle",      "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/boss_battle.mp3",             "config": { loop: false }},
+            {"key": "bubba",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/bubba.mp3",                   "config": { loop: false }},
+            {"key": "difficulty",       "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/difficulty.mp3",              "config": { loop: false }},
+            {"key": "easy",             "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/easy.mp3",                    "config": { loop: false }},
+            {"key": "endless",          "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/endless.mp3",                 "config": { loop: false }},
+            {"key": "friend",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/friend.mp3",                  "config": { loop: false }},
+            {"key": "game-slots",       "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/game_slots.mp3",              "config": { loop: false }},
+            {"key": "hard",             "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/hard.mp3",                    "config": { loop: false }},
+            {"key": "highscore",        "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/highscore.mp3",               "config": { loop: false }},
+            {"key": "leah",             "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/leah.mp3",                    "config": { loop: false }},
+            {"key": "level-complete",   "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/level_complete.mp3",          "config": { loop: false }},
+            {"key": "lives",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/lives.mp3",                   "config": { loop: false }},
+            {"key": "medium",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/medium.mp3",                  "config": { loop: false }},
+            {"key": "new-highscore",    "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/new-highscore.mp3",           "config": { loop: false }},
+            {"key": "play",             "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/play.mp3",                    "config": { loop: false }},
+            {"key": "players",          "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/players.mp3",                 "config": { loop: false }},
+            {"key": "quit",             "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/quit.mp3",                    "config": { loop: false }},
+            {"key": "ready-to-play",    "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/ready-to-play.mp3",           "config": { loop: false }},
+            {"key": "replay",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/replay.mp3",                  "config": { loop: false }},
+            {"key": "selected",         "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/selected.mp3",                "config": { loop: false }},
+            {"key": "selected-already", "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/selected-already.mp3",        "config": { loop: false }},
+            {"key": "slot-1",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/slot_1.mp3",                  "config": { loop: false }},
+            {"key": "slot-2",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/slot_2.mp3",                  "config": { loop: false }},
+            {"key": "slot-3",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/slot_3.mp3",                  "config": { loop: false }},
+            {"key": "slot-4",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/slot_4.mp3",                  "config": { loop: false }},
+            {"key": "score",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/score.mp3",                   "config": { loop: false }},
+            {"key": "start",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/start.mp3",                   "config": { loop: false }},
+            {"key": "story",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/story.mp3",                   "config": { loop: false }},
+            {"key": "timed",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/timed.mp3",                   "config": { loop: false }},
+            {"key": "who-p1",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/who-is-player-1.mp3",         "config": { loop: false }},
+            {"key": "who-p2",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/who-is-player-2.mp3",         "config": { loop: false }},
+            {"key": "energy-charge",    "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/energy-charge.mp3",        "config": { loop: false }},
+            {"key": "energy-blast",     "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/energy-blast.mp3",         "config": { loop: false }},
+            {"key": "explode-1",        "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/explosion-1.mp3",          "config": { loop: false }},
+            {"key": "explode-2",        "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/explosion-2.mp3",          "config": { loop: false }},
+            {"key": "explode-3",        "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/explosion-3.mp3",          "config": { loop: false, volume: 0.35 }},
         ]
         
         // Loading Text
@@ -126,7 +128,7 @@ export default class DataScene1 extends Phaser.Scene {
      */
     addLoadListener(width, height) {
         this.assetsLoaded = 0;
-        this.totalAssets = this.onlineImages.length + 4/* # of spritesheets */;
+        this.totalAssets = this.onlineImages.length + 7/* # of spritesheets */;
         let loadBlockWidth = (width * 0.45) / this.totalAssets;
 
         this.textures.on('addtexture', (k, t) => {
@@ -162,22 +164,41 @@ export default class DataScene1 extends Phaser.Scene {
 
         // Alien Grunt Fire Animations
         this.load.spritesheet(
+            'alien-grunt-float-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/alien_grunt_float_spritesheet.png',
+            { frameWidth: 114, frameHeight: 160 },
+        );
+
+        // Alien Grunt Fire Animations
+        this.load.spritesheet(
             'alien-grunt-fire-sheet-easy',
             'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_fire_114_160_small.png',
             { frameWidth: 114, frameHeight: 160 },
-        )
+        );
         
         this.load.spritesheet(
             'alien-grunt-fire-sheet-medium',
             'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_fire_114_160_medium.png',
             { frameWidth: 114, frameHeight: 160 },
-        )
+        );
 
         this.load.spritesheet(
             'alien-grunt-fire-sheet-hard',
             'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_fire_114_160_hard.png',
             { frameWidth: 114, frameHeight: 160 },
-        )
+        );
+
+        this.load.spritesheet(
+            'lose-heart-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/features/broken_heart_spritesheet.png',
+            { frameWidth: 128, frameHeight: 128 },
+        );
+
+        this.load.spritesheet(
+            'explode-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/features/explode_spritesheet.png',
+            { frameWidth: 200, frameHeight: 200 },
+        );
     }
 
     // Local Sounds would use this.sound.decode([{data: base64, key: id}])
@@ -204,6 +225,18 @@ export default class DataScene1 extends Phaser.Scene {
     }
 
     /**
+     * Rather than having individual scenes add the sounds they want to the soundManager, add them here and then 
+     * retrieve them later so as to reduce unnecessary caching. Use Get along with any sound config to retreive
+     * sound based on its level
+     */
+    cacheSounds() {
+        //Add all sound keys in online sounds with any provided config
+        for (let sound of this.onlineSounds) {
+            this.sound.add(sound.key, sound.config | {});
+        }
+    }
+
+    /**
      * Create animations from loaded spritesheets
      */
     createAnimations() {
@@ -213,6 +246,13 @@ export default class DataScene1 extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('cursor-fill-2', { start: 0 }),
             frameRate: 20,
             repeat: 0,
+        });
+
+        this.anims.create({
+            key: 'alien-grunt-float',
+            frames: this.anims.generateFrameNumbers('alien-grunt-float-sheet', { start: 0 }),
+            frameRate: 3,
+            repeat: -1,
         });
 
         // Alien Grunt Animations
@@ -236,14 +276,26 @@ export default class DataScene1 extends Phaser.Scene {
             frameRate: 3,
             repeat: 0,
         });
+
+        this.anims.create({
+            key: 'lose-heart',
+            frames: this.anims.generateFrameNumbers('lose-heart-sheet', { start: 0 }),
+            frameRate: 3,
+            repeat: 0,
+        });
+
+        this.anims.create({
+            key: 'explode',
+            frames: this.anims.generateFrameNumbers('explode-sheet', { start: 0 }),
+            frameRate: 9,
+            repeat: 1,
+        });
     }
 
     // After spritesheets are loaded, creates the animations from them
     create() {
         this.createAnimations();
 
-        // Add sounds to cache
-        this.sound.add('energy-blast');
-        this.sound.add('energy-charge');
+        this.cacheSounds();
     }
 }
