@@ -1,5 +1,7 @@
 import Phaser from "phaser";
 
+// DEPRECATED - Extending powerup wasn't working correctly for me :/
+// Just make a powerup extend the sprite class itself
 export default class Powerup extends Phaser.Physics.Arcade.Sprite {
     /**
      * @param {Phaser.Scene} scene 
@@ -22,6 +24,13 @@ export default class Powerup extends Phaser.Physics.Arcade.Sprite {
      * on difficulty
      */
     launch() {
+        throw new Error ("Method 'launch()' must be implemented.")
+    }
+
+    /**
+     * Starts the spawn timer for the powerup
+     */
+    spawn() {
         throw new Error ("Method 'launch()' must be implemented.")
     }
 

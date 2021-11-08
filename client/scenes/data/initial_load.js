@@ -33,6 +33,7 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "turret-colored",     "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/turret_col.png"},
             {"key": "alien-bomb",         "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/alien_bomb.png"},
             {"key": "full-heart",         "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/full_heart.png"},
+            {"key": "full-heart-outline", "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/full_heart_outline.png"},
             {"key": "empty-heart",        "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/empty_heart.png"},
             {"key": "star",               "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/star.png"},
             {"key": "alien-grunt",        "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_1_1.png"},

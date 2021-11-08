@@ -29,3 +29,8 @@ health, or maximum whichever is lower.
 * emitted by a shield powerup when hit. This should provide the player with a shield
 if they currently don't have one. Shields block the next attack no matter the damage
 and then break
+
+### *increaseturretspeed* (duration)
+* emitted by a weapon powerup when hit. This should reduce the cooldown timer of
+turrets to some lower constant - (0.1 second?) for the provided duration before
+returning it to its normal value
