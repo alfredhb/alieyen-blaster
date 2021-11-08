@@ -60,7 +60,7 @@ export default class Health extends Phaser.Physics.Arcade.Sprite {
         }
 
         this.spawnTimer = this.scene.time.addEvent({
-            delay: 3000 * this.difficulty, //spawn at 3 or 6 or 9 sec
+            delay: this.scene.levelData.level.powerup_spawnrate * this.difficulty, //spawn at 3 or 6 or 9 sec
             callback: spawnFunc,
             callbackScope: this,
             loop: false,
@@ -87,11 +87,14 @@ export default class Health extends Phaser.Physics.Arcade.Sprite {
      * play a collision animation,
      */
     destruct() {
-        // play a destroy animation & sound (like a ding)
+        /*
+        TODO:
+        - add hit sound
+        - play hit animation
+        - hide and move content on animationcomplete
+        */
         this.setVelocity(0);
         this.setPosition(this.constants.Width * 0.5, this.maxY);
-
-        // DEV 
         this.setVisible(false);
         this.setActive(false);
 

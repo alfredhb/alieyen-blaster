@@ -42,6 +42,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
      *           name: string,
      *           enabled: boolean
      *       }[],
+     *   powerup_spawnrate: number,
      *   aliens: {
      *       grunt: {
      *           spawn: boolean,
@@ -394,10 +395,44 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
         // Start each alien's first spawn timer
         this.aliens.forEach(a => a.spawn());
-        this.powerups.forEach(pG => 
-            {
-                pG.getChildren().forEach(p => p.spawn())
+        this.spawnPowerups();
+    }
+
+    /**
+     * Spawn a randomly enabled powerup every x seconds defined by powerup_spawnrate
+     * and difficulty multiplier
+     */
+    spawnPowerups() {
+        if (!this.levelData.level.powerups) {
+            return;
+        }
+
+        // spawn first powerup
+        this.powerups[0].getChildren()[0].spawn();
+
+        // spawn a random powerup
+        let spawnFunc = () => {
+            let pInd = Phaser.Math.RND.between(0, this.powerups.length - 1);
+            if (pInd < 0 || pInd >= this.powerups.length) return;
+
+            this.powerups[pInd].getChildren()[0].spawn();
+        }
+
+        // start perpetual spawnfunc
+        this.powerupSpawnTimer = this.time.addEvent({
+            delay: this.levelData.level.powerup_spawnrate * this.getMultiplier(),
+            callback: spawnFunc,
+            callbackScope: this,
+            loop: true,
+            paused: false
         });
+    }
+
+    /**
+     * @returns {number} the multiplier for this difficulty
+     */
+    getMultiplier() {
+        return this.levelData.level.difficulty_multiplier[this.levelData.meta.difficulty - 1];
     }
 
     /**
@@ -578,6 +613,8 @@ export default class TemplateLevelScene extends Phaser.Scene {
         this.alienTimers.forEach(tArr => {
             tArr.forEach(t => t.destroy());
         });
+
+        this.powerupSpawnTimer.destroy();
 
         // destroy aliens
         this.aliens.forEach(aGroup => {
