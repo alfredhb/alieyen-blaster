@@ -3,6 +3,8 @@ import Alien from "../../gameobjects/alien";
 import AlienGroup from "../../gameobjects/alien_group";
 import AlienGrunt from "../../gameobjects/alien_grunt";
 import LevelTimer from "../../gameobjects/level_timer";
+import Health from "../../gameobjects/powerups/health";
+import Powerup from "../../gameobjects/powerups/powerup";
 import QuitButton from "../../gameobjects/quit_button";
 import ScoreObject from "../../gameobjects/scoreObject";
 import Turrets from "../../gameobjects/turret";
@@ -40,6 +42,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
      *           name: string,
      *           enabled: boolean
      *       }[],
+     *   powerup_spawnrate: number,
      *   aliens: {
      *       grunt: {
      *           spawn: boolean,
@@ -284,7 +287,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
             bullet.kill();
             let dead = alien.damage();
             if (dead) {
-                this.sound.play('explode-3');
+                this.sound.play('explode-3', { volume: 0.25 });
                 switch(alien.getType()) {
                     case 1:
                         this.kills.miniBoss += 1;
@@ -311,9 +314,56 @@ export default class TemplateLevelScene extends Phaser.Scene {
         /*
         TODO: 
         - create powerups as gameobjects & groups such that spawning is handled elsewhere
-        - for each powerup, create it, and push to this.powerups[]
         */
-       console.log("initPowerups Unimplemented");
+        if (!this.levelData.level.powerups) {
+            return;
+        }
+
+        // Create powerups
+        this.powerups = [];
+        for (let powerup of this.levelData.level.powerups) {
+            if (powerup.enabled) {
+                switch(powerup.name) {
+                    case "health": 
+                        this.powerups.push(
+                            this.physics.add.group({
+                                classType: Health,
+                                runChildUpdate: true,
+                                maxSize: 1
+                            })
+                        );
+                        break;
+                    case "shield":
+
+                        break;
+                    case "turretspeed":
+
+                        break;
+                    default:
+                        console.log("unimplemented powerup: " + powerup.name);
+                }
+            }
+        }
+
+        // Create SpawnTimers and add collision funcs
+        this.powerupColliders = [];
+        for (let powerupGroup of this.powerups) {
+            let powerup = powerupGroup.get();
+            if (powerup) {
+                powerup.launch();
+                this.powerupColliders.push(this.physics.add.overlap(
+                    this.bullets,
+                    powerup,
+                    powerup.collisionFunc,
+                    null,
+                    powerup
+                ));
+            }
+        }
+        console.log(this.powerups, this.powerupColliders)
+
+        // DEV
+        this.events.addListener('healplayer', (amount) => console.log('heal the player! ' + amount));
     }
 
     /**
@@ -342,6 +392,44 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
         // Start each alien's first spawn timer
         this.aliens.forEach(a => a.spawn());
+        this.spawnPowerups();
+    }
+
+    /**
+     * Spawn a randomly enabled powerup every x seconds defined by powerup_spawnrate
+     * and difficulty multiplier
+     */
+    spawnPowerups() {
+        if (!this.levelData.level.powerups) {
+            return;
+        }
+
+        // spawn first powerup
+        this.powerups[0].getChildren()[0].spawn();
+
+        // spawn a random powerup
+        let spawnFunc = () => {
+            let pInd = Phaser.Math.RND.between(0, this.powerups.length - 1);
+            if (pInd < 0 || pInd >= this.powerups.length) return;
+
+            this.powerups[pInd].getChildren()[0].spawn();
+        }
+
+        // start perpetual spawnfunc
+        this.powerupSpawnTimer = this.time.addEvent({
+            delay: this.levelData.level.powerup_spawnrate * this.getMultiplier(),
+            callback: spawnFunc,
+            callbackScope: this,
+            loop: true,
+            paused: false
+        });
+    }
+
+    /**
+     * @returns {number} the multiplier for this difficulty
+     */
+    getMultiplier() {
+        return this.levelData.level.difficulty_multiplier[this.levelData.meta.difficulty - 1];
     }
 
     /**
@@ -492,6 +580,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         // remove event listeners
         try{
             this.input.removeAllListeners();
+            this.events.removeListener('healplayer');
         } catch (e) {
             console.log(e);
         }
@@ -499,6 +588,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         // remove overlappers
         try {
             this.bulletColliders.forEach(c => c.destroy());
+            this.powerupColliders.forEach(c => c.destroy());
         } catch (e) {
             console.log(e);
         }
@@ -520,6 +610,8 @@ export default class TemplateLevelScene extends Phaser.Scene {
         this.alienTimers.forEach(tArr => {
             tArr.forEach(t => t.destroy());
         });
+
+        this.powerupSpawnTimer.destroy();
 
         // destroy aliens
         this.aliens.forEach(aGroup => {

@@ -22,6 +22,7 @@
             },
             ...
         ],
+        powerup_spawnrate: number,      //time in miliseconds between a drop
         aliens: {
             grunt: {
                 spawn: boolean,

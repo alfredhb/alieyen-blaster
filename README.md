@@ -6,7 +6,7 @@ Setup Steps:
 1. install npm: ([NodeJS](https://nodejs.org/en/download/))
 2. install meteor: `$ npm install -g meteor`
 3. clone repository
-4. Connect to development database. Please contact devs for 
+4. Connect to development database. Please contact devs for mongo uri
     * MacOS/Linux, run the following command and skip step 5.
         ```
         $ MONGO_URL=<mongourl>
