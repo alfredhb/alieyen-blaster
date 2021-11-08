@@ -22,6 +22,16 @@ class Turret {
     }
 
     /**
+     * swaps this.cooldownTime between 500ms and 100ms and swap tints of turret
+     */
+    toggleCooldownTime() {
+        this.cooldownTime = (this.cooldownTime == 100) ? 500 : 100;
+        this.cooldownTimer.delay = this.cooldownTime;
+
+        this.turret.setTexture((this.cooldownTime == 100) ? 'turret-speed-up' : 'turret-colored');
+    }
+
+    /**
      * Applies cooldown effect on turret if the cooldown timer is active
      */
     styleCooldown() {
@@ -183,5 +193,29 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
      */
     getTurrets() {
         return this.turrets;
+    }
+
+    /**
+     * Called when scene receives 'increaseturretspeed' event. This reduces the 
+     * cooldown delay for turrets to 0.1 seconds for duration. If the timer is already
+     * active when another powerup is received, then appends the duration of the timer
+     * @param {number} duration time in ms
+     */
+    increaseTurretSpeed(duration) {
+        if (this.speedupTimer && this.speedupTimer.getProgress() < 1) {
+            this.speedupTimer.delay += duration;
+            return;
+        }
+
+        // Create speedupTimer with duration and toggle cooldown time
+        this.speedupTimer = this.scene.time.addEvent({
+            delay: duration,
+            callback: () => {
+                this.turrets.forEach(t => t.toggleCooldownTime());
+            },
+            callbackScope: this,
+            paused: false
+        });
+        this.turrets.forEach(t => t.toggleCooldownTime());
     }
 }

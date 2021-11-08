@@ -5,6 +5,7 @@ import AlienGrunt from "../../gameobjects/alien_grunt";
 import LevelTimer from "../../gameobjects/level_timer";
 import Health from "../../gameobjects/powerups/health";
 import Powerup from "../../gameobjects/powerups/powerup";
+import SpeedUp from "../../gameobjects/powerups/speedup";
 import QuitButton from "../../gameobjects/quit_button";
 import ScoreObject from "../../gameobjects/scoreObject";
 import Turrets from "../../gameobjects/turret";
@@ -314,12 +315,26 @@ export default class TemplateLevelScene extends Phaser.Scene {
         /*
         TODO: 
         - create powerups as gameobjects & groups such that spawning is handled elsewhere
+        - break up this func into initialization, colliders, and listeners
         */
         if (!this.levelData.level.powerups) {
             return;
         }
 
         // Create powerups
+        this.createPowerups();
+
+        // Create SpawnTimers and add collision funcs
+        this.createPowerupColliders();
+
+        // Add listeners for powerups
+        this.createPowerupListeners();
+    }
+
+    /**
+     * Initializes all enabled powerups
+     */
+    createPowerups() {
         this.powerups = [];
         for (let powerup of this.levelData.level.powerups) {
             if (powerup.enabled) {
@@ -336,16 +351,26 @@ export default class TemplateLevelScene extends Phaser.Scene {
                     case "shield":
 
                         break;
-                    case "turretspeed":
-
+                    case "speedup":
+                        this.powerups.push(
+                            this.physics.add.group({
+                                classType: SpeedUp,
+                                runChildUpdate: true,
+                                maxSize: 1
+                            })
+                        );
                         break;
                     default:
                         console.log("unimplemented powerup: " + powerup.name);
                 }
             }
         }
+    }
 
-        // Create SpawnTimers and add collision funcs
+    /**
+     * Creates powerup colliders for all generated powerups enabled in the level
+     */
+    createPowerupColliders() {
         this.powerupColliders = [];
         for (let powerupGroup of this.powerups) {
             let powerup = powerupGroup.get();
@@ -361,9 +386,29 @@ export default class TemplateLevelScene extends Phaser.Scene {
             }
         }
         console.log(this.powerups, this.powerupColliders)
+    }
 
-        // DEV
+    /**
+     * Adds a listener event for all powerups (they only get triggered if the powerup
+     * is created for the level though)
+     */
+    createPowerupListeners() {
+        // Health
         this.events.addListener('healplayer', (amount) => console.log('heal the player! ' + amount));
+        
+        // Increase Turret Speed
+        this.events.addListener('increaseturretspeed', (amount) => {
+            console.log('Reduce Cooldown! ' + amount);
+            this.turrets.increaseTurretSpeed(amount);
+        });
+    }
+
+    /**
+     * removes all powerup listeners from the scene
+     */
+    removePowerupListeners() {
+        this.events.removeListener('healplayer');
+        this.events.removeListener('increaseturretspeed');
     }
 
     /**
@@ -580,7 +625,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         // remove event listeners
         try{
             this.input.removeAllListeners();
-            this.events.removeListener('healplayer');
+            this.removePowerupListeners();
         } catch (e) {
             console.log(e);
         }
