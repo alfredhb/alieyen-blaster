@@ -23,6 +23,9 @@ export default class Health extends Phaser.Physics.Arcade.Sprite {
 
         this.maxX = width + 65;
         this.maxY = height + 65;
+        
+        // Whether player has tagged the powerup
+        this.hit = false;
     }
 
     /**
@@ -30,14 +33,13 @@ export default class Health extends Phaser.Physics.Arcade.Sprite {
      * @param {number} time 
      * @param {numer} delta 
      */
-    preUpdate(time, delta) {
+    update(time, delta) {
         if (this.x < -50 || this.x > this.maxX) {
             this.setActive(false);
             this.setVisible(false);
 
             // respawn logic
             this.launch();
-            this.spawn();
         }
     } 
 
@@ -53,10 +55,12 @@ export default class Health extends Phaser.Physics.Arcade.Sprite {
 
         // spawn the powerup based on the above consts
         let spawnFunc = () => {
+            this.removeListener('animationcomplete')
             this.setPosition((direction > 0) ? -45 : this.maxX - 5, y);
             this.setVelocity(this.xSpeed, 0);
             this.setActive(true);
             this.setVisible(true);
+            this.hit = false;
         }
 
         this.spawnTimer = this.scene.time.addEvent({
@@ -80,25 +84,36 @@ export default class Health extends Phaser.Physics.Arcade.Sprite {
      * worth. 
      */
     collisionFunc() {
+        if (this.hit) return;
+
         this.scene.events.emit('healplayer', (1 /* amount to heal */));
+
+        this.destruct();
     }
 
     /**
      * play a collision animation,
      */
     destruct() {
+        this.hit = true;
+
         /*
         TODO:
         - add hit sound
         - play hit animation
         - hide and move content on animationcomplete
         */
-        this.setVelocity(0);
-        this.setPosition(this.constants.Width * 0.5, this.maxY);
-        this.setVisible(false);
-        this.setActive(false);
+        this.scene.sound.play('collect-powerup');
+        this.play('collect-powerup-animation');
+        this.on('animationcomplete', () => {
+            this.setVelocity(0);
+            this.setPosition(this.constants.Width * 0.5, this.maxY);
+            this.setVisible(false);
+            this.setActive(false);
 
-        // Respawn it after spawn time
-        this.launch();
+            // Respawn it after spawn time
+            this.setTexture('full-heart-outline')
+            this.launch();
+        });
     }
 }

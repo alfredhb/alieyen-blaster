@@ -287,7 +287,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
             bullet.kill();
             let dead = alien.damage();
             if (dead) {
-                this.sound.play('explode-3');
+                this.sound.play('explode-3', { volume: 0.25 });
                 switch(alien.getType()) {
                     case 1:
                         this.kills.miniBoss += 1;
@@ -354,10 +354,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
                 this.powerupColliders.push(this.physics.add.overlap(
                     this.bullets,
                     powerup,
-                    () => {
-                        powerup.collisionFunc();
-                        powerup.destruct();
-                    },
+                    powerup.collisionFunc,
                     null,
                     powerup
                 ));

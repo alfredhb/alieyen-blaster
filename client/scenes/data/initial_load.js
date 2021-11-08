@@ -46,6 +46,7 @@ export default class DataScene1 extends Phaser.Scene {
         */
         this.onlineSounds = [
             {"key": "menu-click",       "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/men-click.wav",            "config": { loop: false, volume: 0.5 }},
+            {"key": "collect-powerup",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/powerup-2.wav",            "config": { loop: false }},
             {"key": "1-player",         "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/1_player.mp3",                "config": { loop: false }},
             {"key": "2-player",         "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/2_player.mp3",                "config": { loop: false }},
             {"key": "accuracy",         "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/accuracy.mp3",                "config": { loop: false }},
@@ -129,7 +130,7 @@ export default class DataScene1 extends Phaser.Scene {
      */
     addLoadListener(width, height) {
         this.assetsLoaded = 0;
-        this.totalAssets = this.onlineImages.length + 7/* # of spritesheets */;
+        this.totalAssets = this.onlineImages.length + 8/* # of spritesheets */;
         let loadBlockWidth = (width * 0.45) / this.totalAssets;
 
         this.textures.on('addtexture', (k, t) => {
@@ -199,6 +200,12 @@ export default class DataScene1 extends Phaser.Scene {
             'explode-sheet',
             'https://storage.googleapis.com/alieyen-blaster/public/assets/features/explode_spritesheet.png',
             { frameWidth: 200, frameHeight: 200 },
+        );
+
+        this.load.spritesheet(
+            'collect-powerup-sheet',
+            "https://storage.googleapis.com/alieyen-blaster/public/assets/features/collect_powerup_spritesheet.png",
+            { frameWidth: 128, frameHeight: 128 },
         );
     }
 
@@ -289,6 +296,13 @@ export default class DataScene1 extends Phaser.Scene {
             key: 'explode',
             frames: this.anims.generateFrameNumbers('explode-sheet', { start: 0 }),
             frameRate: 9,
+            repeat: 1,
+        });
+
+        this.anims.create({
+            key: 'collect-powerup-animation',
+            frames: this.anims.generateFrameNumbers('collect-powerup-sheet', { start: 0 }),
+            frameRate: 4,
             repeat: 1,
         });
     }
