@@ -100,7 +100,7 @@
      * 
      * adjust turret controls based on players
      * 
-     * Distinct colors: Bubba: Green, Leah: Red, Friend: Blue
+     * Distinct colors: Bubba: Green, Leah: Pink, Friend: Blue
      */
 
 
@@ -128,7 +128,7 @@
         const friendText = this.add.text(width * 0.675, height * 0.6, 'Friend', this.constants.MenuButtonStyle());
         bubbaButton.setName(this.constants.Green);
         bubbaText.setName("bubba");
-        leahButton.setName(this.constants.Red);
+        leahButton.setName(this.constants.Pink);
         leahText.setName("leah");
         friendButton.setName(this.constants.Blue);
         friendText.setName("friend");
