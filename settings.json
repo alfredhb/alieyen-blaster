@@ -1,0 +1,7 @@
+{
+    "galaxy.meteor.com": {
+        "env": {
+            "MONGO_URL": "mongodb+srv://superDBUser:zK4LcSBJ3r5bSRbl@alieyen-blaster.lojho.mongodb.net/game-data"
+        }
+    }
+}
