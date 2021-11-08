@@ -5,6 +5,7 @@ import AlienGrunt from "../../gameobjects/alien_grunt";
 import LevelTimer from "../../gameobjects/level_timer";
 import Health from "../../gameobjects/powerups/health";
 import Powerup from "../../gameobjects/powerups/powerup";
+import SpeedUp from "../../gameobjects/powerups/speedup";
 import QuitButton from "../../gameobjects/quit_button";
 import ScoreObject from "../../gameobjects/scoreObject";
 import Turrets from "../../gameobjects/turret";
@@ -314,6 +315,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         /*
         TODO: 
         - create powerups as gameobjects & groups such that spawning is handled elsewhere
+        - break up this func into initialization, colliders, and listeners
         */
         if (!this.levelData.level.powerups) {
             return;
@@ -336,8 +338,14 @@ export default class TemplateLevelScene extends Phaser.Scene {
                     case "shield":
 
                         break;
-                    case "turretspeed":
-
+                    case "speedup":
+                        this.powerups.push(
+                            this.physics.add.group({
+                                classType: SpeedUp,
+                                runChildUpdate: true,
+                                maxSize: 1
+                            })
+                        );
                         break;
                     default:
                         console.log("unimplemented powerup: " + powerup.name);
@@ -364,6 +372,10 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
         // DEV
         this.events.addListener('healplayer', (amount) => console.log('heal the player! ' + amount));
+        this.events.addListener('increaseturretspeed', (amount) => {
+            console.log('Reduce Cooldown! ' + amount);
+            this.turrets.increaseTurretSpeed(amount);
+        });
     }
 
     /**
@@ -581,6 +593,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         try{
             this.input.removeAllListeners();
             this.events.removeListener('healplayer');
+            this.events.removeListener('increaseturretspeed');
         } catch (e) {
             console.log(e);
         }

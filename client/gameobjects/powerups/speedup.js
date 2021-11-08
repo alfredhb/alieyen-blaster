@@ -1,12 +1,9 @@
 import Phaser from "phaser";
 import Constants from "../../lib/constants";
 
-export default class Health extends Phaser.Physics.Arcade.Sprite {
-    /**
-     * @param {Phaser.Scene} scene 
-     */
+export default class SpeedUp extends Phaser.Physics.Arcade.Sprite {
     constructor(scene) {
-        super(scene, -50, -50, 'full-heart-outline');
+        super(scene, -50, -50, 'speed-up');
 
         const { width, height } = scene.scale;
         this.constants = new Constants(width, height);
@@ -79,13 +76,13 @@ export default class Health extends Phaser.Physics.Arcade.Sprite {
     }
 
     /**
-     * Bullet collided with health. Emit healplayer with heal amount the sprite is
-     * worth. 
+     * Bullet collided with speedup. Emit increaseturretspeed with duration to 
+     * reduce cooldown for. 
      */
     collisionFunc() {
         if (this.hit) return;
 
-        this.scene.events.emit('healplayer', (1 /* amount to heal */));
+        this.scene.events.emit('increaseturretspeed', (3000 /* duration in ms */));
 
         this.destruct();
     }
@@ -111,7 +108,7 @@ export default class Health extends Phaser.Physics.Arcade.Sprite {
             this.setActive(false);
 
             // Respawn it after spawn time
-            this.setTexture('full-heart-outline')
+            this.setTexture('speed-up')
             this.launch();
         });
     }
