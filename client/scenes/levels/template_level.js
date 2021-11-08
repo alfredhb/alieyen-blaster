@@ -322,6 +322,19 @@ export default class TemplateLevelScene extends Phaser.Scene {
         }
 
         // Create powerups
+        this.createPowerups();
+
+        // Create SpawnTimers and add collision funcs
+        this.createPowerupColliders();
+
+        // Add listeners for powerups
+        this.createPowerupListeners();
+    }
+
+    /**
+     * Initializes all enabled powerups
+     */
+    createPowerups() {
         this.powerups = [];
         for (let powerup of this.levelData.level.powerups) {
             if (powerup.enabled) {
@@ -352,8 +365,12 @@ export default class TemplateLevelScene extends Phaser.Scene {
                 }
             }
         }
+    }
 
-        // Create SpawnTimers and add collision funcs
+    /**
+     * Creates powerup colliders for all generated powerups enabled in the level
+     */
+    createPowerupColliders() {
         this.powerupColliders = [];
         for (let powerupGroup of this.powerups) {
             let powerup = powerupGroup.get();
@@ -369,13 +386,29 @@ export default class TemplateLevelScene extends Phaser.Scene {
             }
         }
         console.log(this.powerups, this.powerupColliders)
+    }
 
-        // DEV
+    /**
+     * Adds a listener event for all powerups (they only get triggered if the powerup
+     * is created for the level though)
+     */
+    createPowerupListeners() {
+        // Health
         this.events.addListener('healplayer', (amount) => console.log('heal the player! ' + amount));
+        
+        // Increase Turret Speed
         this.events.addListener('increaseturretspeed', (amount) => {
             console.log('Reduce Cooldown! ' + amount);
             this.turrets.increaseTurretSpeed(amount);
         });
+    }
+
+    /**
+     * removes all powerup listeners from the scene
+     */
+    removePowerupListeners() {
+        this.events.removeListener('healplayer');
+        this.events.removeListener('increaseturretspeed');
     }
 
     /**
@@ -592,8 +625,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         // remove event listeners
         try{
             this.input.removeAllListeners();
-            this.events.removeListener('healplayer');
-            this.events.removeListener('increaseturretspeed');
+            this.removePowerupListeners();
         } catch (e) {
             console.log(e);
         }
