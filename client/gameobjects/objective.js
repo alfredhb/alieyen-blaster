@@ -10,13 +10,15 @@ export default class Objective extends Phaser.GameObjects.GameObject {
      * 
      * @param {TemplateLevelScene} scene 
      * @param {Constants} constants 
+     * @param {number?} obj
      */
-    constructor(scene, constants) {
+    constructor(scene, constants, obj) {
         super(scene);
 
         // Determine correct text
+        let objNum = (obj != null) ? obj : scene.levelData.level.objective
         let text = "";
-        switch(scene.levelData.level.objective) {
+        switch(objNum) {
             // TIMED
             case 0:
                 text = 'Kill the Aliens!!!'
