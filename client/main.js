@@ -17,6 +17,7 @@ import TimedArcade from './scenes/levels/arcade/timed';
 import Constants from './lib/constants';
 import LevelFactory from './scenes/levels/level_factory';
 import TemplateLevelScene from './scenes/levels/template_level';
+import TimedTutorialScene from './scenes/levels/timed_tutorial';
 
 // Game Config
 var config = {
@@ -26,13 +27,13 @@ var config = {
   physics: {
       default: 'arcade',
       arcade: {
-          debug: false,
+          debug: true,
       }
   },
   scene: [
     InitialLoad, StartMenu, PlayerSelectMenu, GamemodeMenu, SavefileMenu, 
     ArcadeReportScene, ArcadeMenu, DifficultySelectMenu, TimedArcade, DefaultPage,
-    LevelFactory, TemplateLevelScene, ArcadeReadyScene
+    LevelFactory, TemplateLevelScene, ArcadeReadyScene, TimedTutorialScene
   ],
 };
 
