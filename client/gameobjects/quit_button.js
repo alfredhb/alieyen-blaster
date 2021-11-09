@@ -24,8 +24,8 @@ export default class QuitButton extends Phaser.GameObjects.Group {
             stroke: "#FF0000",
         }).setOrigin(0.5);
         text.setDepth(25);
-        const clickSound = scene.sound.add('menu-click', { loop: false, volume : 0.5});
-        const hoverSound = scene.sound.add('quit', { loop: false });
+        const clickSound = scene.sound.get('menu-click');
+        const hoverSound = scene.sound.get('quit');
 
         // Add interactives
         button.setInteractive();
@@ -47,6 +47,7 @@ export default class QuitButton extends Phaser.GameObjects.Group {
             clickSound.play();
             if (config.execFunc) { config.execFunc(); }
             scene.scene.start(config.backMenu, config.data);
+            return;
         })
     }
 }
