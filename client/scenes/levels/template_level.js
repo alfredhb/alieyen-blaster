@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import Alien from "../../gameobjects/alien";
 import AlienGroup from "../../gameobjects/alien_group";
 import AlienGrunt from "../../gameobjects/alien_grunt";
+import LevelLives from "../../gameobjects/level_lives";
 import LevelTimer from "../../gameobjects/level_timer";
 import Health from "../../gameobjects/powerups/health";
 import Powerup from "../../gameobjects/powerups/powerup";
@@ -21,12 +22,12 @@ export default class TemplateLevelScene extends Phaser.Scene {
      * this for ease of use later
      * @param {{
      *  meta: {
-     *   playerCount: number, 
-     *   difficulty: number, 
+     *   playerCount: number,
+     *   difficulty: number,
      *   players: string[],
      *   currentPlayer: number
-     *  }, 
-     *  level: { 
+     *  },
+     *  level: {
      *   difficulty_multiplier: number[],
      *   objective: number,
      *   win_cond: {
@@ -87,13 +88,13 @@ export default class TemplateLevelScene extends Phaser.Scene {
      * }} data
      */
     init(data) {
-        // its as easy as 
+        // its as easy as
         this.levelData = data;
 
         const { width, height } = this.scale;
         this.constants = new Constants(width, height);
 
-        console.log("Initializing " + this.levelData.name + ".\nDifficulty: " 
+        console.log("Initializing " + this.levelData.name + ".\nDifficulty: "
                     + this.levelData.meta.difficulty + "\nPlayers: "
                     + this.levelData.meta.players.toString() + "\nCurrent Player: "
                     + this.levelData.meta.currentPlayer);
@@ -106,7 +107,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         /*
         TODO:
         - fetch explode sound, player damage sound (if lives exist),
-        any background music, etc 
+        any background music, etc
         - create any new animations
         - move all animation/sound creation to initial_load
         */
@@ -165,7 +166,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         // Quit
         const quit = new QuitButton(this, {
             backMenu: (this.levelData.scene.type == 'ARCADE') ? 'arcadeMenu': 'savefileMenu',
-            execFunc: () => { 
+            execFunc: () => {
                 this.cleanupLevel();
             },
             data: {
@@ -175,7 +176,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
     }
 
     /**
-     * Produces the proper endstate logic based on data.level.objective and win 
+     * Produces the proper endstate logic based on data.level.objective and win
      * conditions.
      */
     initEndState() {
@@ -198,10 +199,18 @@ export default class TemplateLevelScene extends Phaser.Scene {
                     });
                 }
                 break;
-                
+
             // LIVES
             case 1:
-                console.log("LIVES mode unimplemented");
+                this.levelLives = new LevelLives(this, this.constants, this.levelData.level.win_cond.lives);
+                this.levelScore = new ScoreObject(this, this.constants);
+
+                // listen for levelliveszero if one doesn't already exist
+                if (!this.events.listenerCount('levelliveszero')) {
+                    this.events.addListener('levelliveszero', () => {
+                        this.endLevel();
+                    });
+                }
                 break;
 
             // TIMEKILLS
@@ -271,13 +280,13 @@ export default class TemplateLevelScene extends Phaser.Scene {
     initTurrets() {
         /**
          * Callback function when a bullet and an alien overlap. If alien is alive, bullet
-         * and bullet is active, then deal x damage to alien allowing respawn and 
+         * and bullet is active, then deal x damage to alien allowing respawn and
          * increment respective score
-         * @param {Phaser.Physics.Arcade.Sprite} bullet 
-         * @param {Alien} alien 
+         * @param {Phaser.Physics.Arcade.Sprite} bullet
+         * @param {Alien} alien
          */
         let collisionFunc = (bullet, alien) => {
-            /* 
+            /*
             TODO:
             - integrate damage into aliens - refactor kill() to damage() which calls kill()
             */
@@ -297,8 +306,8 @@ export default class TemplateLevelScene extends Phaser.Scene {
                         this.kills.boss += 1;
                         break;
                     default:
-                        this.kills.grunt += 1; 
-                
+                        this.kills.grunt += 1;
+
                 }
             }
         }
@@ -313,7 +322,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
      */
     initPowerups() {
         /*
-        TODO: 
+        TODO:
         - create powerups as gameobjects & groups such that spawning is handled elsewhere
         - break up this func into initialization, colliders, and listeners
         */
@@ -339,7 +348,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         for (let powerup of this.levelData.level.powerups) {
             if (powerup.enabled) {
                 switch(powerup.name) {
-                    case "health": 
+                    case "health":
                         this.powerups.push(
                             this.physics.add.group({
                                 classType: Health,
@@ -395,7 +404,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
     createPowerupListeners() {
         // Health
         this.events.addListener('healplayer', (amount) => console.log('heal the player! ' + amount));
-        
+
         // Increase Turret Speed
         this.events.addListener('increaseturretspeed', (amount) => {
             console.log('Reduce Cooldown! ' + amount);
@@ -507,7 +516,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         Objective Success! - transition to any held end cutscene, if so, carry over
         report data as well. else transition directly to typ specific report
         */
-        
+
         if (this.levelData.scene?.cutscene?.close) {
             // play close cutscene, ends with scene start, set current player to next
         }
@@ -525,11 +534,11 @@ export default class TemplateLevelScene extends Phaser.Scene {
             case 0:
                 this.calculateScore();
                 return true; // timer is out, neutral result
-                
+
             // LIVES
             case 1:
-                console.log("LIVES mode unimplemented");
-                return false; // Check lives count to be nonzero
+                this.calculateScore();
+                return true; // survived until we lost all lives, neutral result
 
             // TIMEKILLS
             case 2:
@@ -552,27 +561,27 @@ export default class TemplateLevelScene extends Phaser.Scene {
                 return false;
         }
     }
-    
+
     /**
      * Either transitions to report if currentplayer is last player OR storymode,
      * else reloads the same scene with currentplayer += 1
      */
     transitionScene() {
         // reload same scene with new player
-        if (this.levelData.meta.playerCount != 1 && this.levelData.meta.currentPlayer == 0 
+        if (this.levelData.meta.playerCount != 1 && this.levelData.meta.currentPlayer == 0
                 && this.levelData.scene.type == 'ARCADE') {
             this.scene.start(
                 'arcadeReadyScene', {
                     meta: {
                         playerCount: this.levelData.meta.playerCount,
-                        difficulty: this.levelData.meta.difficulty, 
+                        difficulty: this.levelData.meta.difficulty,
                         players: this.levelData.meta.players,
                         currentPlayer: 1,
                         levelName: 'levelFactory',
                     },
                     level: this.levelData.level, // pass score
                     scene: {
-                        prevScene: { 
+                        prevScene: {
                             name: 'arcadeMenu',
                             type: 'ARCADE',
                         },
@@ -617,7 +626,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
      * being placed over when LevelFactory transitions here again
      */
     cleanupLevel() {
-        /* 
+        /*
         TODO:
         - delete placed images
         - delete powerups
@@ -649,6 +658,11 @@ export default class TemplateLevelScene extends Phaser.Scene {
         if (this.levelTimer) {
             this.levelTimer.destroy();
             this.time.removeAllEvents();
+        }
+
+        // destroy lives counter
+        if (this.levelLives) {
+            this.levelLives.destroy();
         }
 
         // destroy spawntimers

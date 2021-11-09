@@ -4,7 +4,7 @@ import TemplateLevelScene from '../scenes/levels/template_level';
 
 export default class AlienGroup extends Phaser.GameObjects.Group {
     /**
-     * @param {TemplateLevelScene} scene 
+     * @param {TemplateLevelScene} scene
      * @param {Phaser.Types.GameObjects.Group.GroupCreateConfig} config
      * @param {Constants} c
      */
@@ -19,7 +19,7 @@ export default class AlienGroup extends Phaser.GameObjects.Group {
      */
     maxAliens() {
         let dM = this.scene.levelData.level.difficulty_multiplier[this.scene.levelData.meta.difficulty - 1];
-        
+
         this.maxSize = Math.ceil(this.maxSize * dM);
     }
 
@@ -33,7 +33,7 @@ export default class AlienGroup extends Phaser.GameObjects.Group {
         this.alienTimers = [];
         this.aliensSpawned = 0;
         while (this.alienTimers.length < this.maxSize) {
-            let alien = this.get();
+            let alien = this.get(true);
             if (alien) {
                 let spawnStartNext = () => {
                     alien.stop(); // stop animations

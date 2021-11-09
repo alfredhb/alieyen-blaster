@@ -6,10 +6,10 @@ import Bullet from './bullet';
 class Turret {
     /**
      * @param {Constants} c
-     * @param {Phaser.GameObjects.Image} turret 
-     * @param {Phaser.Time.TimerEvent} cooldownTimer 
-     * @param {boolean} inCooldown 
-     * @param {Phaser.GameObjects.Graphics} cooldownEffect 
+     * @param {Phaser.GameObjects.Image} turret
+     * @param {Phaser.Time.TimerEvent} cooldownTimer
+     * @param {boolean} inCooldown
+     * @param {Phaser.GameObjects.Graphics} cooldownEffect
      */
     constructor(c, turret, cooldownTimer, inCooldown, cooldownEffect) {
         this.constants = c;
@@ -38,7 +38,7 @@ class Turret {
         if (!this.cooldownTimer) {
             return;
         }
-        
+
         let progress = this.cooldownTimer.getProgress();
         if (progress == 1) {
             this.cooldownEffect.visible = false;
@@ -48,6 +48,7 @@ class Turret {
         this.cooldownEffect.visible = true;
         let render = Math.floor(360 * progress);
         this.cooldownEffect.clear();
+        this.cooldownEffect.moveTo(0, 0);
         this.cooldownEffect.fillStyle(this.constants.Red, 0.4);
         this.cooldownEffect.arc(0, 0, 32,
             Phaser.Math.DegToRad(270),
@@ -65,10 +66,10 @@ class Turret {
  */
 export default class Turrets extends Phaser.GameObjects.GameObject {
     /**
-     * 
-     * @param {TemplateLevelScene} scene 
-     * @param {Constants} constants 
-     * @param {string} asset 
+     *
+     * @param {TemplateLevelScene} scene
+     * @param {Constants} constants
+     * @param {string} asset
      */
     constructor(scene, constants, asset) {
         super(scene);
@@ -93,13 +94,13 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
 
         this.currentPlayer = this.scene.levelData.meta.players[this.scene.levelData.meta.currentPlayer]
 
-        // Init 
+        // Init
         this.scene.bullets = this.scene.physics.add.group({
             classType: Bullet,
             runChildUpdate: true,
         });
         this.scene.bulletColliders = [];
-        
+
         // Add to scene
         scene.add.existing(this);
     }
@@ -112,7 +113,7 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
     }
 
     /**
-     * adds event listener to scene which fires the turrets. Collision func is 
+     * adds event listener to scene which fires the turrets. Collision func is
      * used to handle bullet / alien collisions
      * @param {Phaser.GameObjects.Group[]} aliens
      * @param {function} collisionFunc
@@ -123,7 +124,7 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
             if (this.turrets[0].inCooldown || this.turrets[1].inCooldown) {
                 return;
             }
-            
+
             this.fire(aliens, collisionFunc);
         });
     }
@@ -149,7 +150,7 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
             // Rotate turret and fire only if within angle
             let angle = Phaser.Math.Angle.Between(
                     t.turret.x, t.turret.y,
-                    this.scene.input.activePointer.x, 
+                    this.scene.input.activePointer.x,
                     this.scene.input.activePointer.y
                 ) + Math.PI / 2;
             if (!(Math.abs(angle) > 1.5)) {
@@ -166,8 +167,8 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
     /**
      * Adds a bullet and adds overlapper listener for all alien types spawning
      * in the level as captured by this.scene.aliens array of aliengroup types
-     * @param {Turret} t 
-     * @param {number} angle 
+     * @param {Turret} t
+     * @param {number} angle
      * @param {Phaser.GameObjects.Group[]} aliens
      * @param {function} collisionFunc
      */
@@ -196,7 +197,7 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
     }
 
     /**
-     * Called when scene receives 'increaseturretspeed' event. This reduces the 
+     * Called when scene receives 'increaseturretspeed' event. This reduces the
      * cooldown delay for turrets to 0.1 seconds for duration. If the timer is already
      * active when another powerup is received, then appends the duration of the timer
      * @param {number} duration time in ms
