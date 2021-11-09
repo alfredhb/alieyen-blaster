@@ -58,4 +58,8 @@ export default class LevelTimer extends Phaser.GameObjects.GameObject {
     startTimer() {
         this.timer.paused = false;
     }
+
+    stopTimer() {
+        this.timer.paused = true;
+    }
 }
