@@ -403,7 +403,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
      */
     createPowerupListeners() {
         // Health
-        this.events.addListener('healplayer', (amount) => console.log('heal the player! ' + amount));
+        // this.events.addListener('healplayer', (amount) => console.log('heal the player! ' + amount));
 
         // Increase Turret Speed
         this.events.addListener('increaseturretspeed', (amount) => {

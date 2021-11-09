@@ -44,6 +44,10 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
             }
         });
 
+        scene.events.on('healplayer', (health) => {
+            this.numLives += health;
+        });
+
         // add self to scene
         scene.add.existing(this);
     }
@@ -57,5 +61,6 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
 
     destroy() {
         this.scene.events.removeListener('playerhit');
+        this.scene.events.removeListener('playerheal');
     }
 }
