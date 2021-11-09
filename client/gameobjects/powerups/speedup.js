@@ -81,10 +81,11 @@ export default class SpeedUp extends Phaser.Physics.Arcade.Sprite {
      */
     collisionFunc() {
         if (this.hit) return;
-
-        this.scene.events.emit('increaseturretspeed', (3000 /* duration in ms */));
-
+        
         this.destruct();
+
+        this.scene.events.emit('increaseturretspeed', (this.speedUpDuration /* duration in ms */));
+
     }
 
     /**
