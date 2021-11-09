@@ -164,7 +164,8 @@ export default class MenuScene3 extends Phaser.Scene {
         const enButton = this.add.image(width * 0.75, height * 0.35, 'gameslot-button');
         const enIcon = this.add.image(width * 0.75, height * 0.325, 'endless-button');
         const enText = this.add.text(enButton.x, height * 0.425, 'Endless', this.constants.MenuButtonStyle('#000000'));
-        enText.setName('arcadeMenu'); // TODO: change me
+        enText.setName('levelFactory');
+        enIcon.setName('endlessLevelArcade');
 
         // Lives Button
         const liButton = this.add.image(width * 0.25, height * 0.7, 'gameslot-button');
