@@ -129,6 +129,13 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
     }
 
     /**
+     * removes event listener from scene that fires the turrets.
+     */
+    removeFireListener() {
+        this.scene.input.removeAllListeners();
+    }
+
+    /**
      * fires both turrets at the given activepointer location and adds cooldown
      * timers
      * @param {Phaser.GameObjects.Group[]} aliens
