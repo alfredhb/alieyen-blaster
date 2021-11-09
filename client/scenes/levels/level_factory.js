@@ -67,22 +67,27 @@ export default class LevelFactory extends Phaser.Scene {
 
             // Go to cutscene first
             if (res.scene.cutscene?.open) {
-                this.scene.start(
-                    res.scene.cutscene.open,
-                    {
-                        meta: {
-                            playerCount: this.playerCount,
-                            players: this.players,
-                            currentPlayer: this.currentPlayer,
-                            difficulty: this.difficulty
-                        },
-                        level: res.level,
-                        assets: res.assets,
-                        scene: res.scene,
-                        name: this.nextScene.name
-                    }
-                )
-                return;
+                try {
+                    this.scene.start(
+                        res.scene.cutscene.open,
+                        {
+                            meta: {
+                                playerCount: this.playerCount,
+                                players: this.players,
+                                currentPlayer: this.currentPlayer,
+                                difficulty: this.difficulty
+                            },
+                            level: res.level,
+                            assets: res.assets,
+                            scene: res.scene,
+                            name: this.nextScene.name
+                        }
+                    )
+                    return;
+                } catch (e) {
+                    // unable to load cutscene
+                    console.log(e);
+                }
             }
 
             this.scene.start(
