@@ -19,6 +19,7 @@ export default class SpeedUp extends Phaser.Physics.Arcade.Sprite {
 
         this.maxX = width + 65;
         this.maxY = height + 65;
+        this.speedUpDuration = 3000; //3 seconds
         
         // Whether player has tagged the powerup
         this.hit = false;

@@ -13,7 +13,7 @@ class Turret {
      */
     constructor(c, turret, cooldownTimer, inCooldown, cooldownEffect) {
         this.constants = c;
-        this.cooldownTime = 500; // 500 ms
+        this.cooldownTime = 750; // 500 ms
 
         this.turret = turret;
         this.cooldownTimer = cooldownTimer;
