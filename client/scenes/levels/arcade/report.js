@@ -59,7 +59,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
         // Fetch Highscore
         this.highscore = { player: "None", score: 0 };
-        Meteor.call("getHighScore", 'arcade', 'timed', this.bestScore, (err, res) => {
+        Meteor.call("getHighScore", this.prevScene.name, this.bestScore, (err, res) => {
             if (err != null) {
                 console.log(err);
                 return;
