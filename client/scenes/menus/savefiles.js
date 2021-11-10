@@ -106,6 +106,7 @@ export default class MenuScene5 extends Phaser.Scene {
                             difficulty: this.difficulty,
                             players: this.players,
                             currentPlayer: 0,
+                            playerCount: this.playerCount
                         },
                         level: {
                             difficulty_multiplier: [1, 1.5, 2],
