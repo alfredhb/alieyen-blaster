@@ -680,7 +680,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         this.aliens.forEach(aGroup => {
             try {
                 aGroup.getChildren().forEach(a => a.leave());
-                aGroup.destroy(false, true);
+                // aGroup.destroy(false, true);
             } catch (e) {
                 console.log(e);
             }
