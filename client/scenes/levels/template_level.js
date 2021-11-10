@@ -273,7 +273,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
         // Create alien spawntimers
         this.aliens.forEach(a => {
-            a.createSpawnTimers();
+            a.createSpawnTimers(this.levelData.level.win_cond.lives > 0); // if lives are in wincondition then alien can fire
         });
     }
 
