@@ -136,7 +136,8 @@ export default class AlienGrunt extends Alien {
         this.setVelocity(0, 0);
         this.anims.play(this.getFireAnimation());
         this.on('animationcomplete', () => {
-            this.leave();
+            this.off('animationcomplete');
+            this.leave(true /* respawn */);
         });
 
         // create bomb and start sound
@@ -157,7 +158,7 @@ export default class AlienGrunt extends Alien {
             return;
         }
 
-        if (this.alien_attack?.y >= this.constants.Height) {
+        if (this.alien_attack?.y >= this.constants.Height * 0.85) {
             this.alien_attack.setVisible(false);
             this.scene.events.emit('playerhit', 1 /* alien grunt deals 1 damage */);
         }
@@ -233,12 +234,15 @@ export default class AlienGrunt extends Alien {
      * Causes alien to 'exit' level without exploding or playing any sound effects
      * Places alien underneath player and invisible to allow any active bombs to 
      * continue moving
+     * @param {boolean?} respawn
      */
-    leave() {
+    leave(respawn) {
         // TODO: play an animation specific to leaving the level
 
         this.setPosition(this.maxX, this.maxy);
         this.setVisible(false);
+
+        if (respawn) this.respawn();
     }
 
     /**
