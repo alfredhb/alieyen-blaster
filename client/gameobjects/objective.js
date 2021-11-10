@@ -50,14 +50,14 @@ export default class Objective extends Phaser.GameObjects.GameObject {
                 break;
         }
 
-        const objText = scene.add.text(
+        this.objText = scene.add.text(
             constants.Width * 0.05, 
             constants.Height * 0.1, 
             text,
             constants.MenuButtonStyle()
         );
-        objText.setWordWrapWidth(constants.Width * 0.3)
-        objText.setOrigin(0, 0.5);
-        objText.setDepth(11);
+        this.objText.setWordWrapWidth(constants.Width * 0.3)
+        this.objText.setOrigin(0, 0.5);
+        this.objText.setDepth(11);
     }
 }
