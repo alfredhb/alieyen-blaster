@@ -15,7 +15,7 @@ export default class ScoreObject extends Phaser.GameObjects.GameObject {
         super(scene);
 
         // create score text
-        this.text = scene.add.text(c.Width * 0.9, c.Height * 0.1, "Score: 000", c.MenuButtonStyle());
+        this.text = scene.add.text(c.Width * 0.85, c.Height * 0.1, "Score: 000", c.MenuButtonStyle());
         this.text.setOrigin(0.5).setDepth(11);
         scene.add.existing(this);
     }
