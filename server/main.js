@@ -76,9 +76,7 @@ Meteor.methods({
    */
   getHighScore(levelId, scoreObj) {
     var id = (levelId + "-highscore");
-    console.log(id);
     var h = SaveData.findOne(id, { "fields": { player: 1, value: 1 } });
-    console.log(h);
     if (h && h.value >= scoreObj.score) {
       return {player: h.player, score: h.value};
     }
