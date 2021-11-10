@@ -151,7 +151,7 @@ export default class DataScene1 extends Phaser.Scene {
      */
     addLoadListener(width, height) {
         this.assetsLoaded = 0;
-        this.totalAssets = this.onlineImages.length + 8/* # of spritesheets */;
+        this.totalAssets = this.onlineImages.length + 9/* # of spritesheets */;
         let loadBlockWidth = (width * 0.45) / this.totalAssets;
 
         this.textures.on('addtexture', (k, t) => {
@@ -215,6 +215,12 @@ export default class DataScene1 extends Phaser.Scene {
             'lose-heart-sheet',
             'https://storage.googleapis.com/alieyen-blaster/public/assets/features/broken_heart_spritesheet.png',
             { frameWidth: 128, frameHeight: 128 },
+        );
+
+        this.load.spritesheet(
+            'add-heart-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/features/add_heart_spritesheet.png',
+            {frameWidth: 128, frameHeight: 128},
         );
 
         this.load.spritesheet(
@@ -310,6 +316,13 @@ export default class DataScene1 extends Phaser.Scene {
             key: 'lose-heart',
             frames: this.anims.generateFrameNumbers('lose-heart-sheet', { start: 0 }),
             frameRate: 3,
+            repeat: 0,
+        });
+
+        this.anims.create({
+            key: 'add-heart',
+            frames: this.anims.generateFrameNumbers('add-heart-sheet', { start: 0 }),
+            frameRate: 6,
             repeat: 0,
         });
 
