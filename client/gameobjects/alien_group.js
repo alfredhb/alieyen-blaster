@@ -27,13 +27,17 @@ export default class AlienGroup extends Phaser.GameObjects.Group {
         * Creates maxSize number of spawn timers and saves the spawn timer array into
         * this.alienTimers -> a 2D array [alienGruntTimers, miniBossTimers, BossTimers]
         */
-    createSpawnTimers() {
+       /**
+        * 
+        * @param {boolean?} canFire 
+        */
+    createSpawnTimers(canFire) {
         this.maxAliens();
 
         this.alienTimers = [];
         this.aliensSpawned = 0;
         while (this.alienTimers.length < this.maxSize) {
-            let alien = this.get(true);
+            let alien = this.get(canFire);
             if (alien) {
                 let spawnStartNext = () => {
                     alien.stop(); // stop animations

@@ -4,6 +4,7 @@ import AlienGroup from "../../gameobjects/alien_group";
 import AlienGrunt from "../../gameobjects/alien_grunt";
 import LevelLives from "../../gameobjects/level_lives";
 import LevelTimer from "../../gameobjects/level_timer";
+import Objective from "../../gameobjects/objective";
 import Health from "../../gameobjects/powerups/health";
 import Powerup from "../../gameobjects/powerups/powerup";
 import SpeedUp from "../../gameobjects/powerups/speedup";
@@ -234,6 +235,9 @@ export default class TemplateLevelScene extends Phaser.Scene {
                 break;
         }
 
+        // Add objective denotion
+        this.objText = new Objective(this, this.constants);
+        
         // Initilize Kill Tracking
         this.kills = {
             grunt: 0,
@@ -269,7 +273,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
         // Create alien spawntimers
         this.aliens.forEach(a => {
-            a.createSpawnTimers();
+            a.createSpawnTimers(this.levelData.level.win_cond.lives > 0); // if lives are in wincondition then alien can fire
         });
     }
 

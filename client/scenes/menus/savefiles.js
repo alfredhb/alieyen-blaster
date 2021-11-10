@@ -97,7 +97,34 @@ export default class MenuScene5 extends Phaser.Scene {
             // Adds hoverclick and normal click
             this.constants.HoverClick(this, b.button, () => {
                 this.menuSounds.menuClick.play();
-                console.log('Unimplemented');
+                console.log('Playing Tutorial');
+
+                this.scene.start(
+                    'timedTutorialScene',
+                    {
+                        meta: {
+                            difficulty: this.difficulty,
+                            players: this.players,
+                            currentPlayer: 0,
+                        },
+                        level: {
+                            difficulty_multiplier: [1, 1.5, 2],
+                            powerup_spawnrate: 500,
+                            aliens: {
+                                grunt: {
+                                    score: 10,
+                                },
+                                mini_boss: {
+                                    score: 10,
+                                },
+                                boss: {
+                                    score: 10,
+                                },
+                            }
+                        },
+                        name: 'savefileMenu'
+                    }
+                )
             });
         });
     }

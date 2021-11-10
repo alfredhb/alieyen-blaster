@@ -39,6 +39,8 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "empty-heart",        "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/empty_heart.png"},
             {"key": "star",               "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/star.png"},
             {"key": "alien-grunt",        "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_1_1.png"},
+            {"key": "mentor-happy",       "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/mentor_happy.png"},
+            {"key": "mentor-side",        "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/mentor_side.png"},
        ];
 
        /**
@@ -91,6 +93,23 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "explode-1",        "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/explosion-1.mp3",          "config": { loop: false }},
             {"key": "explode-2",        "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/explosion-2.mp3",          "config": { loop: false }},
             {"key": "explode-3",        "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/explosion-3.mp3",          "config": { loop: false, volume: 0.35 }},
+            // Voicelines
+            {"key": "time-tutorial-1",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_1.m4a", "config": { loop: false }},
+            {"key": "time-tutorial-2",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_2.m4a", "config": { loop: false }},
+            {"key": "time-tutorial-3",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_3.m4a", "config": { loop: false }},
+            {"key": "time-tutorial-4",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_4.m4a", "config": { loop: false }},
+            {"key": "time-tutorial-5-1",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_5_1.m4a", "config": { loop: false }},
+            {"key": "time-tutorial-5-2",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_5_2.m4a", "config": { loop: false }},
+            {"key": "time-tutorial-6",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_6.m4a", "config": { loop: false }},
+            {"key": "time-tutorial-7",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_7.m4a", "config": { loop: false }},
+            {"key": "time-tutorial-8",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_8.m4a", "config": { loop: false }},
+            {"key": "time-tutorial-9",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_9.m4a", "config": { loop: false }},
+            {"key": "time-tutorial-10-1",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_10_1.m4a", "config": { loop: false }},
+            {"key": "time-tutorial-10-2",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_10_2.m4a", "config": { loop: false }},
+            {"key": "time-tutorial-11",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_11.m4a", "config": { loop: false }},
+            {"key": "time-tutorial-12",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_12.m4a", "config": { loop: false }},
+            {"key": "time-tutorial-13",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_13.m4a", "config": { loop: false }},
+            {"key": "time-tutorial-14",  "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_14.m4a", "config": { loop: false }},
         ]
         
         // Loading Text

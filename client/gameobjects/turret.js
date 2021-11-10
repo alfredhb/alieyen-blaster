@@ -13,7 +13,7 @@ class Turret {
      */
     constructor(c, turret, cooldownTimer, inCooldown, cooldownEffect) {
         this.constants = c;
-        this.cooldownTime = 500; // 500 ms
+        this.cooldownTime = 750; // 500 ms
 
         this.turret = turret;
         this.cooldownTimer = cooldownTimer;
@@ -127,6 +127,13 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
 
             this.fire(aliens, collisionFunc);
         });
+    }
+
+    /**
+     * removes event listener from scene that fires the turrets.
+     */
+    removeFireListener() {
+        this.scene.input.removeAllListeners();
     }
 
     /**
