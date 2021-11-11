@@ -84,7 +84,7 @@ export default class MenuScene4 extends Phaser.Scene {
      */
     initButtons(width, height) {
         // Play Button
-        const plButton = this.add.image(width * 0.5, height * 0.7, '__WHITE').setDisplaySize(width * 0.25, height * 0.25);
+        const plButton = this.add.image(width * 0.5, height * 0.7, '__WHITE').setDisplaySize(width * 0.35, height * 0.25);
         const plText = this.add.text(plButton.x, plButton.y, 'Play!', {
             fontFamily: "impact-custom",
             color: "#FF0000",
