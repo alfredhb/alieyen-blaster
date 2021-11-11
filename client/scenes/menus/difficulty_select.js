@@ -106,7 +106,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
 
     centerBox(width, height) {
         const centerOutline = this.add.image(width * 0.5, height * 0.5, '__WHITE');
-        centerOutline.setDisplaySize(width * 0.7505, height * 0.5505);
+        centerOutline.setDisplaySize(width * 0.751, height * 0.5505);
         centerOutline.setOrigin(0.5);
 
         const center = this.add.image(width * 0.5, height * 0.5, '__WHITE');

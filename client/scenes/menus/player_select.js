@@ -232,7 +232,7 @@
      */
     centerBox(width, height) {
         this.centerOutline = this.add.image(width * 0.5, height * 0.5, '__WHITE');
-        this.centerOutline.setDisplaySize(width * 0.7505, height * 0.5505);
+        this.centerOutline.setDisplaySize(width * 0.751, height * 0.5505);
         this.centerOutline.setOrigin(0.5);
 
         this.center = this.add.image(width * 0.5, height * 0.5, '__WHITE');
@@ -267,7 +267,7 @@
      */
     promptPersonSelection(width, height) {
         // Expand center section
-        this.centerOutline.setDisplaySize(width * 0.6705, height * 0.8505);
+        this.centerOutline.setDisplaySize(width * 0.751, height * 0.8505);
         this.center.setDisplaySize(width * 0.75, height * 0.85);
 
         // Move up player text

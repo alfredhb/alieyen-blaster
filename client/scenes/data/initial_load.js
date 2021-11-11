@@ -19,8 +19,12 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "arcade-bg",          "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/background/background2.png"},
             {"key": "space-bg",           "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/background/background1.png"},
             {"key": "story-bg",           "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/background/background2.png"},
+            {"key": "ship-bg",            "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/background/ship_bg.jpg"},
+            {"key": "world-1-ship-bg",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/background/ship_bg_world_1.jpg"},
+            {"key": "world-1-bg",         "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/background/world_1_bg.png"},
             {"key": "arcade-hud",         "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/background/arcade_hud.png"},
             {"key": "ship-hud",           "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/background/ship_hud.png"},
+            {"key": "world-1-button",     "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/buttons/world_1_button.jpg"},
             {"key": "arcade-button",      "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/buttons/arcade_no_text.png"},
             {"key": "difficulty-button",  "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/gear.png"},
             {"key": "gameslot-button",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/buttons/game_slot.png"},
@@ -35,6 +39,8 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "alien-bomb",         "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/alien_bomb.png"},
             {"key": "full-heart",         "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/full_heart.png"},
             {"key": "full-heart-outline", "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/full_heart_outline.png"},
+            {"key": "shield-outline",     "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/shield_outline.png"},
+            {"key": "shield-placed",      "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/shield_placed.png"},
             {"key": "speed-up",           "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/speed-up.png"},
             {"key": "empty-heart",        "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/empty_heart.png"},
             {"key": "star",               "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/star.png"},
@@ -151,7 +157,7 @@ export default class DataScene1 extends Phaser.Scene {
      */
     addLoadListener(width, height) {
         this.assetsLoaded = 0;
-        this.totalAssets = this.onlineImages.length + 9/* # of spritesheets */;
+        this.totalAssets = this.onlineImages.length + 11/* # of spritesheets */;
         let loadBlockWidth = (width * 0.45) / this.totalAssets;
 
         this.textures.on('addtexture', (k, t) => {
@@ -221,6 +227,18 @@ export default class DataScene1 extends Phaser.Scene {
             'add-heart-sheet',
             'https://storage.googleapis.com/alieyen-blaster/public/assets/features/add_heart_spritesheet.png',
             {frameWidth: 128, frameHeight: 128},
+        );
+
+        this.load.spritesheet(
+            'lose-shield-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/features/shield_break_spritesheet.png',
+            { frameWidth: 384, frameHeight: 128 },
+        );
+
+        this.load.spritesheet(
+            'add-shield-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/features/shield_add_spritesheet.png',
+            { frameWidth: 384, frameHeight: 128 },
         );
 
         this.load.spritesheet(
@@ -322,6 +340,20 @@ export default class DataScene1 extends Phaser.Scene {
         this.anims.create({
             key: 'add-heart',
             frames: this.anims.generateFrameNumbers('add-heart-sheet', { start: 0 }),
+            frameRate: 6,
+            repeat: 0,
+        });
+
+        this.anims.create({
+            key: 'lose-shield',
+            frames: this.anims.generateFrameNumbers('lose-shield-sheet', { start: 0 }),
+            frameRate: 3,
+            repeat: 0,
+        });
+
+        this.anims.create({
+            key: 'add-shield',
+            frames: this.anims.generateFrameNumbers('add-shield-sheet', { start: 0 }),
             frameRate: 6,
             repeat: 0,
         });
