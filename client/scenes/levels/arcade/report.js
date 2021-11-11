@@ -142,11 +142,11 @@ export default class ArcadeReportScene extends Phaser.Scene {
      */
     centerBox(width, height) {
         const centerOutline = this.add.image(width * 0.5, height * 0.5, '__WHITE');
-        centerOutline.setDisplaySize(width * 0.6505, height * 0.8255);
+        centerOutline.setDisplaySize(width * 0.7505, height * 0.8255);
         centerOutline.setOrigin(0.5);
 
         const center = this.add.image(width * 0.5, height * 0.5, '__WHITE');
-        center.setDisplaySize(width * 0.65, height * 0.825);
+        center.setDisplaySize(width * 0.75, height * 0.825);
         center.setTint(0x000000);
         center.setOrigin(0.5);
     }
@@ -186,37 +186,42 @@ export default class ArcadeReportScene extends Phaser.Scene {
     levelReport(width, height) {
         let ttsArr = [];
 
+        this.playerScoresVals = [];
         const score1Text = this.add.text(
-            width * 0.275,
+            width * 0.2,
             height * 0.275,
             this.constants.Capitalize(this.players[0]) + "'s Score:",
             this.constants.MenuButtonStyle()
         );
         const score1Val = this.add.text(
-            width * 0.675,
+            width * 0.775,
             height * 0.275,
             this.constants.ZeroPad(this.levelScore1, 4),
             this.constants.MenuButtonStyle("#FF0000")
         );
         score1Val.setOrigin(1, 0);
+        this.playerScoresVals.push(score1Val);
         ttsArr.push({text: score1Text, sound: this.sound.get(this.players[0])});
 
         if (this.playerCount == 2) {
             const score2Text = this.add.text(
-                width * 0.275,
+                width * 0.2,
                 height * 0.35,
                 this.constants.Capitalize(this.players[1]) + "'s Score:",
                 this.constants.MenuButtonStyle()
             );
             const score2Val = this.add.text(
-                width * 0.675,
+                width * 0.775,
                 height * 0.35,
                 this.constants.ZeroPad(this.levelScore2, 4),
                 this.constants.MenuButtonStyle("#FF0000")
             );
             score2Val.setOrigin(1, 0);
+            this.playerScoresVals.push(score2Val);
             ttsArr.push({text: score2Text, sound: this.sound.get(this.players[1])});
         }
+
+        this.placeLivesScore(width, height);
 
         ttsArr.forEach(t => {
             t.text.setInteractive();
@@ -230,36 +235,141 @@ export default class ArcadeReportScene extends Phaser.Scene {
         })
     }
 
+    // Add life score counter --> places it between name and score, then plays
+    // an animation showing how much score increases per life person had
+    /**
+     * Requires level.liveScore# to exist for each player. Places num lives as
+     * icons to the left of score and animates score increasing for each life left.
+     * After updating all scores, checks for best score and updates highscore 
+     * accordingly
+     * @param {number} width 
+     * @param {number} height 
+     */
+    placeLivesScore(width, height) {
+        // place lives.
+        let lives = [];
+        for (let i = 0; i < this.levelData.meta.playerCount; i++) {
+            let pLives = [];
+            let lifeHeight = height * 0.275 + i * height * 0.075;
+
+            let numLives = this.levelData.level["liveScore" + (i + 1)];
+            for (let j = 0; j < numLives; j++) {
+                let life = this.add.sprite(width * 0.65 - j * width * 0.056, lifeHeight, 'full-heart-outline');
+                life.setDisplaySize(width * 0.055, width * 0.055).setOrigin(1, 0.125);
+                pLives.push(life);
+            }
+
+            lives.push(pLives);
+        }
+
+        // Animate lives
+        setTimeout(() => {
+            for (let i = 0; i < lives.length; i ++) {
+                // play powerup animation and sound, and hide life, then increment
+                // associated player score
+                for (let j = lives[i].length - 1; j >= 0; j--) {
+                    lives[i][j].on('animationcomplete', () => {
+                        lives[i][j].setDepth(-1);
+
+                        this.addLifeScore(i);
+
+                        // play next powerup
+                        if (j - 1 >= 0) {
+                            lives[i][j - 1].play('collect-powerup-animation');
+                        }
+                        else if (lives.length > 1) {
+                            if (lives[0].length > lives[1].length && i == 0) {
+                                this.restyleHighscore()
+                            } else if (lives[0].length <= lives[1].length && i == 1) {
+                                this.restyleHighscore()
+                            }
+                        } else this.restyleHighscore();
+                    });
+                }
+            }
+            lives.forEach(pL => {
+                if (pL.length) pL[pL.length - 1].play('collect-powerup-animation')
+            });
+        }, 500);
+    }
+
+    /**
+     * Adds one life's score to playerscoreVal and animates it
+     * @param {number} i index of player
+     */
+    addLifeScore(i) {
+        this["levelScore" + (i + 1)] += 100;
+        this.playerScoresVals[i].setText(this.constants.ZeroPad(this["levelScore" + (i + 1)], 4));
+        this.playerScoresVals[i].setColor("#FFFFFF");
+        let reColor = this.time.addEvent({
+            delay: 350,
+            callback: () => {this.playerScoresVals[i].setColor("#FF0000")},
+            callbackScope: this,
+            paused: false,
+            repeat: false
+        });
+    }
+
+    /**
+     * updates the highscore once lives are taken into account
+     */
+    restyleHighscore() {
+        this.bestScore = (this.levelScore1 > this.levelScore2) ?
+            {score: this.levelScore1, player: this.players[0]} :
+            {score: this.levelScore2, player: this.players[1]};
+
+        if (this.highscore.score < this.bestScore.score) {
+            Meteor.call("getHighScore", this.prevScene.name, this.bestScore, (err, res) => {
+                if (err != null) {
+                    console.log(err);
+                    return;
+                }
+
+                // Clear old highscore content
+                this.highscoreTitle.setDepth(-1).removeInteractive();
+                this.highscorePlayer.setDepth(-1).removeInteractive();
+                this.highscoreVal.setDepth(-1).removeInteractive();
+                (this.highscoreStar?.active) ? this.highscoreStar.setDepth(-1).removeInteractive() : () => {};
+
+                // Initialize highscore report once data is returned.
+                const { width, height } = this.scale;
+                this.highscore = res;
+                this.highscoreReport(width, height);
+                this.styleHighScorer(width, height);
+            });
+        }
+    }
+
     /**
      * Posts the Highscore for this level including player who accomplished it
      * @param {number} width
      * @param {number} height
      */
     highscoreReport(width, height) {
-        const title = this.add.text(
+        this.highscoreTitle = this.add.text(
             width * 0.5,
             height * .5,
             'HIGHSCORE',
             this.constants.MenuButtonStyle()
         );
-        const highscorePlayer = this.add.text(
+        this.highscorePlayer = this.add.text(
             width * 0.275,
             height * 0.575,
             this.constants.Capitalize(this.highscore.player) + ": ",
             this.constants.MenuButtonStyle()
         );
-        const highscoreVal = this.add.text(
+        this.highscoreVal = this.add.text(
             width * 0.675,
             height * 0.575,
             this.constants.ZeroPad(this.highscore.score, 4),
             this.constants.MenuButtonStyle("#00FF00")
         );
-        title.setName('highscore');
-        highscorePlayer.setName(this.highscore.player);
-        highscoreVal.setName('score');
+        this.highscoreTitle.setName('highscore');
+        this.highscorePlayer.setName(this.highscore.player);
+        this.highscoreVal.setName('score');
 
-        [title, highscorePlayer, highscoreVal].forEach(t => {
-            title.setOrigin(0.5);
+        [this.highscoreTitle, this.highscorePlayer, this.highscoreVal].forEach(t => {
+            this.highscoreTitle.setOrigin(0.5);
 
             t.setInteractive();
             t.on('pointerover', () => {
@@ -283,9 +393,9 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
         // Determine player who has best score and give them a lil star
         if (this.players[0] == this.bestScore.player) {
-            this.highscoreStar = this.add.image(width * 0.225, height * 0.3, 'star');
+            this.highscoreStar = this.add.image(width * 0.16, height * 0.3, 'star');
         } else {
-            this.highscoreStar = this.add.image(width * 0.225, height * 0.375, 'star');
+            this.highscoreStar = this.add.image(width * 0.16, height * 0.375, 'star');
         }
         this.highscoreStar.setDisplaySize(width * 0.05, width * 0.05);
 
@@ -312,7 +422,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
         let alien = aliens.get();
         if (alien) {
-            alien.place(width * 0.725, height * 0.325);
+            alien.place(width * 0.825, height * 0.325);
 
             // set box interaction
             let box = this.add.image(width * 0.725, height * 0.4, '__WHITE');
@@ -339,10 +449,10 @@ export default class ArcadeReportScene extends Phaser.Scene {
      * @param {number} height
      */
     navigationSection(width, height) {
-        const replayButton = this.add.image(width * 0.35, height * 0.8, '__WHITE');
-        const arcadeButton = this.add.image(width * 0.65, height * 0.8, '__WHITE');
-        const replayText = this.add.text(width * 0.35, height * 0.8, 'REPLAY', this.constants.MenuButtonStyle());
-        const arcadeText = this.add.text(width * 0.65, height * 0.8, 'ARCADE', this.constants.MenuButtonStyle());
+        const replayButton = this.add.image(width * 0.325, height * 0.775, '__WHITE');
+        const arcadeButton = this.add.image(width * 0.675, height * 0.775, '__WHITE');
+        const replayText = this.add.text(width * 0.325, height * 0.775, 'REPLAY', this.constants.MenuButtonStyle());
+        const arcadeText = this.add.text(width * 0.675, height * 0.775, 'ARCADE', this.constants.MenuButtonStyle());
         replayText.setName(this.prevScene.name);
         arcadeText.setName('arcadeMenu');
 
@@ -352,7 +462,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
         ];
         buttons.forEach(b => {
             // Style buttons
-            b.button.setDisplaySize(width * .25, height * 0.1);
+            b.button.setDisplaySize(width * .3, height * 0.175);
             b.button.setOrigin(0.5);
             b.button.setTint(this.constants.Gray);
             b.text.setOrigin(0.5);

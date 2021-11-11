@@ -24,9 +24,9 @@ export default class Objective extends Phaser.GameObjects.GameObject {
                 text = 'Kill the Aliens!!!'
                 break;
                 
-            // LIVES
+            // LIVES (endless)
             case 1:
-                text = 'Kill the Aliens Before They Attack!!!'
+                text = 'Survive for as Long as You Can!!!'; //'Kill the Aliens Before They Attack!!!'
                 break;
 
             // TIMEKILLS
@@ -39,9 +39,9 @@ export default class Objective extends Phaser.GameObjects.GameObject {
                 text = 'Kill All the Aliens Before They Attack!!!'
                 break;
 
-            // TIMELIVES
+            // TIMELIVES (score is killcount + numLives * scorecount)
             case 4:
-                text = 'Survive While Aliens Attack!!!'
+                text = 'Survive Until Time Runs Out!!!'
                 break;
 
             // UNKNOWN
@@ -56,7 +56,7 @@ export default class Objective extends Phaser.GameObjects.GameObject {
             text,
             constants.MenuButtonStyle()
         );
-        this.objText.setWordWrapWidth(constants.Width * 0.3)
+        this.objText.setWordWrapWidth(constants.Width * 0.35)
         this.objText.setOrigin(0, 0.5);
         this.objText.setDepth(11);
     }
