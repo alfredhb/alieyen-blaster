@@ -41,20 +41,20 @@
         // All sounds to be loaded
         // TODO add TTS sounds here for 'players' , '1 player' , '2 player', 'start'
         this.menuSounds = {
-            bubbaTTS: this.sound.add('bubba', { loop: false }),
-            friendTTS: this.sound.add('friend', { loop: false }),
-            leahTTS: this.sound.add('leah', { loop: false }),
-            menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
-            allPlayerSelTTS: this.sound.add('players-selected', { loop: false }),
-            playersTTS: this.sound.add('players', { loop: false }),
-            onePlayerTTS: this.sound.add('1-player', { loop: false }),
-            twoPlayerTTS: this.sound.add('2-player', { loop: false }),
-            readyTTS: this.sound.add('ready-to-play', { loop: false }),
-            startTTS: this.sound.add('start', { loop: false }),
-            selTTS: this.sound.add('selected', { loop: false }),
-            selAlreadyTTS: this.sound.add('selected-already', { loop: false }),
-            whop1TTS: this.sound.add('who-p1', { loop: false }),
-            whop2TTS: this.sound.add('who-p2', { loop: false }),
+            bubbaTTS: this.sound.get('bubba'),
+            friendTTS: this.sound.get('friend'),
+            leahTTS: this.sound.get('leah'),
+            menuClick: this.sound.get('menu-click'),
+            allPlayerSelTTS: this.sound.get('players-selected'),
+            playersTTS: this.sound.get('players'),
+            onePlayerTTS: this.sound.get('1-player'),
+            twoPlayerTTS: this.sound.get('2-player'),
+            readyTTS: this.sound.get('ready-to-play'),
+            startTTS: this.sound.get('start'),
+            selTTS: this.sound.get('selected'),
+            selAlreadyTTS: this.sound.get('selected-already'),
+            whop1TTS: this.sound.get('who-p1'),
+            whop2TTS: this.sound.get('who-p2'),
         }
     }
 
