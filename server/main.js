@@ -96,5 +96,60 @@ Meteor.methods({
     }
 
     return l;
+  },
+
+  /**
+   * Fetches all possible slots which have save data
+   * @returns {object[]}
+   */
+  getSaveData() {
+    let saveslots = ["slot1", "slot2", "slot3", "slot4"];
+    let res = []
+    for (let slot of saveslots) {
+      var s = SaveData.findOne(slot, { "fields": { _id: 1, levels: 1, difficulty: 1 } });
+      if (s == null) continue;
+
+      res.push(s);
+    }
+
+    return res;
+  },
+
+  /**
+   * Creates a new entry with _id slot{{id+1}} with all levels false and diff easy
+   * TODO update as we create more levels
+   * @param {number} id 
+   * @returns {object} the save obj
+   */
+  setSaveData(id) {
+    let save = {
+      _id: "slot" + String(id + 1),
+      difficulty: 1,
+      levels: [
+        {
+          name: "1 - 1",
+          complete: false,
+        },
+        {
+          name: "1 - 2",
+          complete: false,
+        },
+        {
+          name: "1 - 3",
+          complete: false,
+        },
+        {
+          name: "1 - 4",
+          complete: false,
+        },
+        {
+          name: "1 - 5",
+          complete: false,
+        },
+      ]
+    };
+    SaveData.insert(save);
+
+    return save;
   }
 });

@@ -50,13 +50,14 @@ export default class Constants {
     /**
      * title text style for menus
      * Calculates fontsize based on screenheight
+     * @param {string?} color hexcode of color to set text to. Default is white
      * @returns {Phaser.Types.GameObjects.Text.TextStyle} menu title text style
      */
-    MenuTitleStyle = () => {
+    MenuTitleStyle = (color) => {
         return {
             fontFamily: 'impact-custom',
             fontSize: (this.Height * 0.085) + "px",
-            color: "#FFF",
+            color: (color) ? color : "#FFF",
         }
     }
 
