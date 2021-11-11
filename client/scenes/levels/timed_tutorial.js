@@ -42,7 +42,26 @@ export default class TimedTutorialScene extends Phaser.Scene {
 
     /**
      * Capture any scene data held in data for later scenes
-     * @param {*} data 
+     * @param {{
+     * meta: {
+     *  playerCount: number, 
+     *  difficulty: number, 
+     *  players: string[], 
+     *  levelName: string
+     * }, 
+     * level: {any}?,
+     *  scene: { 
+     *      prevScene: { 
+     *          name: string, 
+     *          type: string
+     *      }, 
+     *      nextScene: { 
+     *          name: string, 
+     *          type: string
+     *      }
+     *  },
+     *  levels: any,
+     * }} data
      */
     init(data) {
         this.levelData = data;
@@ -149,14 +168,48 @@ export default class TimedTutorialScene extends Phaser.Scene {
             this.section1Timer.paused = false;
         });
 
-        // transition to next scene whatever it may be
+        // transition to next scene whatever it may be if last player is current player
         this.constants.HoverClick(this, noB, () => {
             this.sound.play('menu-click');
 
-            // real scene data stored in name
-            this.scene.start(
-                this.levelData.name, this.levelData
-            )
+            if (this.levelData.meta.playerCount == 2 && this.levelData.meta.currentPlayer == 0) {
+                // go to ready scene which runs back to tutorial
+                this.scene.start(
+                    'storyReadyScene',
+                    {
+                        meta: {
+                            difficulty: this.levelData.meta.difficulty,
+                            players: this.levelData.meta.players,
+                            currentPlayer: 1,
+                            playerCount: this.levelData.meta.playerCount,
+                            levelName: 'timedTutorialScene'
+                        },
+                        level: {
+                            difficulty_multiplier: [1, 1.5, 2],
+                            powerup_spawnrate: 500,
+                            aliens: {
+                                grunt: {
+                                    score: 10,
+                                },
+                                mini_boss: {
+                                    score: 10,
+                                },
+                                boss: {
+                                    score: 10,
+                                },
+                            }
+                        },
+                        scene: this.levelData.scene,
+                        levels: this.levelData.levels,
+                        name: 'worldSelectMenu'
+                    }
+                );
+            } else {
+                // real scene data stored in name
+                this.scene.start(
+                    this.levelData.name, this.levelData
+                )
+            }
         });
 
     }
@@ -329,7 +382,7 @@ export default class TimedTutorialScene extends Phaser.Scene {
 
         // create fake quitbutton
         const fakeQuit = this.add.image(width * 0.95, height * 0.93, '__WHITE');
-        fakeQuit.setDisplaySize(width * 0.05, width * 0.05);
+        fakeQuit.setDisplaySize(width * 0.075, width * 0.075);
         fakeQuit.setDepth(25);
         const text = this.add.text(fakeQuit.x, fakeQuit.y, 'X', {
             color: "#FF0000",
@@ -546,6 +599,7 @@ export default class TimedTutorialScene extends Phaser.Scene {
 
     }
 
+    // TODO: add case to respawn powerup if it goes offscreen lol
     /**
      * introduce powerups
      */
