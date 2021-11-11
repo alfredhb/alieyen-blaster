@@ -16,18 +16,23 @@ export default class DifficultyDisplay extends Phaser.GameObjects.GameObject {
 
         if (scene.difficulty == null) return; // don't place anything
         
+        this.diffBg = scene.add.image(
+            constants.Width * 0.825,
+            constants.Height * 0.07,
+            '__WHITE'
+        ).setOrigin(0.5).setDisplaySize(constants.Width * 0.15, constants.Height * 0.075);
         this.diffText = scene.add.text(
-            constants.Width * 0.9,
+            constants.Width * 0.825,
             constants.Height * 0.07,
             (scene.difficulty == 1) ? "EASY" : (scene.difficulty == 2) ? 
                 "MEDIUM" : "HARD",
             {
                 fontFamily: "impact-custom",
                 fontSize: (constants.Height * 0.055) + "px",
-                color: "#00FF00",
+                color: "#0000FF",
                 align: "right"
             }
-        ).setOrigin(1, 0.5);
+        ).setOrigin(0.5);
 
         scene.add.existing(this);
     }
