@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Constants from '../../lib/constants';
 import QuitButton from '../../gameobjects/quit_button';
+import DifficultyDisplay from '../../gameobjects/difficulty_display';
 
 export default class MenuScene3 extends Phaser.Scene {
     constructor() {
@@ -98,10 +99,13 @@ export default class MenuScene3 extends Phaser.Scene {
         // Difficulty Settings Button
         const difButton = this.add.image(width * 0.95, height * 0.07, '__WHITE');
         const difIcon = this.add.image(width * 0.95, height * 0.07, 'difficulty-button');
-        difButton.setDisplaySize(width * 0.05, width * 0.05);
+        difButton.setDisplaySize(width * 0.075, width * 0.075);
         difButton.setOrigin(0.5);
-        difIcon.setDisplaySize(width * 0.04, width * 0.04);
+        difIcon.setDisplaySize(width * 0.055, width * 0.055);
         difIcon.setOrigin(0.5);
+
+        // add difficulty overlay
+        this.diffText = new DifficultyDisplay(this, this.constants);
 
         // Add listener
         difButton.setInteractive();

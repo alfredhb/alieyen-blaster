@@ -15,7 +15,7 @@ export default class QuitButton extends Phaser.GameObjects.Group {
         this.constants = new Constants(width, height);
 
         const button = scene.add.image(width * 0.95, height * 0.93, '__WHITE');
-        button.setDisplaySize(width * 0.05, width * 0.05);
+        button.setDisplaySize(width * 0.075, width * 0.075);
         button.setDepth(25);
         const text = scene.add.text(button.x, button.y, 'X', {
             color: "#FF0000",

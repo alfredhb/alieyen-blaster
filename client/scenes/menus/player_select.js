@@ -41,20 +41,20 @@
         // All sounds to be loaded
         // TODO add TTS sounds here for 'players' , '1 player' , '2 player', 'start'
         this.menuSounds = {
-            bubbaTTS: this.sound.add('bubba', { loop: false }),
-            friendTTS: this.sound.add('friend', { loop: false }),
-            leahTTS: this.sound.add('leah', { loop: false }),
-            menuClick: this.sound.add('menu-click', { loop: false, volume: .5}),
-            allPlayerSelTTS: this.sound.add('players-selected', { loop: false }),
-            playersTTS: this.sound.add('players', { loop: false }),
-            onePlayerTTS: this.sound.add('1-player', { loop: false }),
-            twoPlayerTTS: this.sound.add('2-player', { loop: false }),
-            readyTTS: this.sound.add('ready-to-play', { loop: false }),
-            startTTS: this.sound.add('start', { loop: false }),
-            selTTS: this.sound.add('selected', { loop: false }),
-            selAlreadyTTS: this.sound.add('selected-already', { loop: false }),
-            whop1TTS: this.sound.add('who-p1', { loop: false }),
-            whop2TTS: this.sound.add('who-p2', { loop: false }),
+            bubbaTTS: this.sound.get('bubba'),
+            friendTTS: this.sound.get('friend'),
+            leahTTS: this.sound.get('leah'),
+            menuClick: this.sound.get('menu-click'),
+            allPlayerSelTTS: this.sound.get('players-selected'),
+            playersTTS: this.sound.get('players'),
+            onePlayerTTS: this.sound.get('1-player'),
+            twoPlayerTTS: this.sound.get('2-player'),
+            readyTTS: this.sound.get('ready-to-play'),
+            startTTS: this.sound.get('start'),
+            selTTS: this.sound.get('selected'),
+            selAlreadyTTS: this.sound.get('selected-already'),
+            whop1TTS: this.sound.get('who-p1'),
+            whop2TTS: this.sound.get('who-p2'),
         }
     }
 
@@ -96,15 +96,6 @@
     }
 
     /**
-     * TODO PERSON SELECTION
-     * 
-     * adjust turret controls based on players
-     * 
-     * Distinct colors: Bubba: Green, Leah: Pink, Friend: Blue
-     */
-
-
-    /**
      * Creates all person section components behind the centerbox to be revealed
      * when a number of players is selected.
      * @param {number} width 
@@ -112,20 +103,20 @@
      */
     initPersonSection(width, height) {
         // Person Title
-        this.p1Text = this.add.text(width * 0.5, height * 0.475, 'WHO IS PLAYER 1?', this.constants.MenuTitleStyle());
-        this.p2Text = this.add.text(width * 0.5, height * 0.475, 'WHO IS PLAYER 2?', this.constants.MenuTitleStyle());
-        this.readyText = this.add.text(width * 0.5, height * 0.475, 'READY TO PLAY', this.constants.MenuTitleStyle());
+        this.p1Text = this.add.text(width * 0.5, height * 0.465, 'WHO IS PLAYER 1?', this.constants.MenuTitleStyle());
+        this.p2Text = this.add.text(width * 0.5, height * 0.465, 'WHO IS PLAYER 2?', this.constants.MenuTitleStyle());
+        this.readyText = this.add.text(width * 0.5, height * 0.465, 'READY TO PLAY', this.constants.MenuTitleStyle());
         this.p1Text.setOrigin(0.5);
         this.p2Text.setOrigin(0.5);
         this.readyText.setOrigin(0.5);
 
         // Person Buttons
-        const bubbaButton = this.add.image(width * 0.325, height * 0.6, '__WHITE');
+        const bubbaButton = this.add.image(width * 0.275, height * 0.6, '__WHITE');
         const leahButton = this.add.image(width * 0.5, height * 0.6, '__WHITE');
-        const friendButton = this.add.image(width * 0.675, height * 0.6, '__WHITE');
-        const bubbaText = this.add.text(width * 0.325, height * 0.6, 'Bubba', this.constants.MenuButtonStyle());
+        const friendButton = this.add.image(width * 0.725, height * 0.6, '__WHITE');
+        const bubbaText = this.add.text(width * 0.275, height * 0.6, 'Bubba', this.constants.MenuButtonStyle());
         const leahText = this.add.text(width * 0.5, height * 0.6, 'Leah', this.constants.MenuButtonStyle());
-        const friendText = this.add.text(width * 0.675, height * 0.6, 'Friend', this.constants.MenuButtonStyle());
+        const friendText = this.add.text(width * 0.725, height * 0.6, 'Friend', this.constants.MenuButtonStyle());
         bubbaButton.setName(this.constants.Green);
         bubbaText.setName("bubba");
         leahButton.setName(this.constants.Pink);
@@ -167,7 +158,7 @@
     personButtonInteraction(width, height) { 
         this.personButtons.forEach(b => {
             // Style buttons
-            b.button.setDisplaySize(width * .15, height * 0.08);
+            b.button.setDisplaySize(width * .2, height * 0.125);
             b.button.setOrigin(0.5);
             b.button.setTint(this.constants.Gray);
             b.text.setOrigin(0.5);
@@ -241,11 +232,11 @@
      */
     centerBox(width, height) {
         this.centerOutline = this.add.image(width * 0.5, height * 0.5, '__WHITE');
-        this.centerOutline.setDisplaySize(width * 0.6505, height * 0.5505);
+        this.centerOutline.setDisplaySize(width * 0.7505, height * 0.5505);
         this.centerOutline.setOrigin(0.5);
 
         this.center = this.add.image(width * 0.5, height * 0.5, '__WHITE');
-        this.center.setDisplaySize(width * 0.65, height * 0.55);
+        this.center.setDisplaySize(width * 0.75, height * 0.55);
         this.center.setTint(0x000000);
         this.center.setOrigin(0.5);
     }
@@ -256,7 +247,7 @@
      * @param {number} height
      */
     initTitle(width, height) {
-        this.playerText = this.add.text(width * 0.5, height * 0.325, 'PLAYERS', this.constants.MenuTitleStyle());
+        this.playerText = this.add.text(width * 0.5, height * 0.315, 'PLAYERS', this.constants.MenuTitleStyle());
         this.playerText.setOrigin(0.5);
 
         // interactives
@@ -276,8 +267,8 @@
      */
     promptPersonSelection(width, height) {
         // Expand center section
-        this.centerOutline.setDisplaySize(width * 0.6505, height * 0.8505);
-        this.center.setDisplaySize(width * 0.65, height * 0.85);
+        this.centerOutline.setDisplaySize(width * 0.6705, height * 0.8505);
+        this.center.setDisplaySize(width * 0.75, height * 0.85);
 
         // Move up player text
         this.playerText.setPosition(this.playerText.x, height * 0.175);
@@ -313,10 +304,10 @@
      * @param {number} height
      */
     initPlayerSection(width, height) {
-        const onePlayerButton = this.add.image(width * 0.375, height * 0.45, '__WHITE');
-        const twoPlayerButton = this.add.image(width * 0.625, height * 0.45, '__WHITE');
-        const onePlayerText = this.add.text(width * 0.375, height * 0.45, '1 PLAYER', this.constants.MenuButtonStyle());
-        const twoPlayerText = this.add.text(width * 0.625, height * 0.45, '2 PLAYER', this.constants.MenuButtonStyle());
+        const onePlayerButton = this.add.image(width * 0.325, height * 0.45, '__WHITE');
+        const twoPlayerButton = this.add.image(width * 0.675, height * 0.45, '__WHITE');
+        const onePlayerText = this.add.text(width * 0.325, height * 0.45, '1 PLAYER', this.constants.MenuButtonStyle());
+        const twoPlayerText = this.add.text(width * 0.675, height * 0.45, '2 PLAYER', this.constants.MenuButtonStyle());
         onePlayerText.setName('1');
         twoPlayerText.setName('2');
 
@@ -335,7 +326,7 @@
     playerSectionInteraction(width, height) {
         this.playerButtons.forEach(b => {
             // Style buttons
-            b.button.setDisplaySize(width * .2, height * 0.08);
+            b.button.setDisplaySize(width * .3, height * 0.125);
             b.button.setOrigin(0.5);
             b.button.setTint(this.constants.Gray);
             b.text.setOrigin(0.5);
@@ -381,7 +372,7 @@
      */
     initStartSection(width, height) {
         this.startButton = this.add.image(width * 0.5, height * 0.65, '__WHITE');
-        this.startButton.setDisplaySize(width * 0.375, height * 0.12);
+        this.startButton.setDisplaySize(width * 0.4, height * 0.175);
         this.startButton.setTint(this.constants.Gray);
         this.startButton.setOrigin(0.5);
         this.startText = this.add.text(
