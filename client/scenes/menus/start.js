@@ -104,7 +104,7 @@ export default class MenuScene4 extends Phaser.Scene {
         };
 
         // Quit Button
-        const qButton = this.add.image(width * 0.95, height * 0.93, '__WHITE').setDisplaySize(width * 0.05, width * 0.05);
+        const qButton = this.add.image(width * 0.95, height * 0.93, '__WHITE').setDisplaySize(width * 0.075, width * 0.075);
         const qText = this.add.text(qButton.x, qButton.y, 'X', {
             color: "#FF0000",
             fontSize: (height * 0.085) + "px",
