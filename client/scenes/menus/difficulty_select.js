@@ -30,6 +30,13 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
 
             this.difficulty = res;
             console.log("fetched difficulty as " + this.difficulty);
+
+            // highlight the correct button
+            this.buttons.forEach(b => {
+                if (this.difficulty == Number(b.text.name)) {
+                    b.button.setTint(this.constants.Blue);
+                }
+            })
         })
         
         if (this.timer) {
@@ -99,11 +106,11 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
 
     centerBox(width, height) {
         const centerOutline = this.add.image(width * 0.5, height * 0.5, '__WHITE');
-        centerOutline.setDisplaySize(width * 0.6505, height * 0.5505);
+        centerOutline.setDisplaySize(width * 0.7505, height * 0.5505);
         centerOutline.setOrigin(0.5);
 
         const center = this.add.image(width * 0.5, height * 0.5, '__WHITE');
-        center.setDisplaySize(width * 0.65, height * 0.55);
+        center.setDisplaySize(width * 0.75, height * 0.55);
         center.setTint(0x000000);
         center.setOrigin(0.5);
     }
@@ -114,7 +121,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
      * @param {number} height 
      */
     initTitle(width, height) {
-        const difficultyText = this.add.text(width * 0.5, height * 0.325, 'DIFFICULTY', this.constants.MenuTitleStyle());
+        const difficultyText = this.add.text(width * 0.5, height * 0.315, 'DIFFICULTY', this.constants.MenuTitleStyle());
         difficultyText.setOrigin(0.5);
 
         // interactives
@@ -128,34 +135,28 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
     }
 
     difficultySection(width, height) {
-        const difficultyText = this.add.text(width * 0.5, height * 0.325, 'DIFFICULTY', this.constants.MenuTitleStyle());
-        difficultyText.setOrigin(0.5);
 
-        const easyButton = this.add.image(width * 0.325, height * .45, '__WHITE');
+        const easyButton = this.add.image(width * 0.275, height * .45, '__WHITE');
         const mediumButton = this.add.image(width * 0.5, height * .45, '__WHITE');
-        const hardButton = this.add.image(width * 0.675, height * .45, '__WHITE');
-        const easyText = this.add.text(width * 0.325, height * 0.45, 'EASY', this.constants.MenuButtonStyle());
+        const hardButton = this.add.image(width * 0.725, height * .45, '__WHITE');
+        const easyText = this.add.text(width * 0.275, height * 0.45, 'EASY', this.constants.MenuButtonStyle());
         const mediumText = this.add.text(width * 0.5, height * 0.45, 'MEDIUM', this.constants.MenuButtonStyle());
-        const hardText = this.add.text(width * 0.675, height * 0.45, 'HARD', this.constants.MenuButtonStyle());
+        const hardText = this.add.text(width * 0.725, height * 0.45, 'HARD', this.constants.MenuButtonStyle());
         easyText.setName('1');
         mediumText.setName('2');
         hardText.setName('3');
         
-        let buttons = [
+        this.buttons = [
             {button: easyButton, text: easyText, sound: this.menuSounds.easyTTS},
             {button: mediumButton, text: mediumText, sound: this.menuSounds.mediumTTS},
             {button: hardButton, text: hardText, sound: this.menuSounds.hardTTS},
         ];
-        buttons.forEach(b => {
+        this.buttons.forEach(b => {
             // Style Button
-            b.button.setDisplaySize(width * 0.15, height * 0.08);
+            b.button.setDisplaySize(width * 0.2, height * 0.125);
             b.button.setOrigin(0.5);
             b.button.setTint(this.constants.Gray);
             b.text.setOrigin(0.5);
-
-            if (this.difficulty == Number(b.text.name)) {
-                b.button.setTint(this.constants.Blue);
-            }
 
             // Make Interactive
             b.button.setInteractive();
@@ -181,7 +182,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
             this.constants.HoverClick(this, b.button, () => {
                 // Set difficulty & show on button (clear old tints and set new)
                 this.difficulty = Number(b.text.name);
-                buttons.forEach(b => b.button.setTint(this.constants.Gray));
+                this.buttons.forEach(b => b.button.setTint(this.constants.Gray));
                 b.button.setTint(this.constants.Blue);
 
                 this.menuSounds.menuClick.play();
@@ -192,7 +193,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
 
     startSection(width, height) {
         this.startButton = this.add.image(width * 0.5, height * 0.65, '__WHITE');
-        this.startButton.setDisplaySize(width * 0.375, height * 0.12);
+        this.startButton.setDisplaySize(width * 0.4, height * 0.175);
         this.startButton.setTint(this.constants.Gray);
         this.startButton.setOrigin(0.5);
         const startText = this.add.text(width * 0.5, height * 0.65, 'START', this.constants.MenuButtonStyle());
