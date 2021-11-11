@@ -26,7 +26,7 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
         for (let i = 0; i < this.numLives; i++) {
             let life = this.scene.add.sprite(
                 bg.x + constants.Width * 0.005 - bg.displayWidth / 2 + (i) * constants.Width * 0.1,
-                constants.Height * 0.9, 
+                constants.Height * 0.9,
                 'full-heart');
             life.setDisplaySize(constants.Width * 0.09, constants.Width * 0.09);
             life.setOrigin(0, 0.5);
@@ -58,8 +58,7 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
 
                     this.addLife(i);
                 }
-                this.numLives += health;
-                this.numLives = (this.numLives > lives) ? lives : this.numLives;
+                this.numLives = (this.numLives + health > lives) ? lives : this.numLives + health;
             }
         });
 
@@ -69,7 +68,7 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
 
     /**
      * shows the life at index i TODO: add an animation
-     * @param {number} i 
+     * @param {number} i
      */
     addLife(i) {
         if (this.lives[i].depth > 0) return;
@@ -83,7 +82,7 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
 
     /**
      * plays the heartbreak animation for the i'th life and hides it
-     * @param {number} i 
+     * @param {number} i
      */
     removeLife(i) {
         if (this.lives[i].depth < 0) return;

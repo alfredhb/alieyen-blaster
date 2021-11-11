@@ -144,23 +144,23 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
      */
     fire(aliens, collisionFunc) {
         this.turrets.forEach(t => {
-            // Add cooldown timer
-            t.cooldownTimer = this.scene.time.addEvent({
-                delay: t.cooldownTime,
-                callback: () => {
-                    t.inCooldown = false;
-                },
-                callbackScope: this.scene,
-                paused: true
-            });
-
             // Rotate turret and fire only if within angle
             let angle = Phaser.Math.Angle.Between(
                     t.turret.x, t.turret.y,
                     this.scene.input.activePointer.x,
                     this.scene.input.activePointer.y
                 ) + Math.PI / 2;
-            if (!(Math.abs(angle) > 1.5)) {
+            if (Math.abs(angle) <= 1.5) {
+                // Add cooldown timer
+                t.cooldownTimer = this.scene.time.addEvent({
+                    delay: t.cooldownTime,
+                    callback: () => {
+                        t.inCooldown = false;
+                    },
+                    callbackScope: this.scene,
+                    paused: true
+                });
+
                 // place turret in cooldown
                 t.inCooldown = true;
                 t.cooldownTimer.paused = false;
