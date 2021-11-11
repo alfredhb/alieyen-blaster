@@ -226,7 +226,21 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
             // TIMELIVES
             case 4:
-                console.log("TIMELIVES mode unimplemented");
+                // add score, lives, timer, add numlives at end to score
+                this.levelLives = new LevelLives(this, this.constants, this.levelData.level.win_cond.lives);
+                this.levelTimer = new LevelTimer(this, this.constants, this.levelData.level.win_cond.time);
+                this.levelScore = new ScoreObject(this, this.constants);
+
+                if (!this.events.listenerCount('leveltimerover')) {
+                    this.events.addListener('leveltimerover', () => {
+                        this.endLevel();
+                    });
+                }
+                if (!this.events.listenerCount('levelliveszero')) {
+                    this.events.addListener('levelliveszero', () => {
+                        this.endLevel();
+                    });
+                }
                 break;
 
             // UNKNOWN
@@ -556,8 +570,10 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
             // TIMELIVES
             case 4:
-                console.log("TIMELIVES mode unimplemented");
-                return false; // check lives count to be nonzero && timer is out
+                this.calculateScore(4);
+                if (this.levelLives.numLives > 0) return true; // timer ended and lives nonzero
+
+                return false; // lives out or timer ended and lives were out
 
             // UNKNOWN
             default:
@@ -617,11 +633,17 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
     /**
      * Calculates level score based on kills and appends it to the correct score
-     * value of this.leveldata.level.score# based on current player
+     * value of this.leveldata.level.score# based on current player. If objective
+     * would count num lives in score (3, 4) then append the score val as .liveScore#
+     * @param {number} objective
      */
-    calculateScore() {
+    calculateScore(objective) {
         this.levelData.level['score' + (this.levelData.meta.currentPlayer + 1)] = this.levelScore.calculateScore();
-        console.log(this.levelData.level);
+
+        if (objective == 3 || objective == 4) {
+            this.levelData.level['liveScore' + (this.levelData.meta.currentPlayer + 1)] = 
+                this.levelLives.numLives; // score mult determined elsewhere
+        }
         return;
     }
 
@@ -680,7 +702,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         this.aliens.forEach(aGroup => {
             try {
                 aGroup.getChildren().forEach(a => a.leave());
-                aGroup.destroy(false, true);
+                // aGroup.destroy(false, true);
             } catch (e) {
                 console.log(e);
             }

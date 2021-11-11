@@ -70,12 +70,12 @@ Meteor.methods({
    * If lower than score, then updates the DB entry with score and player. Finally
    * returns the highscore object
    * @param {'arcade' | 'story'} gamemode 
-   * @param {string} level 
+   * @param {string} levelId 
    * @param {{player: string, score: number}} scoreObj 
    * @returns {{player: string, score: number}}
    */
-  getHighScore(gamemode, level, scoreObj) {
-    var id = (gamemode + "-" + level + "-highscore");
+  getHighScore(levelId, scoreObj) {
+    var id = (levelId + "-highscore");
     var h = SaveData.findOne(id, { "fields": { player: 1, value: 1 } });
     if (h && h.value >= scoreObj.score) {
       return {player: h.player, score: h.value};

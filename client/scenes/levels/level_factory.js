@@ -64,6 +64,10 @@ export default class LevelFactory extends Phaser.Scene {
             if (data?.level?.hasOwnProperty("score" + (this.currentPlayer))) {
                 res.level["score" + (this.currentPlayer)] = data.level["score" + (this.currentPlayer)]; 
             }
+            // if data.level has previous liveScore, save it
+            if (data?.level?.hasOwnProperty("liveScore" + (this.currentPlayer))) {
+                res.level["liveScore" + (this.currentPlayer)] = data.level["liveScore" + (this.currentPlayer)];
+            }
 
             // Go to cutscene first
             if (res.scene.cutscene?.open) {
