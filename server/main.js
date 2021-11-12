@@ -31,9 +31,18 @@ Meteor.methods({
   },
 
   /**
-   * Reads global difficulty var from /public/game/difficulty.number
+   * Reads global difficulty var from /public/game/difficulty.number or if story,
+   * then from slotId
+   * @param {boolean?} story 
+   * @param {number} id 
    */
-  getDifficulty() {
+  getDifficulty(story, id) {
+    if (story) {
+      var d = SaveData.findOne(("slot" + String(id + 1)), { fields: {difficulty: 1 } });
+
+      return d.difficulty;
+    }
+
     var d = MetaData.findOne("difficulty", { "fields": { value: 1 } });
     if (d) {
       return d.value
@@ -51,17 +60,25 @@ Meteor.methods({
 
   /**
    * Checks that difficulty.number isn't already d, then sets it
-   * @param {number} difficulty 
+   * @param {number} d 
+   * @param {boolean?} story 
+   * @param {number} id 
    * @returns {boolean} whether difficulty was changes
    */
-  setDifficulty(difficulty) {
+  setDifficulty(d, story, id) {
+    if (story) {
+      SaveData.update(("slot" + String(id + 1)), { $set: { difficulty: d } });
+
+      return true;
+    }
+
     var d = MetaData.findOne("difficulty", { "fields": { value: 1 } });
 
-    if (d.value == difficulty) {
+    if (d.value == d) {
       return false
     } 
 
-    MetaData.update("difficulty", { $set: { "value" : difficulty } });
+    MetaData.update("difficulty", { $set: { "value" : d } });
     return true;
   },
 
@@ -151,5 +168,23 @@ Meteor.methods({
     SaveData.insert(save);
 
     return save;
+  },
+
+  /**
+   * sets the completion of level to true for slot at id
+   * @param {number} id 
+   * @param {string} level format world#level#
+   * @returns {object} the save obj
+   */
+  saveLevelData(id, level) {
+    var levelEntry = String(level[5] + ' - ' + level[11]);
+
+    SaveData.update(
+      {_id: ("slot" + String(id + 1)), "levels.$.name": levelEntry},
+      { $set: { "levels.$.complete": true } }
+    );
+    var s = SaveData.findOne(("slot" + String(id + 1)));
+
+    return s;
   }
 });
