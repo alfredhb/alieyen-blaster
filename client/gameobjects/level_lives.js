@@ -15,11 +15,18 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
         super(scene);
 
         this.numLives = lives;
+        this.shielded = false;
 
         // Create Hud spot
         const bg = scene.add.image(constants.Width * 0.5, constants.Height * 0.9, '__WHITE');
         bg.setDisplaySize(constants.Width * 0.1 * lives, constants.Height * 0.15);
         bg.setDepth(11).setOrigin(0.5);
+
+        // Create shield cover
+        this.shieldCover = scene.add.image(constants.Width * 0.5, constants.Height * 0.9, 'shield-placed');
+        this.shieldCover.setDisplaySize(constants.Width * 0.1 * lives, constants.Height * 0.15);
+        this.shieldCover.setDepth(12).setOrigin(0.5);
+        this.shieldCover.setVisible(false);
 
         // Create lives icons for each life
         this.lives = [];
@@ -39,6 +46,7 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
          * add hit listener
          */
         scene.events.on('playerhit', (damage) => {
+            if (this.shielded) return;
             this.numLives -= damage;
 
             // remove lives
@@ -96,6 +104,32 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
                 this.scene.events.emit('levelliveszero');
             }
         });
+    }
+
+    /**
+     * Called when scene receives 'shieldplayer' event. This shields the player from taking damage
+     * If the timer is already active when another powerup is received, then appends the duration
+     * of the timer
+     * @param {number} duration time in ms
+     */
+     shieldLives(duration) {
+        if (this.shieldTimer && this.shieldTimer.getProgress() < 1) {
+            this.shieldTimer.delay += duration;
+            return;
+        }
+
+        // Create speedupTimer with duration and toggle cooldown time
+        this.shieldTimer = this.scene.time.addEvent({
+            delay: duration,
+            callback: () => {
+                this.shielded = false;
+                this.shieldCover.setVisible(false);
+            },
+            callbackScope: this,
+            paused: false
+        });
+        this.shielded = true;
+        this.shieldCover.setVisible(true);
     }
 
     destroy() {
