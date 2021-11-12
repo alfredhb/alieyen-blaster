@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import Phaser from 'phaser';
+import HelpButton from '../../gameobjects/help_button';
 import Constants from '../../lib/constants';
 
 export default class MenuScene4 extends Phaser.Scene {
@@ -47,10 +48,14 @@ export default class MenuScene4 extends Phaser.Scene {
         // Background
         this.add.image(width * 0.5, height * 0.5, 'space-bg').setDisplaySize(width, height);
 
+        // Title
         this.initTitle(width, height);
 
         // Buttons
         this.initButtons(width, height);
+
+        // Add help button
+        this.help = new HelpButton(this);
     }
 
     /**

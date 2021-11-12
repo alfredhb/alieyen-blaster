@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Constants from '../../lib/constants';
 import QuitButton from '../../gameobjects/quit_button';
+import HelpButton from '../../gameobjects/help_button';
 import DifficultyDisplay from '../../gameobjects/difficulty_display';
 
 export default class WorldSelect extends Phaser.Scene {
@@ -72,7 +73,10 @@ export default class WorldSelect extends Phaser.Scene {
                     difficulty: this.difficulty,
                 }
             }
-        })
+        });
+
+        // Add help button
+        this.help = new HelpButton(this);
     }
 
     /**

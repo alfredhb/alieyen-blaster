@@ -50,6 +50,6 @@ export default class QuitButton extends Phaser.GameObjects.Group {
             if (config.execFunc) { config.execFunc(); }
             scene.scene.start(config.backMenu, config.data);
             return;
-        })
+        });
     }
 }

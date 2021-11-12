@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Constants from "../../lib/constants";
 import QuitButton from "../../gameobjects/quit_button";
+import HelpButton from '../../gameobjects/help_button';
 import Turrets from "../../gameobjects/turret";
 import LevelTimer from "../../gameobjects/level_timer";
 import ScoreObject from "../../gameobjects/scoreObject";
@@ -97,6 +98,9 @@ export default class TimedTutorialScene extends Phaser.Scene {
             loop: false,
             paused: true
         });
+
+        // Add help button
+        this.help = new HelpButton(this);
     }
 
     /**

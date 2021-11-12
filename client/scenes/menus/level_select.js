@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Constants from '../../lib/constants';
 import QuitButton from '../../gameobjects/quit_button';
+import HelpButton from '../../gameobjects/help_button';
 import DifficultyDisplay from '../../gameobjects/difficulty_display';
 
 export default class LevelSelect extends Phaser.Scene {
@@ -77,7 +78,10 @@ export default class LevelSelect extends Phaser.Scene {
         const quit = new QuitButton(this, {
             backMenu: 'worldSelectMenu',
             data: this.levelData
-        })
+        });
+
+        // Add help button
+        this.help = new HelpButton(this);
     }
 
     /**

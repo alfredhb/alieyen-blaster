@@ -5,6 +5,7 @@ import { Meteor } from 'meteor/meteor';
 import Phaser from "phaser";
 import Constants from "../../lib/constants";
 import QuitButton from "../../gameobjects/quit_button";
+import HelpButton from '../../gameobjects/help_button';
 
 export default class MenuScene9 extends Phaser.Scene {constructor() {
         super('difficultySelectMenu');
@@ -99,6 +100,9 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
             data: this.levelData,
             execFunc: this.persistDifficulty
         });
+
+        // Add help button
+        this.help = new HelpButton(this);
     }
 
     centerBox(width, height) {
