@@ -82,11 +82,11 @@ export default class ArcadeReadyScene extends Phaser.Scene {
      */
     centerBox(width, height) {
         const centerOutline = this.add.image(width * 0.5, height * 0.5, '__WHITE');
-        centerOutline.setDisplaySize(width * 0.6505, height * 0.505);
+        centerOutline.setDisplaySize(width * 0.7505, height * 0.505);
         centerOutline.setOrigin(0.5);
 
         const center = this.add.image(width * 0.5, height * 0.5, '__WHITE');
-        center.setDisplaySize(width * 0.65, height * 0.5);
+        center.setDisplaySize(width * 0.75, height * 0.5);
         center.setTint(0x000000);
         center.setOrigin(0.5);
     }
@@ -146,10 +146,10 @@ export default class ArcadeReadyScene extends Phaser.Scene {
      * @param {number} height
      */
     navigationSection(width, height) {
-        const playButton = this.add.image(width * 0.35, height * 0.65, '__WHITE');
-        const arcadeButton = this.add.image(width * 0.65, height * 0.65, '__WHITE');
-        const playText = this.add.text(width * 0.35, height * 0.65, 'PLAY', this.constants.MenuButtonStyle());
-        const arcadeText = this.add.text(width * 0.65, height * 0.65, 'ARCADE', this.constants.MenuButtonStyle());
+        const playButton = this.add.image(width * 0.325, height * 0.65, '__WHITE');
+        const arcadeButton = this.add.image(width * 0.675, height * 0.65, '__WHITE');
+        const playText = this.add.text(width * 0.325, height * 0.65, 'PLAY', this.constants.MenuButtonStyle());
+        const arcadeText = this.add.text(width * 0.675, height * 0.65, 'ARCADE', this.constants.MenuButtonStyle());
         playText.setName(this.levelName);
         arcadeText.setName('arcadeMenu');
 
@@ -159,7 +159,7 @@ export default class ArcadeReadyScene extends Phaser.Scene {
         ];
         buttons.forEach(b => {
             // Style buttons
-            b.button.setDisplaySize(width * .25, height * 0.1);
+            b.button.setDisplaySize(width * .3, height * 0.125);
             b.button.setOrigin(0.5);
             b.button.setTint(this.constants.Gray);
             b.text.setOrigin(0.5);
