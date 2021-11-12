@@ -41,10 +41,6 @@ export default class WorldSelect extends Phaser.Scene {
         this.menuSounds = {
             menuClick: this.sound.get('menu-click'),
             difficultyTTS: this.sound.get('difficulty'),
-            timedTTS: this.sound.get('timed'),
-            endlessTTS: this.sound.get('endless'),
-            livesTTS: this.sound.get('lives'),
-            bossBattleTTS: this.sound.get('boss-battle'),
         }
     }
 
@@ -99,7 +95,6 @@ export default class WorldSelect extends Phaser.Scene {
         })
     }
 
-    // TODO: attach slot difficulty to this menu too
     /**
      * Places a difficulty settings menu in top right which on click, transitions
      * to 'difficultySelectMenu'
@@ -151,6 +146,7 @@ export default class WorldSelect extends Phaser.Scene {
                         type: 'STORY'
                     }
                 },
+                levels: this.levelData.levels
             });
         });
 
@@ -201,6 +197,15 @@ export default class WorldSelect extends Phaser.Scene {
                 b.button.clearTint();
                 b.text.clearTint();
             });
+
+            this.constants.HoverClick(this, b.button, () => {
+                this.levelData.meta["world"] = b.text.name;
+                this.menuSounds.menuClick.play();
+                this.scene.start(
+                    b.button.name,
+                    this.levelData
+                );
+            })
         })
     }
 

@@ -16,7 +16,9 @@ export default class LevelFactory extends Phaser.Scene {
      * meta: {
      *  playerCount: number, 
      *  difficulty: number, 
-     *  players: string[]
+     *  players: string[],
+     *  world: number?,
+     *  currentPlayer: number?
      * }, 
      *  level: any?,
      *  scene: { 
@@ -48,13 +50,15 @@ export default class LevelFactory extends Phaser.Scene {
                 console.log(err);
 
                 this.scene.start(
-                    (data.scene.nextScene.type == 'ARCADE') ? 'arcadeMenu' : 'savefileMenu', 
+                    (data.scene.nextScene.type == 'ARCADE') ? 'arcadeMenu' : 'levelSelectMenu', 
                     {
                         meta: {
                             playerCount: this.playerCount,
                             players: this.players,
                             difficulty: this.difficulty,
-                        }
+                            world: data.meta.world // undefined if type == ARCADE
+                        },
+                        levels: data.levels
                     })
 
                 return;
@@ -101,9 +105,11 @@ export default class LevelFactory extends Phaser.Scene {
                         playerCount: this.playerCount,
                         players: this.players,
                         currentPlayer: this.currentPlayer,
-                        difficulty: this.difficulty
+                        difficulty: this.difficulty,
+                        world: data.meta.world // undefined if type == ARCADE
                     },
                     level: res.level,
+                    levels: data.levels,
                     assets: res.assets,
                     scene: res.scene,
                     name: this.nextScene.name
