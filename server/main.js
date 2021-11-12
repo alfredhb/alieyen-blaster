@@ -180,8 +180,12 @@ Meteor.methods({
     var levelEntry = String(level[5] + ' - ' + level[11]);
 
     SaveData.update(
-      {_id: ("slot" + String(id + 1)), "levels.$.name": levelEntry},
-      { $set: { "levels.$.complete": true } }
+      {_id: ("slot" + String(id + 1))},
+      { $set: { "levels.$[element].complete": true } },
+      {
+        multi: true,
+        arrayFilters: [ { "element.name": { $eq: levelEntry } } ]
+      }
     );
     var s = SaveData.findOne(("slot" + String(id + 1)));
 

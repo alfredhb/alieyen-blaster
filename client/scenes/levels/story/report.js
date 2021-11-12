@@ -70,7 +70,6 @@ export default class StoryReportScene extends Phaser.Scene {
             }
 
             // Initialize highscore report once data is returned.
-            console.log(res);
             this.levelData.levels = res.levels
             
             this.addClick(this.buttons);

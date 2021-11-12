@@ -20,6 +20,8 @@ import TemplateLevelScene from './scenes/levels/template_level';
 import TimedTutorialScene from './scenes/levels/timed_tutorial';
 import WorldSelectMenu from './scenes/menus/world_select';
 import StoryReadyScene from './scenes/levels/story/ready';
+import LevelSelectMenu from './scenes/menus/level_select';
+import StoryReportScene from './scenes/levels/story/report';
 
 // Game Config
 var config = {
@@ -36,7 +38,7 @@ var config = {
     InitialLoad, StartMenu, PlayerSelectMenu, GamemodeMenu, SavefileMenu, 
     ArcadeReportScene, ArcadeMenu, DifficultySelectMenu, TimedArcade, DefaultPage,
     LevelFactory, TemplateLevelScene, ArcadeReadyScene, TimedTutorialScene, WorldSelectMenu,
-    StoryReadyScene
+    StoryReadyScene, LevelSelectMenu, StoryReportScene
   ],
 };
 

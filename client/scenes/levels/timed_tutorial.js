@@ -503,7 +503,6 @@ export default class TimedTutorialScene extends Phaser.Scene {
         }
 
         // create collision func
-        console.log(alien);
         let collisionFunc = () => {
             if (this.kills.grunt > 0) return;
             this.turrets.removeFireListener();
