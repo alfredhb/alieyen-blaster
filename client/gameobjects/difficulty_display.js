@@ -34,6 +34,21 @@ export default class DifficultyDisplay extends Phaser.GameObjects.GameObject {
             }
         ).setOrigin(0.5);
 
+        // set tts interaction
+        let diffSound = scene.sound.get('difficulty');
+        let sound = scene.sound.get((scene.difficulty == 1) ? 'easy' : (scene.difficulty == 2
+                ? 'medium' : 'hard' ));
+
+        this.diffBg.setInteractive();
+        this.diffBg.on('pointerover', () => {
+            if (diffSound.isPlaying && sound.isPlaying) return;
+            diffSound.play();
+            diffSound.on('complete', () => {
+                diffSound.off('complete');
+                sound.play();
+            })
+        });
+
         scene.add.existing(this);
     }
 }

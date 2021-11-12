@@ -188,6 +188,8 @@ export default class MenuScene5 extends Phaser.Scene {
             this.constants.HoverClick(this, b.button, () => {
                 this.menuSounds.menuClick.play();
 
+                this.setCurrentSlot(id);
+
                 this.scene.start(
                     'worldSelectMenu',
                     {
@@ -215,6 +217,8 @@ export default class MenuScene5 extends Phaser.Scene {
                 console.log(err);
                 return;
             }
+
+            this.setCurrentSlot(slotId);
 
             this.scene.start(
                 (this.playerCount == 1) ? 'timedTutorialScene' : 'storyReadyScene',
@@ -252,5 +256,13 @@ export default class MenuScene5 extends Phaser.Scene {
                 }
             )
         });
+    }
+
+    /**
+     * sets the game property gameslot to slot (the 0 indexed slot number)
+     * @param {number} slot 
+     */
+    setCurrentSlot(slot) {
+        this.game.config.gameslot = slot;
     }
 }

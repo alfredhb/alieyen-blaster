@@ -4,9 +4,9 @@ import Constants from "../../../lib/constants";
 import QuitButton from "../../../gameobjects/quit_button";
 import AlienGrunt from "../../../gameobjects/alien_grunt";
 
-export default class ArcadeReportScene extends Phaser.Scene {
+export default class StoryReportScene extends Phaser.Scene {
     constructor() {
-        super('arcadeReportScene');
+        super('storyReportScene');
     }
 
     /**
@@ -32,12 +32,16 @@ export default class ArcadeReportScene extends Phaser.Scene {
      *      nextScene: { 
      *          name: string, 
      *          type: string
-     *      }
+     *      },
+     *      name: string
      *  }
      * }} data
      */
     init(data) {
         this.levelData = data;
+
+        // prevSceneLevelName
+        this.name = data.scene.name;
 
         // Set game metadata
         this.playerCount = data.meta.playerCount;
@@ -59,17 +63,16 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
         // Fetch Highscore
         this.highscore = { player: "None", score: 0 };
-        Meteor.call("getHighScore", this.prevScene.name, this.bestScore, (err, res) => {
+        Meteor.call("saveLevelData", this.game.config.gameslot, this.name, (err, res) => {
             if (err != null) {
                 console.log(err);
                 return;
             }
 
             // Initialize highscore report once data is returned.
-            const { width, height } = this.scale;
-            this.highscore = res;
-            this.highscoreReport(width, height);
-            this.styleHighScorer(width, height);
+            this.levelData.levels = res.levels
+            
+            this.addClick(this.buttons);
         });
 
         // Specific level report card data
@@ -80,7 +83,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
         // Load Sounds
         this.menuSounds = {
             menuClick: this.sound.get('menu-click'),
-            arcadeTTS: this.sound.get('arcade'),
+            storyTTS: this.sound.get('story'),
             levelCompleteTTS: this.sound.get('level-complete'),
             replayTTS: this.sound.get('replay'),
             scoreTTS: this.sound.get('score'),
@@ -118,13 +121,15 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
         // quit button
         const quitButton = new QuitButton(this, {
-            backMenu: 'arcadeMenu',
+            backMenu: 'levelSelectMenu',
             data: {
                 meta: {
                     playerCount: this.playerCount,
                     difficulty: this.difficulty,
                     players: this.players,
-                }
+                    world: this.levelData.meta.world
+                },
+                levels: this.levelData.levels
             }
         });
     }
@@ -311,7 +316,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
     }
 
     /**
-     * updates the highscore once lives are taken into account
+     * TODO: rotate this as a star counter once scores are done
      */
     restyleHighscore() {
         this.bestScore = (this.levelScore1 > this.levelScore2) ?
@@ -341,6 +346,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
     }
 
     /**
+     * TODO: rotate this as a star counter once scores are done
      * Posts the Highscore for this level including player who accomplished it
      * @param {number} width
      * @param {number} height
@@ -444,23 +450,23 @@ export default class ArcadeReportScene extends Phaser.Scene {
     }
 
     /**
-     * Navigation which either replays the last level, or returns to the arcade menu
+     * Navigation which either replays the last level, or returns to the levelselect menu
      * @param {number} width
      * @param {number} height
      */
     navigationSection(width, height) {
         const replayButton = this.add.image(width * 0.325, height * 0.775, '__WHITE');
-        const arcadeButton = this.add.image(width * 0.675, height * 0.775, '__WHITE');
+        const continueButton = this.add.image(width * 0.675, height * 0.775, '__WHITE');
         const replayText = this.add.text(width * 0.325, height * 0.775, 'REPLAY', this.constants.MenuButtonStyle());
-        const arcadeText = this.add.text(width * 0.675, height * 0.775, 'ARCADE', this.constants.MenuButtonStyle());
+        const continueText = this.add.text(width * 0.675, height * 0.775, 'CONTINUE', this.constants.MenuButtonStyle());
         replayText.setName(this.prevScene.name);
-        arcadeText.setName('arcadeMenu');
+        continueText.setName('levelSelectMenu');
 
-        let buttons = [
+        this.buttons = [
             {button: replayButton, text: replayText, sound: this.menuSounds.replayTTS},
-            {button: arcadeButton, text: arcadeText, sound: this.menuSounds.arcadeTTS},
+            {button: continueButton, text: continueText, sound: this.menuSounds.storyTTS},
         ];
-        buttons.forEach(b => {
+        this.buttons.forEach(b => {
             // Style buttons
             b.button.setDisplaySize(width * .3, height * 0.175);
             b.button.setOrigin(0.5);
@@ -481,8 +487,6 @@ export default class ArcadeReportScene extends Phaser.Scene {
                 b.button.setTint(this.constants.Gray);
             });
         });
-
-        this.addClick(buttons);
     }
 
     /**
@@ -495,7 +499,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
             this.menuSounds.menuClick.play();
 
             this.scene.start(
-                (this.playerCount == 1) ? 'levelFactory': 'arcadeReadyScene',
+                (this.playerCount == 1) ? 'levelFactory': 'storyReadyScene',
                 {
                     meta: {
                         playerCount: this.playerCount,
@@ -503,34 +507,38 @@ export default class ArcadeReportScene extends Phaser.Scene {
                         players: this.players,
                         levelName: b[0].text.name,
                         currentPlayer: 0,
+                        world: this.name[5], // in case meta.world is unpopulated
                     },
                     scene: {
                         prevScene: {
-                            name: 'arcadeMenu',
-                            type: 'ARCADE',
+                            name: 'levelSelectMenu',
+                            type: 'STORY',
                         },
                         nextScene: {
                             name: this.levelData.scene.prevScene.name,
                             type: this.levelData.scene.prevScene.type
                         }
-                    }
+                    },
+                    levels: this.levelData.levels
                 }
             )
         });
 
-        // hoverclick for arcade
+        // hoverclick for story
         this.constants.HoverClick(this, b[1].button, () => {
             this.menuSounds.menuClick.play();
 
             this.scene.start(
-                'arcadeMenu',
+                'levelSelectMenu',
                 {
                     meta: {
                         playerCount: this.playerCount,
                         difficulty: this.difficulty,
                         players: this.players,
                         currentPlayer: this.players[0],
-                    }
+                        world: this.name[5],
+                    },
+                    levels: this.levelData.levels
                 }
             )
         });

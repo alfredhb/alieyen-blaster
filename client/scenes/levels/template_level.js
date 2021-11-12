@@ -173,6 +173,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
             },
             data: {
                 meta: this.levelData.meta,
+                levels: this.levelData.levels
             }
         });
     }
@@ -602,31 +603,38 @@ export default class TemplateLevelScene extends Phaser.Scene {
      */
     transitionScene() {
         // reload same scene with new player
-        if (this.levelData.meta.playerCount != 1 && this.levelData.meta.currentPlayer == 0
-                && this.levelData.scene.type == 'ARCADE') {
-            this.scene.start(
-                'arcadeReadyScene', {
-                    meta: {
-                        playerCount: this.levelData.meta.playerCount,
-                        difficulty: this.levelData.meta.difficulty,
-                        players: this.levelData.meta.players,
-                        currentPlayer: 1,
-                        levelName: 'levelFactory',
-                    },
-                    level: this.levelData.level, // pass score
-                    scene: {
-                        prevScene: {
-                            name: 'arcadeMenu',
-                            type: 'ARCADE',
+        if (this.levelData.meta.playerCount != 1 && this.levelData.meta.currentPlayer == 0) {
+            // if (this.levelData.scene.type == 'ARCADE') {
+                this.scene.start(
+                    (this.levelData.scene.type == 'ARCADE') ? 'arcadeReadyScene' : 'storyReadyScene',
+                    {
+                        meta: {
+                            playerCount: this.levelData.meta.playerCount,
+                            difficulty: this.levelData.meta.difficulty,
+                            players: this.levelData.meta.players,
+                            currentPlayer: 1,
+                            levelName: 'levelFactory',
+                            world: this.levelData.meta.world
                         },
-                        nextScene: {
-                            name: this.levelData.name,
-                            type: this.levelData.scene.type
+                        level: this.levelData.level, // pass score
+                        scene: { 
+                            prevScene: (this.levelData.scene.type) ? 
+                            {
+                                name: 'arcadeMenu',
+                                type: 'ARCADE',
+                            } : {
+                                name: 'levelSelectMenu',
+                                type: 'STORY',
+                            },
+                            nextScene: {
+                                name: this.levelData.name,
+                                type: this.levelData.scene.type
+                            }
                         }
                     }
-                }
-            )
-            return;
+                )
+                return;
+            // }
         }
 
         this.scene.start(
@@ -640,6 +648,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
                         type: this.levelData.scene.type,
                     },
                     nextScene: this.levelData.scene.next,
+                    name: this.levelData.name,
                 }
             }
         );

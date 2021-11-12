@@ -15,6 +15,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
      * @param {{meta: {playerCount: number, difficulty: number, players: string[]}, level: {any}, scene: { prevScene: { name: string, type: string}, nextScene: { name: string, type: string}}}} data 
      */
     init(data) {
+        this.levelData = data;
         this.nextScene = data.scene.nextScene;
         this.prevScene = data.scene.prevScene; // {scene: string, type: enum{'ARCADE' || STORY'}
 
@@ -22,7 +23,8 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
         this.players = data.meta.players;
 
         // Game data holds player count in a central place
-        Meteor.call("getDifficulty", (err, res) => {
+        Meteor.call("getDifficulty",
+            (this.nextScene.type == 'STORY'), this.game.config.gameslot, (err, res) => {
             if (err != null) {
                 console.log(err);
                 this.difficulty = 1;
@@ -91,15 +93,10 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
         this.startSection(width, height);
 
         // Quit Button
+        this.levelData.meta.difficulty = this.difficulty | 1;
         const quitButton = new QuitButton(this, {
             backMenu: this.prevScene.name,
-            data: {
-                meta: {
-                    playerCount: this.playerCount,
-                    difficulty: this.difficulty,
-                    players: this.players,
-                }
-            },
+            data: this.levelData,
             execFunc: this.persistDifficulty
         });
     }
@@ -225,15 +222,10 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
                 this.persistDifficulty();
 
                 this.menuSounds.menuClick.play();
+                this.levelData.meta.difficulty = this.difficulty;
                 this.scene.start(
                     this.nextScene.name,
-                    {
-                        meta: {
-                            playerCount: this.playerCount,
-                            difficulty: this.difficulty,
-                            players: this.players,
-                        }
-                    }
+                    this.levelData
                 );
             }
         })
@@ -252,11 +244,15 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
     }
 
     /**
-     * Saves set difficulty to db
+     * Saves set difficulty to db, if type of scene is 'STORY', then sets the difficulty
+     * of the current game slot instead
      * @param {number} d 
      */
     persistDifficulty = () => {
-        Meteor.call("setDifficulty", this.difficulty, (err, res) => {
+        Meteor.call("setDifficulty",
+             this.difficulty, this.levelData.scene.nextScene.type == 'STORY',
+             this.game.config.gameslot,
+            (err, res) => {
             if (err != null) {
                 console.log(err);
             }
