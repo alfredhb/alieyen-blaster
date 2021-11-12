@@ -46,7 +46,11 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
          * add hit listener
          */
         scene.events.on('playerhit', (damage) => {
-            if (this.shielded) return;
+            if (this.shielded) {
+                this.scene.sound.play('armor-dink'); // U.S. spelling... USA! USA! USA!
+                return;
+            };
+            this.scene.sound.play('oof-damage'); // real sound take-damage
             this.numLives -= damage;
 
             // remove lives
