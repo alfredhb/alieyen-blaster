@@ -37,6 +37,7 @@ Meteor.methods({
    * @param {number} id 
    */
   getDifficulty(story, id) {
+    console.log(story, id);
     if (story) {
       var d = SaveData.findOne(("slot" + String(id + 1)), { fields: {difficulty: 1 } });
 
@@ -60,25 +61,25 @@ Meteor.methods({
 
   /**
    * Checks that difficulty.number isn't already d, then sets it
-   * @param {number} d 
+   * @param {number} dif 
    * @param {boolean?} story 
    * @param {number} id 
    * @returns {boolean} whether difficulty was changes
    */
-  setDifficulty(d, story, id) {
+  setDifficulty(dif, story, id) {
     if (story) {
-      SaveData.update(("slot" + String(id + 1)), { $set: { difficulty: d } });
+      SaveData.update(("slot" + String(id + 1)), { $set: { difficulty: dif } });
 
       return true;
     }
 
     var d = MetaData.findOne("difficulty", { "fields": { value: 1 } });
 
-    if (d.value == d) {
+    if (d.value == dif) {
       return false
     } 
 
-    MetaData.update("difficulty", { $set: { "value" : d } });
+    MetaData.update("difficulty", { $set: { "value" : dif } });
     return true;
   },
 
