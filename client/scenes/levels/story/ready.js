@@ -82,13 +82,15 @@ export default class StoryReadyScene extends Phaser.Scene {
 
         // quit button
         const quitButton = new QuitButton(this, {
-            backMenu: 'worldSelectMenu',
+            backMenu: 'levelSelectMenu',
             data: {
                 meta: {
                     playerCount: this.playerCount,
                     difficulty: this.difficulty,
                     players: this.players,
-                }
+                    world: this.readyData.meta.world,
+                },
+                levels: this.readyData.levels
             }
         });
     }
