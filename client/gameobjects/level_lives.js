@@ -23,9 +23,9 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
         bg.setDepth(11).setOrigin(0.5);
 
         // Create shield cover
-        this.shieldCover = scene.add.image(constants.Width * 0.5, constants.Height * 0.9, 'shield-placed');
+        this.shieldCover = scene.add.sprite(constants.Width * 0.5, constants.Height * 0.9, 'shield-placed');
         this.shieldCover.setDisplaySize(constants.Width * 0.1 * lives, constants.Height * 0.15);
-        this.shieldCover.setDepth(12).setOrigin(0.5);
+        this.shieldCover.setDepth(13).setOrigin(0.5);
         this.shieldCover.setVisible(false);
 
         // Create lives icons for each life
@@ -123,7 +123,10 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
             delay: duration,
             callback: () => {
                 this.shielded = false;
-                this.shieldCover.setVisible(false);
+                this.shieldCover.play('lose-shield').on('animationcomplete', () => {
+                    this.shieldCover.setTexture('shield-placed');
+                    this.shieldCover.setVisible(false);
+                });
             },
             callbackScope: this,
             paused: false
