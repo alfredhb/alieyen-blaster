@@ -425,8 +425,8 @@ export default class ArcadeReportScene extends Phaser.Scene {
             alien.place(width * 0.825, height * 0.325);
 
             // set box interaction
-            let box = this.add.image(width * 0.725, height * 0.4, '__WHITE');
-            box.setDisplaySize(150, 200)
+            let box = this.add.image(width * 0.825, height * 0.325, '__WHITE');
+            box.setDisplaySize(width * 0.03, height * 0.05)
             box.setAlpha(0.01);
             box.setOrigin(0.5);
 
