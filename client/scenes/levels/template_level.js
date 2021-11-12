@@ -7,6 +7,7 @@ import LevelTimer from "../../gameobjects/level_timer";
 import Objective from "../../gameobjects/objective";
 import Health from "../../gameobjects/powerups/health";
 import Powerup from "../../gameobjects/powerups/powerup";
+import Shield from "../../gameobjects/powerups/shield";
 import SpeedUp from "../../gameobjects/powerups/speedup";
 import QuitButton from "../../gameobjects/quit_button";
 import ScoreObject from "../../gameobjects/scoreObject";
@@ -252,7 +253,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
         // Add objective denotion
         this.objText = new Objective(this, this.constants);
-        
+
         // Initilize Kill Tracking
         this.kills = {
             grunt: 0,
@@ -377,7 +378,13 @@ export default class TemplateLevelScene extends Phaser.Scene {
                         );
                         break;
                     case "shield":
-
+                        this.powerups.push(
+                            this.physics.add.group({
+                                classType: Shield,
+                                runChildUpdate: true,
+                                maxSize: 1
+                            })
+                        );
                         break;
                     case "speedup":
                         this.powerups.push(
@@ -429,6 +436,12 @@ export default class TemplateLevelScene extends Phaser.Scene {
             console.log('Reduce Cooldown! ' + amount);
             this.turrets.increaseTurretSpeed(amount);
         });
+
+        // Increase Turret Speed
+        this.events.addListener('shieldplayer', (amount) => {
+            console.log('Shield! ' + amount);
+            this.levelLives.shieldLives(amount);
+        });
     }
 
     /**
@@ -437,6 +450,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
     removePowerupListeners() {
         this.events.removeListener('healplayer');
         this.events.removeListener('increaseturretspeed');
+        this.events.removeListener('shieldplayer');
     }
 
     /**
@@ -650,7 +664,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         this.levelData.level['score' + (this.levelData.meta.currentPlayer + 1)] = this.levelScore.calculateScore();
 
         if (objective == 3 || objective == 4) {
-            this.levelData.level['liveScore' + (this.levelData.meta.currentPlayer + 1)] = 
+            this.levelData.level['liveScore' + (this.levelData.meta.currentPlayer + 1)] =
                 this.levelLives.numLives; // score mult determined elsewhere
         }
         return;
