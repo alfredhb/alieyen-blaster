@@ -36,8 +36,10 @@ export default class HelpScene extends Phaser.Scene {
         // continue
         const cB = this.add.image(width * 0.5, height * 0.7, '__WHITE');
         const cT = this.add.text(width * 0.5, height * 0.7, 'Continue?', this.constants.MenuButtonStyle("#000"));
+        const cS = this.sound.get('help');
         cB.setOrigin(0.5).setDisplaySize(width * 0.35, height* 0.2);
         cT.setOrigin(0.5);
+        cS.play({ volume: 1.5 });
 
         cB.setInteractive();
         cB.on('pointerover', () => {
