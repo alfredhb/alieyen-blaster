@@ -490,7 +490,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
      * and difficulty multiplier
      */
     spawnPowerups() {
-        if (!this.levelData.level.powerups) {
+        if (!this.levelData.level.powerups || !this.powerups.length) {
             return;
         }
 
@@ -635,7 +635,8 @@ export default class TemplateLevelScene extends Phaser.Scene {
                             }
                         }
                     }
-                )
+                );
+                this.scene.stop(this); // stop itself
                 return;
             // }
         }
@@ -655,6 +656,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
                 }
             }
         );
+        this.scene.stop(this); // stop itself
     }
 
     /**
@@ -722,7 +724,8 @@ export default class TemplateLevelScene extends Phaser.Scene {
             tArr.forEach(t => t.destroy());
         });
 
-        this.powerupSpawnTimer.destroy();
+        // destroy timer if powerups were present in the level
+        if (this.powerups.length) this.powerupSpawnTimer.destroy();
 
         // destroy aliens
         this.aliens.forEach(aGroup => {

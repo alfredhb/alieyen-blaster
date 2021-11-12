@@ -190,6 +190,7 @@ export default class ArcadeReadyScene extends Phaser.Scene {
                     (b.text.name == this.readyData.scene.nextScene.name) ? 'levelFactory' : b.text.name, 
                     this.readyData
                 );
+                this.scene.stop(this); // stop itself
             })
         });
     }

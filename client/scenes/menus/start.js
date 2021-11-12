@@ -106,6 +106,7 @@ export default class MenuScene4 extends Phaser.Scene {
                     }
                 }
             );
+            this.scene.stop(this); // stop itself
         };
 
         // Quit Button

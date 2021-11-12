@@ -152,6 +152,7 @@ export default class WorldSelect extends Phaser.Scene {
                 },
                 levels: this.levelData.levels
             });
+            this.scene.stop(this); // stop itself
         });
 
     }
@@ -209,6 +210,7 @@ export default class WorldSelect extends Phaser.Scene {
                     b.button.name,
                     this.levelData
                 );
+                this.scene.stop(this); // stop itself
             })
         })
     }

@@ -210,7 +210,8 @@ export default class MenuScene5 extends Phaser.Scene {
                         },
                         levels: slot.levels,
                     }
-                )
+                );
+                this.scene.stop(this); // stop itself
             });
         }
     }
@@ -264,7 +265,8 @@ export default class MenuScene5 extends Phaser.Scene {
                     levels: res.levels,
                     name: 'worldSelectMenu'
                 }
-            )
+            );
+            this.scene.stop(this); // stop itself
         });
     }
 

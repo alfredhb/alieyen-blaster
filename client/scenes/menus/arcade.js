@@ -144,6 +144,7 @@ export default class MenuScene3 extends Phaser.Scene {
                     }
                 },
             });
+            this.scene.stop(this); // stop itself
         });
 
     }
@@ -221,6 +222,7 @@ export default class MenuScene3 extends Phaser.Scene {
             // Add Hoverclick and normal click
             this.constants.HoverClick(this, b.button, () => {
                 this.menuSounds.menuClick.play();
+                this.scene.stop(this); // stop itself
                 this.scene.start(
                     (this.playerCount == 1) ? b.text.name : "arcadeReadyScene",
                     {

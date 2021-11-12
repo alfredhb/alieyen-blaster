@@ -159,6 +159,7 @@ export default class LevelSelect extends Phaser.Scene {
                 },
                 levels: this.levelData.levels
             });
+            this.scene.stop(this); // stop itself
         });
 
     }
@@ -180,7 +181,7 @@ export default class LevelSelect extends Phaser.Scene {
         const l2B = this.add.image(width * 0.5, height * 0.45, 'gameslot-button');
         const l2T = this.add.text(l2B.x, l2B.y, (this.world) + ' - 2', this.constants.MenuButtonStyle("#000000"));
         l2B.setName('levelFactory');
-        l2T.setName('world' + this.world + 'leve2');
+        l2T.setName('world' + this.world + 'level2');
         
         const l3B = this.add.image(width * 0.79, height * 0.45, 'gameslot-button');
         const l3T = this.add.text(l3B.x, l3B.y, (this.world) + ' - 3', this.constants.MenuButtonStyle("#000000"));
@@ -312,7 +313,8 @@ export default class LevelSelect extends Phaser.Scene {
                     },
                     levels: this.levelData.levels
                 }
-            )
+            );
+            this.scene.stop(this); // stop itself
         })
     }
 

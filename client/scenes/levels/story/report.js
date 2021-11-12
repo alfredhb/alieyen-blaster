@@ -525,7 +525,8 @@ export default class StoryReportScene extends Phaser.Scene {
                     },
                     levels: this.levelData.levels
                 }
-            )
+            );
+            this.scene.stop(this); // stop itself
         });
 
         // hoverclick for story
@@ -544,7 +545,8 @@ export default class StoryReportScene extends Phaser.Scene {
                     },
                     levels: this.levelData.levels
                 }
-            )
+            );
+            this.scene.stop(this); // stop itself
         });
     }
 }

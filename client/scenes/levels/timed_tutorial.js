@@ -231,11 +231,13 @@ export default class TimedTutorialScene extends Phaser.Scene {
                         name: 'worldSelectMenu'
                     }
                 );
+                this.scene.stop(this); // stop itself
             } else {
                 // real scene data stored in name
                 this.scene.start(
                     this.levelData.name, this.levelData
-                )
+                );
+                this.scene.stop(this); // stop itself
             }
         });
 

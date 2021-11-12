@@ -429,6 +429,7 @@
                         }
                     }
                 );
+                this.scene.stop(this); // stop itself
             }
         });
     }

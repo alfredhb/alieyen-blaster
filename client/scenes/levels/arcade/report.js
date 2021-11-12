@@ -519,7 +519,8 @@ export default class ArcadeReportScene extends Phaser.Scene {
                         }
                     }
                 }
-            )
+            );
+            this.scene.stop(this); // stop itself
         });
 
         // hoverclick for arcade
@@ -536,7 +537,8 @@ export default class ArcadeReportScene extends Phaser.Scene {
                         currentPlayer: this.players[0],
                     }
                 }
-            )
+            );
+            this.scene.stop(this); // stop itself
         });
     }
 }

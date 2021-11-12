@@ -123,7 +123,7 @@ export default class MenuScene2 extends Phaser.Scene {
                         }
                     }
                 );
-
+                this.scene.stop(this); // stop itself
             });
         });
     }

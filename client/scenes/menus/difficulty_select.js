@@ -231,6 +231,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
                     this.nextScene.name,
                     this.levelData
                 );
+                this.scene.stop(this); // stop itself
             }
         })
     }
