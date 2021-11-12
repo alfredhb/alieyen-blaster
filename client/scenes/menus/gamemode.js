@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import QuitButton from '../../gameobjects/quit_button';
+import HelpButton from '../../gameobjects/help_button';
 import Constants from '../../lib/constants';
 
 export default class MenuScene2 extends Phaser.Scene {
@@ -43,6 +44,9 @@ export default class MenuScene2 extends Phaser.Scene {
         this.constants = new Constants(width, height);
         
         this.initButtons(width, height);
+
+        // Add help button
+        this.help = new HelpButton(this);
     }
 
     /**
@@ -119,7 +123,7 @@ export default class MenuScene2 extends Phaser.Scene {
                         }
                     }
                 );
-
+                this.scene.stop(this); // stop itself
             });
         });
     }

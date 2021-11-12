@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Constants from '../../lib/constants';
 import QuitButton from '../../gameobjects/quit_button';
+import HelpButton from '../../gameobjects/help_button';
 import DifficultyDisplay from '../../gameobjects/difficulty_display';
 
 export default class WorldSelect extends Phaser.Scene {
@@ -72,7 +73,10 @@ export default class WorldSelect extends Phaser.Scene {
                     difficulty: this.difficulty,
                 }
             }
-        })
+        });
+
+        // Add help button
+        this.help = new HelpButton(this);
     }
 
     /**
@@ -84,7 +88,7 @@ export default class WorldSelect extends Phaser.Scene {
         const title = this.add.text(width * 0.5, height * 0.15, 'World Select', this.constants.MenuTitleStyle("#000000"));
         title.setOrigin(0.5);
 
-        const titleSound = this.sound.get('arcade');
+        const titleSound = this.sound.get('world-select');
 
         // interactives
         title.setInteractive();
@@ -148,6 +152,7 @@ export default class WorldSelect extends Phaser.Scene {
                 },
                 levels: this.levelData.levels
             });
+            this.scene.stop(this); // stop itself
         });
 
     }
@@ -175,7 +180,7 @@ export default class WorldSelect extends Phaser.Scene {
         w3T.setName(3).setOrigin(0.5).setAlpha(0.5);
 
         this.buttons = [
-            {button: w1B,  text: w1T, sound: this.sound.get('slot-1')},
+            {button: w1B,  text: w1T, sound: this.sound.get('world-1')},
             // {button: w2B,  text: w2T, sound: this.sound.get('slot-2')}, NOT DONE
             // {button: w3B,  text: w3T, sound: this.sound.get('slot-3')},
         ].forEach(b => {
@@ -205,6 +210,7 @@ export default class WorldSelect extends Phaser.Scene {
                     b.button.name,
                     this.levelData
                 );
+                this.scene.stop(this); // stop itself
             })
         })
     }

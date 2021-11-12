@@ -37,7 +37,6 @@ Meteor.methods({
    * @param {number} id 
    */
   getDifficulty(story, id) {
-    console.log(story, id);
     if (story) {
       var d = SaveData.findOne(("slot" + String(id + 1)), { fields: {difficulty: 1 } });
 

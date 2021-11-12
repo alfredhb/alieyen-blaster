@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Constants from "../../lib/constants";
 import QuitButton from "../../gameobjects/quit_button";
+import HelpButton from '../../gameobjects/help_button';
 import Turrets from "../../gameobjects/turret";
 import LevelTimer from "../../gameobjects/level_timer";
 import ScoreObject from "../../gameobjects/scoreObject";
@@ -97,6 +98,9 @@ export default class TimedTutorialScene extends Phaser.Scene {
             loop: false,
             paused: true
         });
+
+        // Add help button
+        this.help = new HelpButton(this);
     }
 
     /**
@@ -128,14 +132,35 @@ export default class TimedTutorialScene extends Phaser.Scene {
                 align: "center"
             }
         );
-        title.setOrigin(0.5).setDepth(12).setWordWrapWidth(width * 0.6).set;
+        title.setOrigin(0.5).setDepth(12).setWordWrapWidth(width * 0.6);
+        title.setInteractive();
+        title.on('pointerover', () => {
+            let t = this.sound.get('tutorial');
+            if (this.levelData.tutorialComplete) {
+                if (t.isPlaying) return;
+                let sound = this.sound.get('level-complete');
+                t.play();
+                t.on('complete', () => {
+                    t.off('complete');
+                    sound.play();
+                });
+            } else {
+                let sound = this.sound.get('play');
+                if (sound.isPlaying) return;
+                sound.play();
+                sound.on('complete', () => {
+                    sound.off('complete');
+                    t.play();
+                })
+            }
+        });
 
         const yesB = this.add.image(width * 0.35, height * 0.555, '__WHITE');
         const noB = this.add.image(width * 0.65, height * 0.555, '__WHITE');
         const yesT = this.add.text(width * 0.35, height * 0.555, "Yes", this.constants.MenuButtonStyle());
         const noT = this.add.text(width * 0.65, height * 0.555, "No", this.constants.MenuButtonStyle());
 
-        let buttons = [{b: yesB, t: yesT}, {b: noB, t: noT}]
+        let buttons = [{b: yesB, t: yesT, s: this.sound.get('yes')}, {b: noB, t: noT, s: this.sound.get('no')}]
         buttons.forEach(b => {
             b.b.setDisplaySize(width * 0.275, height * 0.2);
             b.b.setOrigin(0.5).setDepth(12);
@@ -147,6 +172,8 @@ export default class TimedTutorialScene extends Phaser.Scene {
                 b.b.setTint(this.constants.Red);
 
                 // Play TTS
+                if (b.s.isPlaying) return;
+                b.s.play();
             }).on('pointerout', () => {
                 b.b.setTint(this.constants.Gray);
             });
@@ -204,11 +231,13 @@ export default class TimedTutorialScene extends Phaser.Scene {
                         name: 'worldSelectMenu'
                     }
                 );
+                this.scene.stop(this); // stop itself
             } else {
                 // real scene data stored in name
                 this.scene.start(
                     this.levelData.name, this.levelData
-                )
+                );
+                this.scene.stop(this); // stop itself
             }
         });
 

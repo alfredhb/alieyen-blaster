@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Constants from '../../lib/constants';
 import QuitButton from '../../gameobjects/quit_button';
+import HelpButton from '../../gameobjects/help_button';
 import DifficultyDisplay from '../../gameobjects/difficulty_display';
 
 export default class MenuScene3 extends Phaser.Scene {
@@ -67,6 +68,9 @@ export default class MenuScene3 extends Phaser.Scene {
                 },
             },
         });
+
+        // Add help button
+        this.help = new HelpButton(this);
     }
 
     /**
@@ -140,6 +144,7 @@ export default class MenuScene3 extends Phaser.Scene {
                     }
                 },
             });
+            this.scene.stop(this); // stop itself
         });
 
     }
@@ -217,6 +222,7 @@ export default class MenuScene3 extends Phaser.Scene {
             // Add Hoverclick and normal click
             this.constants.HoverClick(this, b.button, () => {
                 this.menuSounds.menuClick.play();
+                this.scene.stop(this); // stop itself
                 this.scene.start(
                     (this.playerCount == 1) ? b.text.name : "arcadeReadyScene",
                     {

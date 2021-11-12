@@ -6,10 +6,10 @@ import LevelLives from "../../gameobjects/level_lives";
 import LevelTimer from "../../gameobjects/level_timer";
 import Objective from "../../gameobjects/objective";
 import Health from "../../gameobjects/powerups/health";
-import Powerup from "../../gameobjects/powerups/powerup";
 import Shield from "../../gameobjects/powerups/shield";
 import SpeedUp from "../../gameobjects/powerups/speedup";
 import QuitButton from "../../gameobjects/quit_button";
+import HelpButton from '../../gameobjects/help_button';
 import ScoreObject from "../../gameobjects/scoreObject";
 import Turrets from "../../gameobjects/turret";
 import Constants from "../../lib/constants";
@@ -141,6 +141,9 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
         // Start
         this.startLevel();
+
+        // Add help button
+        this.help = new HelpButton(this);
     }
 
     /**
@@ -487,7 +490,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
      * and difficulty multiplier
      */
     spawnPowerups() {
-        if (!this.levelData.level.powerups) {
+        if (!this.levelData.level.powerups || !this.powerups.length) {
             return;
         }
 
@@ -632,7 +635,8 @@ export default class TemplateLevelScene extends Phaser.Scene {
                             }
                         }
                     }
-                )
+                );
+                this.scene.stop(this); // stop itself
                 return;
             // }
         }
@@ -652,6 +656,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
                 }
             }
         );
+        this.scene.stop(this); // stop itself
     }
 
     /**
@@ -719,7 +724,8 @@ export default class TemplateLevelScene extends Phaser.Scene {
             tArr.forEach(t => t.destroy());
         });
 
-        this.powerupSpawnTimer.destroy();
+        // destroy timer if powerups were present in the level
+        if (this.powerups.length) this.powerupSpawnTimer.destroy();
 
         // destroy aliens
         this.aliens.forEach(aGroup => {

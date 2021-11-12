@@ -1,7 +1,7 @@
-import { Meteor } from 'meteor/meteor';
 import Phaser from "phaser";
 import Constants from "../../../lib/constants";
 import QuitButton from "../../../gameobjects/quit_button";
+import HelpButton from '../../../gameobjects/help_button';
 
 export default class StoryReadyScene extends Phaser.Scene {
     constructor() {
@@ -93,6 +93,9 @@ export default class StoryReadyScene extends Phaser.Scene {
                 levels: this.readyData.levels
             }
         });
+
+        // Add help button
+        this.help = new HelpButton(this);
     }
 
     /**
@@ -207,6 +210,7 @@ export default class StoryReadyScene extends Phaser.Scene {
                     (b.text.name == this.readyData.scene.nextScene.name) ? 'levelFactory' : b.text.name, 
                     this.readyData
                 );
+                this.scene.stop(this); // stop itself
             })
         });
     }

@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Constants from '../../lib/constants';
 import QuitButton from '../../gameobjects/quit_button';
+import HelpButton from '../../gameobjects/help_button';
 import DifficultyDisplay from '../../gameobjects/difficulty_display';
 
 export default class LevelSelect extends Phaser.Scene {
@@ -77,7 +78,10 @@ export default class LevelSelect extends Phaser.Scene {
         const quit = new QuitButton(this, {
             backMenu: 'worldSelectMenu',
             data: this.levelData
-        })
+        });
+
+        // Add help button
+        this.help = new HelpButton(this);
     }
 
     /**
@@ -89,7 +93,7 @@ export default class LevelSelect extends Phaser.Scene {
         const title = this.add.text(width * 0.5, height * 0.15, ('World ' + this.world), this.constants.MenuTitleStyle("#000000"));
         title.setOrigin(0.5);
 
-        const titleSound = this.sound.get('arcade');
+        const titleSound = this.sound.get('world-' + this.world);
 
         // interactives
         title.setInteractive();
@@ -155,6 +159,7 @@ export default class LevelSelect extends Phaser.Scene {
                 },
                 levels: this.levelData.levels
             });
+            this.scene.stop(this); // stop itself
         });
 
     }
@@ -176,7 +181,7 @@ export default class LevelSelect extends Phaser.Scene {
         const l2B = this.add.image(width * 0.5, height * 0.45, 'gameslot-button');
         const l2T = this.add.text(l2B.x, l2B.y, (this.world) + ' - 2', this.constants.MenuButtonStyle("#000000"));
         l2B.setName('levelFactory');
-        l2T.setName('world' + this.world + 'leve21');
+        l2T.setName('world' + this.world + 'level2');
         
         const l3B = this.add.image(width * 0.79, height * 0.45, 'gameslot-button');
         const l3T = this.add.text(l3B.x, l3B.y, (this.world) + ' - 3', this.constants.MenuButtonStyle("#000000"));
@@ -270,8 +275,12 @@ export default class LevelSelect extends Phaser.Scene {
             b.text.setTint(0xFFF);
 
             // Play TTS
-            if (!b.sound.isPlaying) {
-                b.sound.play();
+            if (complete) {
+                let s = this.sound.get('level-complete');
+                if (s.isPlaying) return;
+                s.play();
+            } else {
+                this.playLevelTTS(index + 1);
             }
         }).on('pointerout', () => {
             b.button.clearTint();
@@ -304,7 +313,25 @@ export default class LevelSelect extends Phaser.Scene {
                     },
                     levels: this.levelData.levels
                 }
-            )
+            );
+            this.scene.stop(this); // stop itself
         })
+    }
+
+    /**
+     * plays the tts for levelNum by stitching level + levelnum
+     * @param {number} levelNum 
+     */
+    playLevelTTS(levelNum) {
+        console.log(levelNum);
+        let level = this.sound.get('level');
+        if (level.isPlaying) return;
+
+        let num = this.sound.get(String(levelNum));
+        level.play();
+        level.on('complete', () => {
+            level.off('complete');
+            num.play();
+        });
     }
 }

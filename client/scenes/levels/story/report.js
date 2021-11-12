@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import Phaser from "phaser";
 import Constants from "../../../lib/constants";
 import QuitButton from "../../../gameobjects/quit_button";
+import HelpButton from '../../../gameobjects/help_button';
 import AlienGrunt from "../../../gameobjects/alien_grunt";
 
 export default class StoryReportScene extends Phaser.Scene {
@@ -132,6 +133,9 @@ export default class StoryReportScene extends Phaser.Scene {
                 levels: this.levelData.levels
             }
         });
+
+        // Add help button
+        this.help = new HelpButton(this);
     }
 
     update() {
@@ -521,7 +525,8 @@ export default class StoryReportScene extends Phaser.Scene {
                     },
                     levels: this.levelData.levels
                 }
-            )
+            );
+            this.scene.stop(this); // stop itself
         });
 
         // hoverclick for story
@@ -540,7 +545,8 @@ export default class StoryReportScene extends Phaser.Scene {
                     },
                     levels: this.levelData.levels
                 }
-            )
+            );
+            this.scene.stop(this); // stop itself
         });
     }
 }

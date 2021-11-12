@@ -22,6 +22,7 @@ import WorldSelectMenu from './scenes/menus/world_select';
 import StoryReadyScene from './scenes/levels/story/ready';
 import LevelSelectMenu from './scenes/menus/level_select';
 import StoryReportScene from './scenes/levels/story/report';
+import HelpMenu from './scenes/menus/help';
 
 // Game Config
 var config = {
@@ -38,7 +39,7 @@ var config = {
     InitialLoad, StartMenu, PlayerSelectMenu, GamemodeMenu, SavefileMenu, 
     ArcadeReportScene, ArcadeMenu, DifficultySelectMenu, TimedArcade, DefaultPage,
     LevelFactory, TemplateLevelScene, ArcadeReadyScene, TimedTutorialScene, WorldSelectMenu,
-    StoryReadyScene, LevelSelectMenu, StoryReportScene
+    StoryReadyScene, LevelSelectMenu, StoryReportScene, HelpMenu
   ],
 };
 

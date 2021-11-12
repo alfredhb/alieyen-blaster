@@ -1,7 +1,8 @@
 import { Meteor } from 'meteor/meteor';
-import Phaser, { ScaleModes } from 'phaser';
+import Phaser from 'phaser';
 import Constants from '../../lib/constants';
 import QuitButton from '../../gameobjects/quit_button';
+import HelpButton from '../../gameobjects/help_button';
 
 export default class MenuScene5 extends Phaser.Scene {
     constructor() {
@@ -59,6 +60,9 @@ export default class MenuScene5 extends Phaser.Scene {
         
 
         this.initButtons(width, height);
+
+        // Add help button
+        this.help = new HelpButton(this);
     }
 
     /**
@@ -114,6 +118,9 @@ export default class MenuScene5 extends Phaser.Scene {
         this[slot._id + "World"] = this.add.text(slotButton.x, slotButton.y, closestLevel, this.constants.MenuButtonStyle("#000000")
         ).setOrigin(0.5);
 
+        // update tts of a full button
+        this.buttons[slot._id[4] - 1].sound = this.sound.get('slot-' + slot._id[4]);
+
         this.setButtonInteraction(slot, slot._id[4] - 1);
     }
 
@@ -147,10 +154,10 @@ export default class MenuScene5 extends Phaser.Scene {
         });
 
         this.buttons = [
-            {button: this.slot1Button, text: this.slot1Text, sound: null},
-            {button: this.slot2Button, text: this.slot2Text, sound: null},
-            {button: this.slot3Button, text: this.slot3Text, sound: null},
-            {button: this.slot4Button, text: this.slot4Text, sound: null},
+            {button: this.slot1Button, text: this.slot1Text, sound: this.sound.get('empty')},
+            {button: this.slot2Button, text: this.slot2Text, sound: this.sound.get('empty')},
+            {button: this.slot3Button, text: this.slot3Text, sound: this.sound.get('empty')},
+            {button: this.slot4Button, text: this.slot4Text, sound: this.sound.get('empty')},
         ];
         this.buttons.forEach(b => {
             b.button.setDisplaySize(width * .35, height * .25);
@@ -169,6 +176,9 @@ export default class MenuScene5 extends Phaser.Scene {
 
         b.button.on('pointerover', () => {
             b.button.setTint(this.constants.Red);
+
+            if (b.sound.isPlaying) return;
+            b.sound.play();
         });
         b.button.on('pointerout', () => {
             b.button.clearTint();
@@ -200,7 +210,8 @@ export default class MenuScene5 extends Phaser.Scene {
                         },
                         levels: slot.levels,
                     }
-                )
+                );
+                this.scene.stop(this); // stop itself
             });
         }
     }
@@ -254,7 +265,8 @@ export default class MenuScene5 extends Phaser.Scene {
                     levels: res.levels,
                     name: 'worldSelectMenu'
                 }
-            )
+            );
+            this.scene.stop(this); // stop itself
         });
     }
 

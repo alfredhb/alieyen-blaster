@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import Phaser from "phaser";
 import Constants from "../../../lib/constants";
 import QuitButton from "../../../gameobjects/quit_button";
+import HelpButton from '../../../gameobjects/help_button';
 import AlienGrunt from "../../../gameobjects/alien_grunt";
 
 export default class ArcadeReportScene extends Phaser.Scene {
@@ -127,6 +128,9 @@ export default class ArcadeReportScene extends Phaser.Scene {
                 }
             }
         });
+
+        // Add help button
+        this.help = new HelpButton(this);
     }
 
     update() {
@@ -515,7 +519,8 @@ export default class ArcadeReportScene extends Phaser.Scene {
                         }
                     }
                 }
-            )
+            );
+            this.scene.stop(this); // stop itself
         });
 
         // hoverclick for arcade
@@ -532,7 +537,8 @@ export default class ArcadeReportScene extends Phaser.Scene {
                         currentPlayer: this.players[0],
                     }
                 }
-            )
+            );
+            this.scene.stop(this); // stop itself
         });
     }
 }
