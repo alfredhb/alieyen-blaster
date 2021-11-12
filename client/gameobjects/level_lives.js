@@ -123,6 +123,7 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
             delay: duration,
             callback: () => {
                 this.shielded = false;
+                this.scene.sound.play('glass-break');
                 this.shieldCover.play('lose-shield').on('animationcomplete', () => {
                     this.shieldCover.setTexture('shield-placed');
                     this.shieldCover.setVisible(false);

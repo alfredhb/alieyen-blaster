@@ -94,6 +94,7 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "timed",            "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/timed.mp3",                   "config": { loop: false }},
             {"key": "who-p1",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/who-is-player-1.mp3",         "config": { loop: false }},
             {"key": "who-p2",           "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/tts/who-is-player-2.mp3",         "config": { loop: false }},
+            {"key": "glass-break",      "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/glass_break.mp3",          "config": { loop: false, volume: 0.5 }},
             {"key": "energy-charge",    "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/energy-charge.mp3",        "config": { loop: false }},
             {"key": "energy-blast",     "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/energy-blast.mp3",         "config": { loop: false }},
             {"key": "explode-1",        "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/sprite/explosion-1.mp3",          "config": { loop: false }},
