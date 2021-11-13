@@ -190,5 +190,13 @@ Meteor.methods({
     var s = SaveData.findOne(("slot" + String(id + 1)));
 
     return s;
+  },
+
+  /**
+   * deletes the save data associated with id
+   * @param {string} id 
+   */
+  deleteSaveData(id) {
+    return SaveData.remove(id);
   }
 });

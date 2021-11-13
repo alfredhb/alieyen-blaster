@@ -18,6 +18,7 @@ export default class Constants {
     Green = 0x00ff00;
     Gray = 0x808080;
     LightBlue = 0x7DF9FF;
+    LightGreen = 0x90EE90;
     Red = 0xFF0000;
     Pink = 0xFF69B4;
 
