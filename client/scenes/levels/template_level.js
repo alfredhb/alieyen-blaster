@@ -736,5 +736,8 @@ export default class TemplateLevelScene extends Phaser.Scene {
                 console.log(e);
             }
         });
+
+        // stop sound
+        this.game.sound.stopAll();
     }
 }
