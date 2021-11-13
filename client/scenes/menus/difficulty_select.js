@@ -129,7 +129,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
         difficultyText.setInteractive();
         difficultyText.on('pointerover', () => {
             if (!this.menuSounds.difficultyTTS.isPlaying) {
-                this.menuSounds.difficultyTTS.play();
+                this.menuSounds.difficultyTTS.play({volume: this.game.config.ttsVolume});
             }
         });
 
@@ -167,7 +167,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
 
                 // Play TTS here
                 if (!b.sound.isPlaying){ 
-                    b.sound.play();
+                    b.sound.play({volume: this.game.config.ttsVolume});
                 }
             }).on('pointerout', () => {
                 if (!this.difficulty) {
@@ -208,7 +208,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
                 this.startButton.setTint(this.constants.Red);
 
                 if (!this.menuSounds.startTTS.isPlaying) {
-                    this.menuSounds.startTTS.play();
+                    this.menuSounds.startTTS.play({volume: this.game.config.ttsVolume});
                 }
             }
         }).on('pointerout', () => {

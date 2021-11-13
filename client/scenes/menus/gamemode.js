@@ -101,7 +101,7 @@ export default class MenuScene2 extends Phaser.Scene {
 
                 // Play if not playing already
                 if (!b.sound.isPlaying) {
-                    b.sound.play();
+                    b.sound.play({volume: this.game.config.ttsVolume});
                 }
 
             }).on('pointerout', () => {

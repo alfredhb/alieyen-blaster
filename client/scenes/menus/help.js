@@ -25,7 +25,7 @@ export default class HelpScene extends Phaser.Scene {
         this.constants = new Constants(width, height)
 
         const bg = this.add.image(width * 0.5, height * 0.5, '__WHITE');
-        bg.setOrigin(0.5).setDisplaySize(width, height).setTint(0x000)
+        bg.setOrigin(0.5).setDisplaySize(width, height).setTint(0x000);
 
         const title = this.add.text(width * 0.5, height * 0.35, 'H E L P', {
             fontFamily: 'impact-custom',

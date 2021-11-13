@@ -178,7 +178,7 @@ export default class MenuScene5 extends Phaser.Scene {
             b.button.setTint(this.constants.Red);
 
             if (b.sound.isPlaying) return;
-            b.sound.play();
+            b.sound.play({volume: this.game.config.ttsVolume});
         });
         b.button.on('pointerout', () => {
             b.button.clearTint();
