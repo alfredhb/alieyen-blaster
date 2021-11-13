@@ -174,7 +174,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
         if (this.levelData.level.objComplete) {
             title.on('pointerover', () => {
                 if (!this.menuSounds.levelCompleteTTS.isPlaying) {
-                    this.menuSounds.levelCompleteTTS.play();
+                    this.menuSounds.levelCompleteTTS.play({volume: this.game.config.ttsVolume});
                 }
             });
         } else {
@@ -232,7 +232,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
             t.text.on('pointerover', () => {
                 if (!this.menuSounds.scoreTTS.isPlaying) {
-                    t.sound.play();
+                    t.sound.play({volume: this.game.config.ttsVolume});
                     this.menuSounds.scoreTTS.play({delay: 0.75})
                 }
             })
@@ -378,7 +378,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
             t.setInteractive();
             t.on('pointerover', () => {
                 this.sound.stopAll();
-                this.sound.play(t.name);
+                this.sound.play(t.name, {volume: this.game.config.ttsVolume});
             });
         });
     }
@@ -406,7 +406,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
         this.highscoreStar.setInteractive();
         this.highscoreStar.on('pointerover', () => {
             this.sound.stopAll();
-            this.sound.play('new-highscore');
+            this.sound.play('new-highscore', {volume: this.game.config.ttsVolume});
         });
     }
 
@@ -479,7 +479,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
                 // Play TTS here
                 if (!b.sound.isPlaying) {
-                    b.sound.play();
+                    b.sound.play({volume: this.game.config.ttsVolume});
                 }
             }).on('pointerout', () => {
                 b.button.setTint(this.constants.Gray);

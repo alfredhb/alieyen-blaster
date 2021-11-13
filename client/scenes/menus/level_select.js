@@ -99,7 +99,7 @@ export default class LevelSelect extends Phaser.Scene {
         title.setInteractive();
         title.on('pointerover', () => {
             if (!titleSound.isPlaying) {
-                titleSound.play();
+                titleSound.play({volume: this.game.config.ttsVolume});
             }
         })
     }
@@ -278,7 +278,7 @@ export default class LevelSelect extends Phaser.Scene {
             if (complete) {
                 let s = this.sound.get('level-complete');
                 if (s.isPlaying) return;
-                s.play();
+                s.play({volume: this.game.config.ttsVolume});
             } else {
                 this.playLevelTTS(index + 1);
             }
@@ -328,10 +328,10 @@ export default class LevelSelect extends Phaser.Scene {
         if (level.isPlaying) return;
 
         let num = this.sound.get(String(levelNum));
-        level.play();
+        level.play({volume: this.game.config.ttsVolume});
         level.on('complete', () => {
             level.off('complete');
-            num.play();
+            num.play({volume: this.game.config.ttsVolume});
         });
     }
 }

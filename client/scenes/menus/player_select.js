@@ -148,7 +148,7 @@
             t.text.setInteractive();
             t.text.on('pointerover', () => {
                 if (t.text.depth > 0 && !t.sound.isPlaying) {
-                    t.sound.play();
+                    t.sound.play({volume: this.game.config.ttsVolume});
                 }
             });
         });
@@ -175,7 +175,7 @@
 
                 // Play TTS here
                 if (b.button.depth > 0 && !b.sound.isPlaying) {
-                    b.sound.play();
+                    b.sound.play({volume: this.game.config.ttsVolume});
                 }
             }).on('pointerout', () => {
                 // If button is a chosen player, leave it highlighted
@@ -191,13 +191,13 @@
                 if (this.playerCount <= this.players.length) {
                     // Play TTS like All players selected
                     this.sound.pauseAll();
-                    this.menuSounds.allPlayerSelTTS.play();
+                    this.menuSounds.allPlayerSelTTS.play({volume: this.game.config.ttsVolume});
                     return;
                 }
                 if (this.players.find(p => p.text.name == b.text.name)) {
                     // Play TtS like player already selected
                     this.sound.pauseAll();
-                    this.menuSounds.selAlreadyTTS.play()
+                    this.menuSounds.selAlreadyTTS.play({volume: this.game.config.ttsVolume})
                     return;
                 }
 
@@ -211,7 +211,7 @@
                 this.menuSounds.menuClick.play();
 
                 // Play tts like 'bubba selected'
-                this.menuSounds.selTTS.play({delay: 0.25});
+                this.menuSounds.selTTS.play({volume: this.game.config.ttsVolume, delay: 0.25});
 
                 // Style start if all players accounted for, else show next title
                 if (this.playerCount == this.players.length) {
@@ -219,7 +219,7 @@
                     this.p2Text.setDepth(-1);
                     this.readyText.setDepth(2);
 
-                    this.menuSounds.readyTTS.play({delay: 1});
+                    this.menuSounds.readyTTS.play({volume: this.game.config.ttsVolume, delay: 1});
                     this.styleStart();
                 } else {
                     this.p1Text.setDepth(-1);
@@ -258,7 +258,7 @@
         this.playerText.setInteractive();
         this.playerText.on('pointerover', () => {
             if (!this.menuSounds.playersTTS.isPlaying) {
-                this.menuSounds.playersTTS.play();
+                this.menuSounds.playersTTS.play({volume: this.game.config.ttsVolume});
             }
         });
 
@@ -343,7 +343,7 @@
 
                 // Play TTS here
                 if (!b.sound.isPlaying) {
-                    b.sound.play();
+                    b.sound.play({volume: this.game.config.ttsVolume});
                 }
             }).on('pointerout', () => {
                 if (!this.playerNumSelected()) {
@@ -403,7 +403,7 @@
 
                 // Play tts if start is ready
                 if (!this.menuSounds.startTTS.isPlaying) {
-                    this.menuSounds.startTTS.play();
+                    this.menuSounds.startTTS.play({volume: this.game.config.ttsVolume});
                 }
             }
         }).on('pointerout', () => {

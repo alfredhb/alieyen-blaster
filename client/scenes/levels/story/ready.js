@@ -132,7 +132,7 @@ export default class StoryReadyScene extends Phaser.Scene {
         title.setInteractive();
         title.on('pointerover', () => {
             if (!this.menuSounds.readyToPlayTTS.isPlaying) {
-                this.menuSounds.readyToPlayTTS.play();
+                this.menuSounds.readyToPlayTTS.play({volume: this.game.config.ttsVolume});
             }
         })
     }
@@ -158,7 +158,7 @@ export default class StoryReadyScene extends Phaser.Scene {
             t.text.setInteractive();
 
             t.text.on('pointerover', () => {
-                t.sound.play();
+                t.sound.play({volume: this.game.config.ttsVolume});
             })
         })
     }
@@ -195,7 +195,7 @@ export default class StoryReadyScene extends Phaser.Scene {
 
                 // Play TTS here
                 if (!b.sound.isPlaying) {
-                    b.sound.play();
+                    b.sound.play({volume: this.game.config.ttsVolume});
                 }
             }).on('pointerout', () => {
                 b.button.setTint(this.constants.Gray);
