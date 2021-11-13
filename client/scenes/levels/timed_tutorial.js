@@ -139,18 +139,18 @@ export default class TimedTutorialScene extends Phaser.Scene {
             if (this.levelData.tutorialComplete) {
                 if (t.isPlaying) return;
                 let sound = this.sound.get('level-complete');
-                t.play();
+                t.play({volume: this.game.config.ttsVolume});
                 t.on('complete', () => {
                     t.off('complete');
-                    sound.play();
+                    sound.play({volume: this.game.config.ttsVolume});
                 });
             } else {
                 let sound = this.sound.get('play');
                 if (sound.isPlaying) return;
-                sound.play();
+                sound.play({volume: this.game.config.ttsVolume});
                 sound.on('complete', () => {
                     sound.off('complete');
-                    t.play();
+                    t.play({volume: this.game.config.ttsVolume});
                 })
             }
         });
@@ -173,7 +173,7 @@ export default class TimedTutorialScene extends Phaser.Scene {
 
                 // Play TTS
                 if (b.s.isPlaying) return;
-                b.s.play();
+                b.s.play({volume: this.game.config.ttsVolume});
             }).on('pointerout', () => {
                 b.b.setTint(this.constants.Gray);
             });

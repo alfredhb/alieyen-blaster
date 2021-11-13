@@ -77,7 +77,7 @@ export default class MenuScene4 extends Phaser.Scene {
         title.setInteractive();
         title.on('pointerover', () => {
             if (!this.menuSounds.titleTTS.isPlaying) {
-                this.menuSounds.titleTTS.play();
+                this.menuSounds.titleTTS.play({volume: this.game.config.ttsVolume});
             }
         })
     }
@@ -120,7 +120,7 @@ export default class MenuScene4 extends Phaser.Scene {
         const qSound = this.menuSounds.quitTTS;
         const qFunc = () => {
             console.log('Unimplemented');
-            qSound.play();
+            qSound.play({volume: this.game.config.ttsVolume});
         };
 
         this.buttons = [
@@ -135,7 +135,7 @@ export default class MenuScene4 extends Phaser.Scene {
 
                 // Play if not playing already
                 if (!b.sound.isPlaying) {
-                    b.sound.play();
+                    b.sound.play({volume: this.game.config.ttsVolume});
                 }
             });
             b.button.on('pointerout', () => {
@@ -146,5 +146,32 @@ export default class MenuScene4 extends Phaser.Scene {
             // Add hoverclick and normal click
             this.constants.HoverClick(this, b.button, b.func)
         });
+
+        this.addSettings(width, height);
+    }
+
+    /**
+     * Opens the hidden admin settings menu. This is only meant to be accessible
+     * by craig, so no accessibility is available for bubba and leah
+     * @param {number} width 
+     * @param {number} height 
+     */
+    addSettings(width, height) {
+        // Hidden settings button
+        const sButton = this.add.image(width * 0.95, height * 0.07, '__WHITE');
+        sButton.setDisplaySize(width * 0.075, width * 0.075).setTint(0x000).setAlpha(0.075);
+
+        sButton.setInteractive();
+        sButton.on('pointerup', () => {
+            this.menuSounds.menuClick.play();
+
+            this.scene.pause(this);
+            this.scene.launch('adminSettingsMenu', this);
+            return;
+        });
+
+        // // set default ttsvolume in game config unless already set
+        if (this.game.config.ttsVolume && this.game.config.ttsVolume != 0.5) return;
+        this.game.config.ttsVolume = 0.5;
     }
 }

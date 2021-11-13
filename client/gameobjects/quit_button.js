@@ -34,7 +34,7 @@ export default class QuitButton extends Phaser.GameObjects.Group {
             text.setTint(0xFFF);
 
             if (!hoverSound.isPlaying) {
-                hoverSound.play();
+                hoverSound.play({volume: scene.game.config.ttsVolume});
             }
         });
         button.on('pointerout', () => {

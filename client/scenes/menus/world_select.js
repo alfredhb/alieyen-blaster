@@ -94,7 +94,7 @@ export default class WorldSelect extends Phaser.Scene {
         title.setInteractive();
         title.on('pointerover', () => {
             if (!titleSound.isPlaying) {
-                titleSound.play();
+                titleSound.play({volume: this.game.config.ttsVolume});
             }
         })
     }
@@ -125,7 +125,7 @@ export default class WorldSelect extends Phaser.Scene {
             difIcon.setTint(0xFFF);
 
             if (!this.menuSounds.difficultyTTS.isPlaying){
-                this.menuSounds.difficultyTTS.play();
+                this.menuSounds.difficultyTTS.play({volume: this.game.config.ttsVolume});
             }
         }).on('pointerout', () => {
             difButton.clearTint();
@@ -195,7 +195,7 @@ export default class WorldSelect extends Phaser.Scene {
 
                 // Play TTS
                 if (!b.sound.isPlaying) {
-                    b.sound.play();
+                    b.sound.play({volume: this.game.config.ttsVolume});
                 }
             });
             b.button.on('pointerout', () => {
