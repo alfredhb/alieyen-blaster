@@ -11,21 +11,22 @@ import AlienGroup from "../../gameobjects/alien_group";
 import SpeedUp from "../../gameobjects/powerups/speedup";
 
 const line1Text = ["This ","is my ","spaceship",", ","I ","have ","2 cannons ","which ","keep ","us out ", "of ", "danger."];
-const line2Text = ["But most ","importantly, ","my spaceship"," has a ","done ","button."];
-const line3Text = ["If I ","ever ","want ","to ","stop ","I ","just ","use ","this. ","Try it ","now by ","TAPPING "," or LOOKING ","at it ","for a ","little ","while."];
-const line4Text = ["Use ","this ","if ","you ","are ","ever ","done ","playing ","and ","want ","to ","stop! ","Any ","completed ","levels ","will be ","waiting ","when you ","come back."];
+const line2Text = ["But most ","importantly, ","my spaceship"," has a ","DONE ","button."];
+const line3Text = ["If I ","ever ","want ","to ","stop ","I ","just ","use ","this. ","Try it ","now by ","TAPPING "," on it ","or LOOKING ","at it ","for a ","little ","while."];
+const line4Text = ["Use ","this ","if ","you ","ever ","are ","done ","playing ","and ","want ","to ","stop! ","Any ","completed ","levels ","will be ","waiting ","when you ","come back."];
 const line5Text = ["This ","is the ","level ","tracker!"," On the ","left ","it tells ","you ","what ","you"," have"," to"," do."];
 const line5_2Text = ["In the"," middle"," is a"," timer"," to"," show you"," when"," the"," level"," is"," over,"," and on the"," right"," is your"," score!"];
 const line6Text = ["Oh! ","It's zero! ","Lets fix ","that..."];
 const line7Text = ["Look ","an Alien!"];
 const line8Text = ["TAP"," or LOOK"," at it"," to fire"," the cannons!"];
-const line9Text = ["Great Job!"," I think"," more"," of them"," are coming..."," Watch Out!!!"];
-const line10Text = ["You may"," have"," noticed"," the cannons"," don't fire ","very fast!"];
-const line10_2Text = ["That's"," because ","they ","need to"," cool off"," before"," shooting ","again."];
+const line9Text = ["Great Job!", " Killing"," aliens ","increases ","your score. ","If you ","ever see one, ","make sure ","it doesn't ","leave your ","sight!"];
+const line9_2Text = [" I think"," more"," of them"," are coming..."," Watch Out!!!"];
+const line10Text = ["You may"," have"," noticed"," that the"," cannons"," don't fire ","very fast!"];
+const line10_2Text = ["That's"," because ","they need ","TIME to"," cool off"," before"," shooting ","again."];
 const line11Text = ["Oh look,"," a powerup!"," Shoot it"," to collect it."];
-const line12Text = ["Now we"," can shoot"," much faster,"," but only"," as long"," as the"," effect ","lasts!"," Watch the"," color of"," your cannons!"];
+const line12Text = ["Now we"," can shoot"," much faster,"," but only"," as long"," as the"," effect ","lasts!"," Watch the"," COLOR of"," your cannons!"];
 const line13Text = ["Uh oh,"," more aliens!"," Quick,"," take"," them out!!!"];
-const line14Text = ["I have"," taught ","you everthing ","I know,"," time to"," take out"," those villians!"];
+const line14Text = ["I have"," taught ","you everthing ","I know,"," time to"," take out"," those villians. Good Luck!"];
 
 /**
  * I'm ashamed to admit this, but the next 500 lines is the most spaghetti shit
@@ -185,10 +186,10 @@ export default class TimedTutorialScene extends Phaser.Scene {
             this.bg.setDepth(0);
             centerOutline.setDepth(-1);
             center.setDepth(-1);
-            title.setDepth(-1);
-            yesB.removeInteractive().setDepth(-1);
+            title.disableInteractive().setDepth(-1);
+            yesB.disableInteractive().setDepth(-1);
             yesT.setDepth(-1);
-            noB.removeInteractive().setDepth(-1);
+            noB.disableInteractive().setDepth(-1);
             noT.setDepth(-1);
 
             // trigger voiceline starts
@@ -518,7 +519,8 @@ export default class TimedTutorialScene extends Phaser.Scene {
         // Get Voicelines
         let line7 = this.sound.get('time-tutorial-7');
         let line8 = this.sound.get('time-tutorial-8');
-        let line9 = this.sound.get('time-tutorial-9');
+        let line9_1 = this.sound.get('time-tutorial-9-1');
+        let line9_2 = this.sound.get('time-tutorial-9-2');
 
         // place alien
         this.aliens = new AlienGroup(this, {
@@ -545,7 +547,7 @@ export default class TimedTutorialScene extends Phaser.Scene {
                 this.levelTimer.stopTimer();
 
                 this.hideDialogue();
-                this.showDialogue(0, line9Text, line9);
+                this.showDialogue(this.constants.Height * 0.4, line9Text, line9_1);
             });
             this.kills.grunt = 1;
         }
@@ -571,8 +573,13 @@ export default class TimedTutorialScene extends Phaser.Scene {
                 this.levelTimer.startTimer();
             }, 500);
         });
-        line9.on('complete', () => {
-            line9.off('complete');
+        line9_1.on('complete', () => {
+            line9_1.off('complete');
+            this.hideDialogue();
+            this.showDialogue(0, line9_2Text, line9_2)
+        });
+        line9_2.on('complete', () => {
+            line9_2.off('complete');
             setTimeout(() => {
                 this.hideDialogue();
                 this.objText.objText.text = "Kill the Aliens!"
@@ -581,7 +588,7 @@ export default class TimedTutorialScene extends Phaser.Scene {
                 this.aliens.spawn();
                 this.section5();
             }, 1000);
-        })
+        });
     }
 
     /**
@@ -753,12 +760,14 @@ export default class TimedTutorialScene extends Phaser.Scene {
         });
 
         this.events.addListener('leveltimerover', () => {
-            this.aliens.getChildren().forEach(a => a.leave());
-            this.bg.setDepth(5);
-            // this.aliens.destroy(false, true);
-            this.turrets.removeFireListener();
+            setTimeout(() => {
+                this.aliens.getChildren().forEach(a => a.leave());
+                this.bg.setDepth(5);
+                // this.aliens.destroy(false, true);
+                this.turrets.removeFireListener();
 
-            this.section8();
+                this.section8();
+            }, 1250);
         });
     }
 

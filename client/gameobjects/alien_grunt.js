@@ -17,8 +17,9 @@ export default class AlienGrunt extends Alien {
         this.setInteractive();
         this.setPosition(width + 50, height + 50);
         this.setDisplaySize(width * 0.03, height * 0.05);
-        this.setSize(this.width * 0.5, this.height * 0.7);
-        this.setOrigin(0.5);
+        this.body.setSize(this.displayWidth * 1.3, this.displayHeight * 2);
+        // this.setOrigin(0.5);
+        this.body.setOffset(this.displayWidth * 1.1, this.displayHeight)
 
         this.maxX = width + 65;
         this.maxY = height + 65;
@@ -56,6 +57,11 @@ export default class AlienGrunt extends Alien {
             this.deadVal = true;
             this.respawn();
         }
+
+        if (this.doesFire && Math.abs(this.x - this.stopLoc) < 5) {
+            this.fire();
+            this.doesFire = false;
+        }
     }
 
     /**
@@ -70,7 +76,8 @@ export default class AlienGrunt extends Alien {
         this.xSpeed = direction * this.speed * 1000;
         this.ySpeed = 0 * 1000;
 
-        this.setPosition((direction > 0) ? -50 : this.maxX, y);
+        this.x = (direction > 0) ? -50 : this.maxX;
+        this.setPosition(this.x, y);
         this.setVelocity(this.xSpeed, this.ySpeed);
         this.anims.play('alien-grunt-float');
         this.setActive(true);
@@ -80,19 +87,11 @@ export default class AlienGrunt extends Alien {
         // stops when alien should be over its zone and makes it fire
         // TODO: make associated with difficulty
         if (this.canFire && Math.random() > 0.66) {
-            let stopLoc = Phaser.Math.RND.between(
+            this.stopLoc = Phaser.Math.RND.between(
                 this.constants.Width * 1 / 4,
                 this.constants.Width * 3 / 4
             );
-            let stopDelay = Math.abs((stopLoc - this.x) / this.speed);
-
-            this.scene.time.addEvent({
-                delay: stopDelay,
-                callback: this.fire,
-                callbackScope: this,
-                loop: false,
-                paused: false,
-            });
+            this.doesFire = true;
         }
 
         this.deadVal = false;

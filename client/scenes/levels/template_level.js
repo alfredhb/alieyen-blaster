@@ -417,7 +417,9 @@ export default class TemplateLevelScene extends Phaser.Scene {
                 this.powerupColliders.push(this.physics.add.overlap(
                     this.bullets,
                     powerup,
-                    powerup.collisionFunc,
+                    (p, b) => {
+                        powerup.collisionFunc(p, b);
+                    },
                     null,
                     powerup
                 ));
