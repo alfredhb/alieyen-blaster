@@ -31,4 +31,26 @@ export default class ScoreObject extends Phaser.GameObjects.GameObject {
         (this.scene.kills.boss * this.scene.levelData.level.aliens.boss.score | 0));
         return this.score;
     }
+
+    /**
+     * The score required to succeed in a level, add extra cases here to provide
+     * story levels a star rating
+     * @param {number} m the difficultymultiplier
+     * @returns {number}
+     */
+    getSuccessScore(m) {
+        let score = 0;
+        if (this.scene.levelData.level.aliens.grunt.spawn) {
+            score += this.scene.levelData.level.aliens.grunt.score
+                 * this.scene.levelData.level.win_cond.kills.grunt;
+        } if (this.scene.levelData.level.aliens.mini_boss.spawn) {
+            score += this.scene.levelData.level.aliens.mini_boss.score
+                 * this.scene.levelData.level.win_cond.kills.mini_boss;
+        } if (this.scene.levelData.level.aliens.boss.spawn) {
+            score += this.scene.levelData.level.aliens.boss.score
+                 * this.scene.levelData.level.win_cond.kills.boss;
+        }
+        console.log(score, this.scene.getMultiplier());
+        return score * m;
+    }
 }

@@ -133,6 +133,17 @@ Meteor.methods({
   },
 
   /**
+   * the save slot entry for id
+   * @param {number} id 
+   * @returns {object}
+   */
+  getSlotData(id) {
+    var s = SaveData.findOne("slot" + String(id + 1));
+
+    return s;
+  },
+
+  /**
    * Creates a new entry with _id slot{{id+1}} with all levels false and diff easy
    * TODO update as we create more levels
    * @param {number} id 

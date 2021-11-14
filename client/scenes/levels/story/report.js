@@ -64,17 +64,31 @@ export default class StoryReportScene extends Phaser.Scene {
 
         // Fetch Highscore
         this.highscore = { player: "None", score: 0 };
-        Meteor.call("saveLevelData", this.game.config.gameslot, this.name, (err, res) => {
-            if (err != null) {
-                console.log(err);
-                return;
-            }
-
-            // Initialize highscore report once data is returned.
-            this.levelData.levels = res.levels
-            
-            this.addClick(this.buttons);
-        });
+        if (this.levelData.level.objComplete) {
+            Meteor.call("saveLevelData", this.game.config.gameslot, this.name, (err, res) => {
+                if (err != null) {
+                    console.log(err);
+                    return;
+                }
+    
+                // Initialize highscore report once data is returned.
+                this.levelData.levels = res.levels
+                
+                this.addClick(this.buttons);
+            });
+        } else {
+            Meteor.call('getSlotData', this.game.config.gameslot, (err, res) => {
+                if (err != null) {
+                    console.log(err);
+                    return;
+                }
+    
+                // Initialize highscore report once data is returned.
+                this.levelData.levels = res.levels
+                
+                this.addClick(this.buttons);
+            })
+        }
 
         // Specific level report card data
         console.log("initialized ReportScene for ", this.playerCount, " players")

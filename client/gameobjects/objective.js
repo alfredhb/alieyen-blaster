@@ -31,7 +31,8 @@ export default class Objective extends Phaser.GameObjects.GameObject {
 
             // TIMEKILLS
             case 2:
-                text = 'Kill the Aliens Before Time Runs Out!!!'
+                let sScore = scene.levelScore.getSuccessScore(scene.getMultiplier());
+                text = 'Get a Score of  ' + sScore + '  Before Time Runs Out!!!'
                 break;
 
             // LIVEKILLS
