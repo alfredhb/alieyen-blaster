@@ -154,7 +154,7 @@ export default class AlienMini extends Alien {
 
             setTimeout(() => {
                 this.scene.events.emit('minibosskilled');
-            }, 1500);
+            }, 1000);
         });
 
         return this.deadVal;

@@ -11,7 +11,7 @@ export default class Objective extends Phaser.GameObjects.GameObject {
      * @param {TemplateLevelScene} scene 
      * @param {Constants} constants 
      * @param {number?} obj
-     * @param {string} customText
+     * @param {string?} customText
      */
     constructor(scene, constants, obj, customText) {
         super(scene);
@@ -51,7 +51,7 @@ export default class Objective extends Phaser.GameObjects.GameObject {
                 console.log("Unknown objective found for level " + this.levelData.name);
                 break;
         }
-        if (customText.length) text = customText
+        if (customText?.length) text = customText
 
         this.objText = scene.add.text(
             constants.Width * 0.05, 
