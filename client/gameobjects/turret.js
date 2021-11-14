@@ -150,7 +150,7 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
                     this.scene.input.activePointer.x,
                     this.scene.input.activePointer.y
                 ) + Math.PI / 2;
-            if (Math.abs(angle) <= 1.5) {
+            if (Math.abs(angle) <= 1.9) {
                 // Add cooldown timer
                 t.cooldownTimer = this.scene.time.addEvent({
                     delay: t.cooldownTime,
