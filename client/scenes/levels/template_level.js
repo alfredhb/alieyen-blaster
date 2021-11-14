@@ -221,7 +221,15 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
             // TIMEKILLS
             case 2:
-                console.log("TIMEKILLS mode unimplemented");
+                this.levelTimer = new LevelTimer(this, this.constants, this.levelData.level.win_cond.time);
+                this.levelScore = new ScoreObject(this, this.constants);
+
+                // listen for leveltimerover if one doesn't already exist
+                if (!this.events.listenerCount('leveltimerover')) {
+                    this.events.addListener('leveltimerover', () => {
+                        this.endLevel();
+                    });
+                }
                 break;
 
             // LIVEKILLS
@@ -581,6 +589,10 @@ export default class TemplateLevelScene extends Phaser.Scene {
             // TIMEKILLS
             case 2:
                 console.log("TIMEKILLS mode unimplemented");
+                let pScore = this.calculateScore();
+                let sScore = this.levelScore.getSuccessScore(this.getMultiplier());
+                if (pScore >= sScore) return true;
+
                 return false; // timer is out && kills match
 
             // LIVEKILLS
@@ -668,13 +680,14 @@ export default class TemplateLevelScene extends Phaser.Scene {
      * @param {number} objective
      */
     calculateScore(objective) {
-        this.levelData.level['score' + (this.levelData.meta.currentPlayer + 1)] = this.levelScore.calculateScore();
+        let score = this.levelScore.calculateScore();
+        this.levelData.level['score' + (this.levelData.meta.currentPlayer + 1)] = score;
 
         if (objective == 3 || objective == 4) {
             this.levelData.level['liveScore' + (this.levelData.meta.currentPlayer + 1)] =
                 this.levelLives.numLives; // score mult determined elsewhere
         }
-        return;
+        return score;
     }
 
     /**
