@@ -80,9 +80,11 @@ export default class SpeedUp extends Phaser.Physics.Arcade.Sprite {
      * Bullet collided with speedup. Emit increaseturretspeed with duration to 
      * reduce cooldown for. 
      */
-    collisionFunc() {
+    collisionFunc(p, b) {
         if (this.hit) return;
+        if (!b.active) return;
         
+        b.kill();
         this.destruct();
 
         this.scene.events.emit('increaseturretspeed', (this.speedUpDuration /* duration in ms */));

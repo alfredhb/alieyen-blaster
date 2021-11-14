@@ -82,9 +82,11 @@ export default class Health extends Phaser.Physics.Arcade.Sprite {
      * Bullet collided with health. Emit healplayer with heal amount the sprite is
      * worth. 
      */
-    collisionFunc() {
+    collisionFunc(p, b) {
         if (this.hit) return;
-
+        if (!b.active) return;
+        
+        b.kill();
         this.scene.events.emit('healplayer', (1 /* amount to heal */));
 
         this.destruct();

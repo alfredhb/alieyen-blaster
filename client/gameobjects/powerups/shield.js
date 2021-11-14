@@ -83,9 +83,11 @@ export default class Shield extends Phaser.Physics.Arcade.Sprite {
      * Bullet collided with health. Emit healplayer with heal amount the sprite is
      * worth.
      */
-    collisionFunc() {
+    collisionFunc(p, b) {
         if (this.hit) return;
-
+        if (!b.active) return;
+        
+        b.kill();
         this.scene.events.emit('shieldplayer', (this.shieldDuration /* duration in ms */));
 
         this.destruct();
