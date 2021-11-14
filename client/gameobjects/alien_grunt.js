@@ -157,8 +157,7 @@ export default class AlienGrunt extends Alien {
         this.deadVal = true;
 
         // let projectile handle killed alien
-        if (this.projectile) {
-            this.projectile.alienKilled();
+        if (this.projectile && this.projectile.alienKilled()) {
             this.projectile.destroy();
         }
         

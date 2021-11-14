@@ -33,7 +33,8 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "endless-button",     "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/infinity.png"},
             {"key": "lives-button",       "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/heart.png"},
             {"key": "gauntlet-button",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/alien.png"},
-            {"key": "alien-boss",         "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/boss_min_1.png"},
+            {"key": "alien-mini-boss",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/boss_min_1.png"},
+            {"key": "mini-boss-shield",   "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/characters/mini_boss_shield.png"},
             {"key": "turret-colored",     "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/turret_col.png"},
             {"key": "turret-speed-up",    "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/turret_col_outline.png"},
             {"key": "alien-bomb",         "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/alien_bomb.png"},
@@ -175,7 +176,7 @@ export default class DataScene1 extends Phaser.Scene {
      */
     addLoadListener(width, height) {
         this.assetsLoaded = 0;
-        this.totalAssets = this.onlineImages.length + 11/* # of spritesheets */;
+        this.totalAssets = this.onlineImages.length + 13/* # of spritesheets */;
         let loadBlockWidth = (width * 0.45) / this.totalAssets;
 
         this.textures.on('addtexture', (k, t) => {
@@ -207,6 +208,18 @@ export default class DataScene1 extends Phaser.Scene {
             'cursor-fill-2',
             'https://storage.googleapis.com/alieyen-blaster/public/assets/features/cursor-sheet-v2.png',
             { frameWidth: 40, frameHeight: 40 },
+        );
+
+        this.load.spritesheet(
+            'mini-boss-float-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/mini_boss_float_sheet.png',
+            { frameWidth: 228, frameHeight: 218 },
+        );
+
+        this.load.spritesheet(
+            'mini-boss-shield-break-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/mini_boss_shield_break_sheet.png',
+            { frameWidth: 228, frameHeight: 218 },
         );
 
         // Alien Grunt Fire Animations
@@ -316,6 +329,20 @@ export default class DataScene1 extends Phaser.Scene {
             key: 'cursor-fill-animation-2',
             frames: this.anims.generateFrameNumbers('cursor-fill-2', { start: 0 }),
             frameRate: 20,
+            repeat: 0,
+        });
+
+        this.anims.create({
+            key: 'mini-boss-float',
+            frames: this.anims.generateFrameNumbers('mini-boss-float-sheet', { start: 0 }),
+            frameRate: 3,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: 'mini-boss-shield-break',
+            frames: this.anims.generateFrameNumbers('mini-boss-shield-break-sheet', { start: 0 }),
+            frameRate: 3,
             repeat: 0,
         });
 
