@@ -50,7 +50,6 @@ export default class ScoreObject extends Phaser.GameObjects.GameObject {
             score += this.scene.levelData.level.aliens.boss.score
                  * this.scene.levelData.level.win_cond.kills.boss;
         }
-        console.log(score, this.scene.getMultiplier());
         return score * m;
     }
 }

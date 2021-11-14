@@ -71,10 +71,7 @@ export default class StoryReportScene extends Phaser.Scene {
                     return;
                 }
     
-                // Initialize highscore report once data is returned.
-                this.levelData.levels = res.levels
-                
-                this.addClick(this.buttons);
+                this.attachSlotData(res);
             });
         } else {
             Meteor.call('getSlotData', this.game.config.gameslot, (err, res) => {
@@ -83,10 +80,7 @@ export default class StoryReportScene extends Phaser.Scene {
                     return;
                 }
     
-                // Initialize highscore report once data is returned.
-                this.levelData.levels = res.levels
-                
-                this.addClick(this.buttons);
+                this.attachSlotData(res);
             })
         }
 
@@ -134,6 +128,19 @@ export default class StoryReportScene extends Phaser.Scene {
         // Replay / Back Buttons
         this.navigationSection(width, height);
 
+        // Add help button
+        this.help = new HelpButton(this);
+    }
+
+    /**
+     * saves the slot data to transitionary components and adds interactivity
+     * @param {object} data 
+     */
+    attachSlotData(data) {
+        this.levelData.levels = data.levels
+        
+        this.addClick(this.buttons);
+
         // quit button
         const quitButton = new QuitButton(this, {
             backMenu: 'levelSelectMenu',
@@ -147,9 +154,6 @@ export default class StoryReportScene extends Phaser.Scene {
                 levels: this.levelData.levels
             }
         });
-
-        // Add help button
-        this.help = new HelpButton(this);
     }
 
     update() {
