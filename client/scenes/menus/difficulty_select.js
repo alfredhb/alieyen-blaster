@@ -32,6 +32,11 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
             }
 
             this.difficulty = res;
+            this.levelData.meta.difficulty = res;
+
+            // style start if difficulty is already set
+            this.styleStart();
+
             console.log("fetched difficulty as " + this.difficulty);
 
             // highlight the correct button
@@ -233,7 +238,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
                 );
                 this.scene.stop(this); // stop itself
             }
-        })
+        });
     }
     
     startReady() {
