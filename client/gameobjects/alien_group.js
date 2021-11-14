@@ -26,7 +26,7 @@ export default class AlienGroup extends Phaser.GameObjects.Group {
     maxAliens() {
         let dM = this.scene.levelData.level.difficulty_multiplier[this.scene.levelData.meta.difficulty - 1];
 
-        this.maxSize = Math.ceil(this.maxSize * dM);
+        this.maxSize = Math.floor(this.maxSize * dM);
     }
 
     /**
