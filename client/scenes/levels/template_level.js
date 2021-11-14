@@ -13,6 +13,7 @@ import HelpButton from '../../gameobjects/help_button';
 import ScoreObject from "../../gameobjects/scoreObject";
 import Turrets from "../../gameobjects/turret";
 import Constants from "../../lib/constants";
+import AlienMini from "../../gameobjects/alien_mini";
 
 export default class TemplateLevelScene extends Phaser.Scene {
     constructor() {
@@ -192,6 +193,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         - create liveCounter logiv for LIVES, LIVEKILLS, TIMELIVES
         - call any end animations needed
         */
+        let customText = "";
         switch (this.levelData.level.objective) {
             // TIMED
             case 0:
@@ -234,7 +236,23 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
             // LIVEKILLS
             case 3:
-                console.log("LIVEKILLS mode unimplemented");
+                this.levelLives = new LevelLives(this, this.constants, this.levelData.level.win_cond.lives);
+                this.levelScore = new ScoreObject(this, this.constants);
+                customText = "Defeat Glorber's General!!!";
+
+                if (!this.events.listenerCount('levelliveszero')) {
+                    this.events.addListener('levelliveszero', () => {
+                        this.endLevel();
+                    });
+                }
+
+                if (!this.events.listenerCount('minibosskilled')) {
+                    this.events.addListener('minibosskilled', () => {
+                        if (this.kills.miniBoss == this.levelData.level.win_cond.kills.mini_boss) this.endLevel();
+                        // TODO, fix for Omega - this is a short since only mini-bosses are in the game
+                        // currently. Add obj checker before ending the level completely!
+                    }); // special case listener for boss levels
+                }
                 break;
 
             // TIMELIVES
@@ -263,7 +281,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         }
 
         // Add objective denotion
-        this.objText = new Objective(this, this.constants);
+        this.objText = new Objective(this, this.constants, null, customText);
 
         // Initilize Kill Tracking
         this.kills = {
@@ -298,6 +316,15 @@ export default class TemplateLevelScene extends Phaser.Scene {
             }, this.constants)
         );
 
+        let mBossData = this.levelData.level.aliens.mini_boss;
+        this.aliens.push(
+            new AlienGroup(this, {
+                classType: AlienMini,
+                runChildUpdate: true,
+                maxSize: (mBossData.spawn) ? mBossData.quantity : 0
+            }, this.constants)
+        );
+
         // Create alien spawntimers
         this.aliens.forEach(a => {
             a.createSpawnTimers(this.levelData.level.win_cond.lives > 0); // if lives are in wincondition then alien can fire
@@ -326,12 +353,13 @@ export default class TemplateLevelScene extends Phaser.Scene {
             }
 
             bullet.kill();
-            let dead = alien.damage();
+            let dead = alien.damage(1); // deal 1 damage
             if (dead) {
                 this.sound.play('explode-3', { volume: 0.25 });
                 switch(alien.getType()) {
                     case 1:
                         this.kills.miniBoss += 1;
+                        console.log(this.kills);
                         break;
                     case 2:
                         this.kills.boss += 1;
@@ -342,9 +370,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
                 }
             }
         }
-        this.aliens.forEach(a => {
-            this.turrets.addFireListener(a, collisionFunc);
-        })
+        this.turrets.addFireListener(this.aliens, collisionFunc);
     }
 
     /**
@@ -573,6 +599,8 @@ export default class TemplateLevelScene extends Phaser.Scene {
      * @returns {boolean}
      */
     checkObjective() {
+        let pScore = 0;
+        let sScore = 0;
         switch (this.levelData.level.objective) {
             // TIMED
             case 0:
@@ -586,16 +614,20 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
             // TIMEKILLS
             case 2:
-                console.log("TIMEKILLS mode unimplemented");
-                let pScore = this.calculateScore();
-                let sScore = this.levelScore.getSuccessScore(this.getMultiplier());
+                pScore = this.calculateScore();
+                sScore = this.levelScore.getSuccessScore(this.getMultiplier());
                 if (pScore >= sScore) return true;
 
                 return false; // timer is out && kills match
 
             // LIVEKILLS
             case 3:
-                console.log("LIVEKILLS mode unimplemented");
+                pScore = this.calculateScore();
+                sScore = this.levelScore.getSuccessScore(this.getMultiplier());
+                if (this.levelLives.numLives > 0 && sScore <= pScore) {
+                    return true; // lives complete and score sufficient
+                }
+
                 return false; // check lives count to be nonzero && kills satisfied
 
             // TIMELIVES
