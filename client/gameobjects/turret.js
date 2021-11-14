@@ -183,13 +183,15 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
         let bullet = this.scene.bullets.get(this.currentPlayer);
         if (bullet) {
             // Add collider for each alien type
-            this.scene.bulletColliders.push(this.scene.physics.add.overlap(
-                bullet,
-                aliens,
-                collisionFunc,
-                null,
-                this.scene
-            ));
+            aliens.forEach(a => {
+                this.scene.bulletColliders.push(this.scene.physics.add.overlap(
+                    bullet,
+                    a,
+                    collisionFunc,
+                    null,
+                    this.scene
+                ));
+            });
             bullet.fire(null, t.turret.x, t.turret.y + 50, angle);
             bullet.setDepth(8);
         }
