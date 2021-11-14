@@ -143,7 +143,6 @@ import Constants from "../../lib/constants";
         const { width, height } = this.scale;
 
         for (let i = 0; i < slots.length; i++) {
-            console.log(slots[i], i);
             this.addSaveSlot(width, height, i, slots[i]);
         }
     }
