@@ -73,11 +73,14 @@ export default class AlienProjectile extends Phaser.Physics.Arcade.Sprite {
 
     /**
      * Handle projectile when alien is killed. If still charging, kill the projectile.
+     * @returns {boolean} whether to destroy the projectile or not
      */
     alienKilled() {
         if (this.displayWidth < this.constants.Width * 0.055) {
             this.kill()
+            return true;
         }
+        return false
     }
 
     /**

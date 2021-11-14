@@ -157,8 +157,10 @@ export default class AlienGrunt extends Alien {
         this.deadVal = true;
 
         // let projectile handle killed alien
-        this.projectile?.alienKilled();
-
+        if (this.projectile && this.projectile.alienKilled()) {
+            this.projectile.destroy();
+        }
+        
         // Stop any charge sound and play animation
         this.play('explode', { loop: false, volume: 0.25 });
         this.on('animationcomplete', () => {
