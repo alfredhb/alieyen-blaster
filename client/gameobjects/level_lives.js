@@ -65,7 +65,6 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
         scene.events.on('healplayer', (health) => {
             if (this.numLives < lives) {
                 for (let i = this.numLives; i < this.numLives + health; i++) {
-                    console.log(this.numLives, lives, health);
                     if (i >= lives) break;
 
                     this.addLife(i);
