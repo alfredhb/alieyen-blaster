@@ -575,8 +575,11 @@ export default class TimedTutorialScene extends Phaser.Scene {
         });
         line9_1.on('complete', () => {
             line9_1.off('complete');
-            this.hideDialogue();
-            this.showDialogue(0, line9_2Text, line9_2)
+            setTimeout(() => {
+                this.hideDialogue();
+                this.showDialogue(0, line9_2Text, line9_2);
+                console.log(this.aliens);
+            }, 1000);
         });
         line9_2.on('complete', () => {
             line9_2.off('complete');
