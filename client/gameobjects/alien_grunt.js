@@ -17,7 +17,7 @@ export default class AlienGrunt extends Alien {
         this.setInteractive();
         this.setPosition(width + 50, height + 50);
         this.setDisplaySize(width * 0.03, height * 0.05);
-        this.body.setSize(this.displayWidth * 1.3, this.displayHeight * 2);
+        this.body.setSize(this.displayWidth * 0.7, this.displayHeight * 1.5);
         // this.setOrigin(0.5);
         this.body.setOffset(this.displayWidth * 1.1, this.displayHeight)
 
