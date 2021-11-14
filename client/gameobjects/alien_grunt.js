@@ -4,7 +4,7 @@ import Alien from "./alien";
 
 export default class AlienGrunt extends Alien {
     /**
-     * @param {Phaser.Scene} scene 
+     * @param {Phaser.Scene} scene
      */
     constructor(scene, canFire) {
         super(scene, -50, -50, 'alien-grunt-1-1');
@@ -12,7 +12,7 @@ export default class AlienGrunt extends Alien {
         let { width, height } = scene.scale;
         this.constants = new Constants(width, height);
 
-        // Add to physics and to canvas 
+        // Add to physics and to canvas
         scene.physics.add.existing(this);
         this.setInteractive();
         this.setPosition(width + 50, height + 50);
@@ -24,7 +24,7 @@ export default class AlienGrunt extends Alien {
         this.maxY = height + 65;
 
         /**
-         * Difficulty must affect: 
+         * Difficulty must affect:
          * 1. Speed that aliens move - done
          * 2. Whether aliens stop and continue moving (da jukes)
          * 3. How quickly aliens charge up to fire - done
@@ -40,13 +40,12 @@ export default class AlienGrunt extends Alien {
 
         // Add Animation
         this.anims.get('alien-grunt-float');
-        this.chargeSound = this.scene.sound.get('energy-charge');
     }
 
     /**
      * Update function which runs every tick and updates object position
-     * @param {number} time 
-     * @param {number} delta 
+     * @param {number} time
+     * @param {number} delta
      */
     update(time, delta) {
         if (this.x < -50 || this.x > this.maxX) {
@@ -55,11 +54,8 @@ export default class AlienGrunt extends Alien {
 
             // Respawn logic
             this.deadVal = true;
-            this.respawn();   
+            this.respawn();
         }
-
-        // Handle any firing animations
-        this.handleProjectile();
     }
 
     /**
@@ -73,7 +69,7 @@ export default class AlienGrunt extends Alien {
         this.speed = this.constants.GetSpeed(this.difficulty);
         this.xSpeed = direction * this.speed * 1000;
         this.ySpeed = 0 * 1000;
-        
+
         this.setPosition((direction > 0) ? -50 : this.maxX, y);
         this.setVelocity(this.xSpeed, this.ySpeed);
         this.anims.play('alien-grunt-float');
@@ -104,13 +100,13 @@ export default class AlienGrunt extends Alien {
 
     /**
      * places the sprite statically at x y and makes it visible and active
-     * @param {number} x 
-     * @param {number} y 
+     * @param {number} x
+     * @param {number} y
      */
     place(x, y) {
         this.setPosition(x, y);
         this.setDisplaySize(
-            this.constants.Width * 0.03, 
+            this.constants.Width * 0.03,
             this.constants.Height * 0.05
         );
         this.anims.play('alien-grunt-float');
@@ -121,17 +117,17 @@ export default class AlienGrunt extends Alien {
 
     /**
      * Fires at the player's ship
-     * 
+     *
      * Requires: alien is not dead (signifying it's in flight)
      * Requires: alien grunt has canFire as true meaning it can fire
-     * Requires: different animations for charge- different frame num so 
+     * Requires: different animations for charge- different frame num so
      *              easy, med, hard charge times are all represented correctly
      */
     fire() {
         if (this.deadVal || !this.canFire) {
             return;
         }
-        
+
         // Stop moving and begin animation
         this.setVelocity(0, 0);
         this.anims.play(this.getFireAnimation());
@@ -140,43 +136,16 @@ export default class AlienGrunt extends Alien {
             this.leave(true /* respawn */);
         });
 
-        // create bomb and start sound
-        this.alien_attack = this.scene.add.image(this.x, this.y + this.height * 0.75, 'alien-bomb');
-        this.alien_attack.setTint(this.constants.LightBlue);
-        this.alien_attack.setDisplaySize(5, 5);
-        this.chargeSound.play();
+        this.addProjectile();
     }
 
-    /**
-     * an update function for alien's projectile. Charges up to width size scene.width * 0.028
-     * at rate variable with difficulty, then updates position downward until it 
-     * reaches the cockpit emitting a player damage event captured by the level
-     * and captured by the alien
+     /**
+     * Adds a projectile to this scene.
      */
-    handleProjectile() {
-        if (!this.alien_attack?.visible) {
-            return;
-        }
-
-        if (this.alien_attack?.y >= this.constants.Height * 0.85) {
-            this.alien_attack.setVisible(false);
-            this.scene.events.emit('playerhit', 1 /* alien grunt deals 1 damage */);
-        }
-
-        if (this.alien_attack?.displayWidth < this.constants.Width * 0.055) {
-            this.alien_attack.setDisplaySize(
-                this.alien_attack.displayWidth + 0.3 * this.dMultiplier, 
-                this.alien_attack.displayWidth + 0.3 * this.dMultiplier,
-            );
-
-            // Swap audio events
-            if (this.alien_attack.displayWidth >= this.constants.Width * 0.055) {
-                this.chargeSound.stop();
-                this.scene.sound.get('energy-blast').play()
-            }
-        } else if (this.alien_attack?.displayWidth >= this.constants.Width * 0.055 
-            && this.alien_attack?.y < this.constants.Height) {
-            this.alien_attack.setPosition(this.alien_attack.x, this.alien_attack.y + 2.5);
+    addProjectile() {
+        this.projectile = this.scene.projectiles.get(this.constants.Width, this.constants.Height, this.dMultiplier);
+        if (this.projectile) {
+            this.projectile.fire(this.x, this.y + this.height * 0.75);
         }
     }
 
@@ -188,11 +157,8 @@ export default class AlienGrunt extends Alien {
     kill() {
         this.deadVal = true;
 
-        if (this.alien_attack?.displayWidth < this.constants.Width * 0.055) {
-            this.chargeSound.stop();
-            this.alien_attack.setVisible(false);
-            this.alien_attack.setActive(false);
-        }
+        // let projectile handle killed alien
+        this.projectile?.alienKilled();
 
         // Stop any charge sound and play animation
         this.play('explode', { loop: false, volume: 0.25 });
@@ -232,7 +198,7 @@ export default class AlienGrunt extends Alien {
 
     /**
      * Causes alien to 'exit' level without exploding or playing any sound effects
-     * Places alien underneath player and invisible to allow any active bombs to 
+     * Places alien underneath player and invisible to allow any active bombs to
      * continue moving
      * @param {boolean?} respawn
      */

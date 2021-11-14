@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Constants from '../lib/constants';
 import TemplateLevelScene from '../scenes/levels/template_level';
+import AlienProjectile from './alien_projectile';
 
 export default class AlienGroup extends Phaser.GameObjects.Group {
     /**
@@ -12,6 +13,11 @@ export default class AlienGroup extends Phaser.GameObjects.Group {
         super(scene, config);
 
         scene.add.existing(this);
+
+        this.scene.projectiles = this.scene.physics.add.group({
+            classType: AlienProjectile,
+            runChildUpdate: true,
+        });
     }
 
     /**
@@ -24,13 +30,11 @@ export default class AlienGroup extends Phaser.GameObjects.Group {
     }
 
     /**
-        * Creates maxSize number of spawn timers and saves the spawn timer array into
-        * this.alienTimers -> a 2D array [alienGruntTimers, miniBossTimers, BossTimers]
-        */
-       /**
-        * 
-        * @param {boolean?} canFire 
-        */
+    * Creates maxSize number of spawn timers and saves the spawn timer array into
+    * this.alienTimers -> a 2D array [alienGruntTimers, miniBossTimers, BossTimers]
+    *
+    * @param {boolean?} canFire
+    */
     createSpawnTimers(canFire) {
         this.maxAliens();
 
