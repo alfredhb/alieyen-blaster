@@ -130,7 +130,7 @@ export default class LevelSelect extends Phaser.Scene {
             difIcon.setTint(0xFFF);
 
             if (!this.menuSounds.difficultyTTS.isPlaying){
-                this.menuSounds.difficultyTTS.play();
+                this.menuSounds.difficultyTTS.play({volume: this.game.config.ttsVolume});
             }
         }).on('pointerout', () => {
             difButton.clearTint();
@@ -323,7 +323,6 @@ export default class LevelSelect extends Phaser.Scene {
      * @param {number} levelNum 
      */
     playLevelTTS(levelNum) {
-        console.log(levelNum);
         let level = this.sound.get('level');
         if (level.isPlaying) return;
 
