@@ -46,19 +46,19 @@ export default class TimedTutorialScene extends Phaser.Scene {
      * Capture any scene data held in data for later scenes
      * @param {{
      * meta: {
-     *  playerCount: number, 
-     *  difficulty: number, 
-     *  players: string[], 
+     *  playerCount: number,
+     *  difficulty: number,
+     *  players: string[],
      *  levelName: string
-     * }, 
+     * },
      * level: {any}?,
-     *  scene: { 
-     *      prevScene: { 
-     *          name: string, 
+     *  scene: {
+     *      prevScene: {
+     *          name: string,
      *          type: string
-     *      }, 
-     *      nextScene: { 
-     *          name: string, 
+     *      },
+     *      nextScene: {
+     *          name: string,
      *          type: string
      *      }
      *  },
@@ -105,9 +105,9 @@ export default class TimedTutorialScene extends Phaser.Scene {
     }
 
     /**
-     * Creates a tutorial menu over existing content 
-     * @param {number} width 
-     * @param {number} height 
+     * Creates a tutorial menu over existing content
+     * @param {number} width
+     * @param {number} height
      */
     initTutorialMenu(width, height) {
         this.bg = this.add.image(width * 0.5, height * 0.5, 'space-bg');
@@ -246,8 +246,8 @@ export default class TimedTutorialScene extends Phaser.Scene {
 
     /**
      * Creates the hud (bg already done)
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     createHud(width, height) {
         const cockpit = this.add.image(width * 0.5, height * 0.5, 'ship-hud');
@@ -255,7 +255,7 @@ export default class TimedTutorialScene extends Phaser.Scene {
         cockpit.setDepth(11);
 
         this.turrets = new Turrets(this, this.constants, 'turret-colored');
-        
+
         this.levelTimer = new LevelTimer(this, this.constants, 30000);
         this.levelScore = new ScoreObject(this, this.constants);
         this.objText = new Objective(this, this.constants, 0);
@@ -316,7 +316,7 @@ export default class TimedTutorialScene extends Phaser.Scene {
     }
 
     /**
-     * 
+     *
      * @param {string[]} line array for words
      * @param {number} lineNum number of line
      */
@@ -331,10 +331,10 @@ export default class TimedTutorialScene extends Phaser.Scene {
 
     /**
      * applies a highlight effect on x and y with width and height size
-     * @param {number} x1 
-     * @param {number} y1 
-     * @param {number} x2 
-     * @param {number} y2 
+     * @param {number} x1
+     * @param {number} y1
+     * @param {number} x2
+     * @param {number} y2
      */
     highlightLocation(x1, y1, x2, y2) {
         this.highlight = new Phaser.Geom.Rectangle(x1 + 15, y1 + 15, x2 - 30, y2 - 30);
@@ -372,8 +372,8 @@ export default class TimedTutorialScene extends Phaser.Scene {
 
     /**
      * Highlights bottom hud and speaks two lines before transition
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     section1(width, height) {
         // L1 highlight lower hud
@@ -402,8 +402,8 @@ export default class TimedTutorialScene extends Phaser.Scene {
 
     /**
      * highlights quitbutton, creates fake quitbutton, and says a few lines related
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     section2(width, height) {
         // L2 Highlight QuitButton and disable action
@@ -447,7 +447,7 @@ export default class TimedTutorialScene extends Phaser.Scene {
         line3.on('complete', () => {
             this.constants.HoverClick(this, fakeQuit, () => {
                 clickSound.play();
-                
+
                 // trigger transition
                 clickSound.on('complete', () => {
                     clickSound.off('complete');
@@ -463,7 +463,7 @@ export default class TimedTutorialScene extends Phaser.Scene {
                 this.hideDialogue();
                 this.section3(width, height);
             }, 500);
-    
+
             fakeQuit.setDepth(-1);
             fakeQuit.destroy();
         });
@@ -471,8 +471,8 @@ export default class TimedTutorialScene extends Phaser.Scene {
 
     /**
      * highlights top hud and speaks lines about them
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     section3(width, height) {
         // L3 highlight upper hud
@@ -512,8 +512,8 @@ export default class TimedTutorialScene extends Phaser.Scene {
 
     /**
      * placing an alien and adding fire listener for it
-     * @param {number} width 
-     * @param {number} height 
+     * @param {number} width
+     * @param {number} height
      */
     section4(width, height) {
         // Get Voicelines
@@ -569,7 +569,7 @@ export default class TimedTutorialScene extends Phaser.Scene {
                 this.hideDialogue();
 
                 // add fire listener
-                this.turrets.addFireListener(this.aliens, collisionFunc);
+                this.turrets.addFireListener([this.aliens], collisionFunc);
                 this.levelTimer.startTimer();
             }, 500);
         });
@@ -626,13 +626,14 @@ export default class TimedTutorialScene extends Phaser.Scene {
                         this.kills.boss += 1;
                         break;
                     default:
-                        this.kills.grunt += 1; 
-                
+                        this.kills.grunt += 1;
+
                 }
             }
         }
 
-        this.turrets.addFireListener(this.aliens, collisionFunc2);
+        this.turrets.addFireListener([this.aliens], collisionFunc2);
+        this.levelTimer = new LevelTimer(this, this.constants, 30000);
         this.levelTimer.startTimer();
 
     }
@@ -667,12 +668,12 @@ export default class TimedTutorialScene extends Phaser.Scene {
         this.powerupCollider = this.physics.add.overlap(
             this.bullets,
             powerup,
-            () => {
+            (p, b) => {
                 if (this.levelTimer.timer.paused) return;
                 this.levelTimer.stopTimer();
-                powerup.collisionFunc();
+                powerup.collisionFunc(p, b);
                 this.turrets.removeFireListener();
-                
+
                 setTimeout(() => {
                     this.hideDialogue();
                     this.section7();
@@ -704,10 +705,11 @@ export default class TimedTutorialScene extends Phaser.Scene {
             line11.off('complete');
             setTimeout(() => {
                 this.objText.objText.text = "Shoot the Powerup!"
+                this.levelTimer = new LevelTimer(this, this.constants, 30000);
                 this.levelTimer.startTimer();
                 powerup.spawn();
                 this.hideDialogue();
-                this.turrets.addFireListener(this.aliens, this.collisionFunc3);
+                this.turrets.addFireListener([this.aliens], this.collisionFunc3);
             }, 1000);
         });
     }
@@ -729,8 +731,8 @@ export default class TimedTutorialScene extends Phaser.Scene {
                     this.kills.boss += 1;
                     break;
                 default:
-                    this.kills.grunt += 1; 
-            
+                    this.kills.grunt += 1;
+
             }
         }
     };
@@ -757,8 +759,9 @@ export default class TimedTutorialScene extends Phaser.Scene {
             setTimeout(() => {
                 this.hideDialogue();
                 this.aliens.spawn();
+                this.levelTimer = new LevelTimer(this, this.constants, 10000);
                 this.levelTimer.startTimer();
-                this.turrets.addFireListener(this.aliens, this.collisionFunc3);
+                this.turrets.addFireListener([this.aliens], this.collisionFunc3);
             }, 1000);
         });
 
@@ -770,7 +773,7 @@ export default class TimedTutorialScene extends Phaser.Scene {
                 this.turrets.removeFireListener();
 
                 this.section8();
-            }, 1250);
+            }, 500);
         });
     }
 
