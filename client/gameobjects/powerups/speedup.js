@@ -37,6 +37,7 @@ export default class SpeedUp extends Phaser.Physics.Arcade.Sprite {
 
             // respawn logic
             this.launch();
+            if (this.isTutorial) this.spawn(this.isTutorial);
         }
     } 
 
@@ -71,9 +72,13 @@ export default class SpeedUp extends Phaser.Physics.Arcade.Sprite {
 
     /**
      * start the spawnTimer
+     * @param {boolean?} isTutorial
      */
-    spawn() {
+    spawn(isTutorial) {
         this.spawnTimer.paused = false;
+
+        // handles respawn in initial tutorial setting
+        this.isTutorial = isTutorial;
     }
 
     /**

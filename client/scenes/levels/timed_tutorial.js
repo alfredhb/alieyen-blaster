@@ -707,11 +707,12 @@ export default class TimedTutorialScene extends Phaser.Scene {
                 this.objText.objText.text = "Shoot the Powerup!"
                 this.levelTimer = new LevelTimer(this, this.constants, 30000);
                 this.levelTimer.startTimer();
-                powerup.spawn();
+                powerup.spawn(true);
                 this.hideDialogue();
                 this.turrets.addFireListener([this.aliens], this.collisionFunc3);
             }, 1000);
         });
+        powerup
     }
 
     collisionFunc3 = (bullet, alien) => {
