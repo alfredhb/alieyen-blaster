@@ -1,10 +1,7 @@
 import 'phaser';
 import './templates/main.html';
 
-import { Template } from 'meteor/templating';
-import { ReactiveVar } from 'meteor/reactive-var';
 import ArcadeMenu from './scenes/menus/arcade'
-import DefaultPage from './scenes/menus/default'
 import DifficultySelectMenu from './scenes/menus/difficulty_select'
 import GamemodeMenu from './scenes/menus/gamemode';
 import InitialLoad from './scenes/data/initial_load';
@@ -38,7 +35,7 @@ var config = {
   },
   scene: [
     InitialLoad, StartMenu, PlayerSelectMenu, GamemodeMenu, SavefileMenu, 
-    ArcadeReportScene, ArcadeMenu, DifficultySelectMenu, TimedArcade, DefaultPage,
+    ArcadeReportScene, ArcadeMenu, DifficultySelectMenu, TimedArcade,
     LevelFactory, TemplateLevelScene, ArcadeReadyScene, TimedTutorialScene, WorldSelectMenu,
     StoryReadyScene, LevelSelectMenu, StoryReportScene, HelpMenu, AdminSettingsMenu
   ],
