@@ -9,7 +9,7 @@ Setup Steps:
 4. Connect to development database. Please contact devs for mongo uri
     * MacOS/Linux, run the following command and skip step 5.
         ```
-        $ MONGO_URL=<mongourl>
+        $ MONGO_URL=<mongourl> meteor
         ```
     * Windows. run the following command and continue to step 5.
         ```
