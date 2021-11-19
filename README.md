@@ -51,5 +51,5 @@ Due to new browser security measures, the user is required to interact with a pa
     $  'meteor' is not recognized as an internal or external command,
     operable program or batch file.
     ```
-* On Mac: please make sure that the path your nodejs libraries are installed at is added to the paths file `/etc/paths`
+* On Mac: please make sure that the path your nodejs libraries are installed at (`npm root -g`) is added to the paths file `/etc/paths`
 * On Windows: please reinstall nodejs and assert that it adds the correct paths when you install meteor. If this doesn't work, please try cloning the repo on a CAEN computer.
