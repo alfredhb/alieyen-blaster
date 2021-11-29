@@ -73,48 +73,28 @@ export default class LevelFactory extends Phaser.Scene {
                 res.level["liveScore" + (this.currentPlayer)] = data.level["liveScore" + (this.currentPlayer)];
             }
 
-            // Go to cutscene first
+            // Go to template cutscene first
             if (res.scene.cutscene?.open) {
-                try {
-                    this.scene.start(
-                        res.scene.cutscene.open,
-                        {
-                            meta: {
-                                playerCount: this.playerCount,
-                                players: this.players,
-                                currentPlayer: this.currentPlayer,
-                                difficulty: this.difficulty
-                            },
-                            level: res.level,
-                            assets: res.assets,
-                            scene: res.scene,
-                            name: this.nextScene.name
-                        }
-                    )
-                    return;
-                } catch (e) {
-                    // unable to load cutscene
-                    console.log(e);
-                }
-            }
+                this.scene.pause('levelFactory', res);
 
-            this.scene.start(
-                'templateLevelScene',
-                {
-                    meta: {
-                        playerCount: this.playerCount,
-                        players: this.players,
-                        currentPlayer: this.currentPlayer,
-                        difficulty: this.difficulty,
-                        world: data.meta.world // undefined if type == ARCADE
-                    },
-                    level: res.level,
-                    levels: data.levels,
-                    assets: res.assets,
-                    scene: res.scene,
-                    name: this.nextScene.name
-                }
-            )
+                this.events.addListener('pause', () => {
+                    this.events.removeListener('pause');
+                    this.scene.setVisible(false);
+
+                    this.scene.launch('templateCutscene', {
+                        url: res.scene.cutscene.open,
+                        open: true,
+                        scene: this
+                    });
+                });
+                this.events.addListener('resume', () => {
+                    this.scene.setVisible(true);
+                    this.events.removeListener('resume');
+                    this.playLevel(data, res);
+                });
+            } else {
+                this.playLevel(data, res);
+            }
         })
     }
 
@@ -135,5 +115,29 @@ export default class LevelFactory extends Phaser.Scene {
             }
         );
         loadText.setOrigin(0.5);
+    }
+
+    /**
+     * transitions to templateLevelScene
+     * @param {object} res 
+     */
+    playLevel(data, res) {
+        this.scene.start(
+            'templateLevelScene',
+            {
+                meta: {
+                    playerCount: this.playerCount,
+                    players: this.players,
+                    currentPlayer: this.currentPlayer,
+                    difficulty: this.difficulty,
+                    world: data.meta.world // undefined if type == ARCADE
+                },
+                level: res.level,
+                levels: data.levels,
+                assets: res.assets,
+                scene: res.scene,
+                name: this.nextScene.name
+            }
+        )
     }
 }

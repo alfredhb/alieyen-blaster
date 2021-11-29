@@ -6,8 +6,9 @@ export default class HelpButton extends Phaser.GameObjects.Group {
     /**
      * a button which pauses the scene entirely and takes the user to the help menu
      * @param {Phaser.Scene} scene 
+     * @param {{execFunc: function?}?} config
      */
-    constructor(scene) {
+    constructor(scene, config) {
         super(scene);
 
         const { width, height } = scene.scale;
@@ -38,7 +39,10 @@ export default class HelpButton extends Phaser.GameObjects.Group {
         
         // Add hoverclick and normal click
         this.constants.HoverClick(scene, button, () => {
+            this.scene.sound.stopAll();
             clickSound.play();
+            
+            if (config?.execFunc) { config.execFunc(); }
             
             scene.scene.pause(scene);
             this.scene.scene.launch('helpMenu', scene);

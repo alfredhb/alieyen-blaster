@@ -21,6 +21,7 @@ import LevelSelectMenu from './scenes/menus/level_select';
 import StoryReportScene from './scenes/levels/story/report';
 import HelpMenu from './scenes/menus/help';
 import AdminSettingsMenu from './scenes/menus/admin_settings';
+import TemplateCutscene from './scenes/levels/story/template_cutscene';
 
 // Game Config
 var config = {
@@ -35,7 +36,7 @@ var config = {
   },
   scene: [
     InitialLoad, StartMenu, PlayerSelectMenu, GamemodeMenu, SavefileMenu, 
-    ArcadeReportScene, ArcadeMenu, DifficultySelectMenu, TimedArcade,
+    ArcadeReportScene, ArcadeMenu, DifficultySelectMenu, TimedArcade, TemplateCutscene,
     LevelFactory, TemplateLevelScene, ArcadeReadyScene, TimedTutorialScene, WorldSelectMenu,
     StoryReadyScene, LevelSelectMenu, StoryReportScene, HelpMenu, AdminSettingsMenu
   ],

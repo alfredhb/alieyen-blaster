@@ -589,9 +589,31 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
         if (this.levelData.scene?.cutscene?.close) {
             // play close cutscene, ends with scene start, set current player to next
+            // pause this scene to transition to templatecutscene, then that
+            // should transition back here
+            this.scene.pause('templateLevelScene', {cutscene: true});
+            this.events.addListener('pause', (e, d) => {
+                if (d.cutscene) {
+                    this.events.removeListener('pause');
+                    this.scene.setVisible(false);
+                    
+                    this.scene.launch('templateCutscene', {
+                        url: this.levelData.scene.cutscene.close,
+                        open: false,
+                        scene: this
+                    });
+                }
+            });
+            this.events.addListener('resume', (e, d) => {
+                if (d.cutscene) {
+                    this.scene.setVisible(true);
+                    this.events.removeListener('resume');
+                    this.transitionScene();
+                }
+            });
+        } else {
+            this.transitionScene();
         }
-
-        this.transitionScene();
     }
 
     /**
