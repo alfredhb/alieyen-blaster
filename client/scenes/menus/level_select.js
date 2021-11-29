@@ -21,7 +21,8 @@ export default class LevelSelect extends Phaser.Scene {
      *  },
      *  levels: {
      *      name: string,
-     *      complete: string 
+     *      complete: string,
+     *      stars: number 
      *  }[]
      * }} data 
      */
@@ -258,13 +259,9 @@ export default class LevelSelect extends Phaser.Scene {
         gfx.lineStyle(15, (complete) ? this.constants.Blue : this.constants.Red, 1);
         gfx.strokeRectShape(highlight);
 
-        // TODO: Make score translate to stars - a threshold gives you more (max 3) seen in report
-        // add star
+        // Move text up, place 3 star outlines, and place num stars
         if (complete) {
-            let star = this.add.image(b.button.x + width * 0.0625, b.button.y, 'star');
-            star.setDisplaySize(width * 0.05, width * 0.05);
-            star.setOrigin(0.5);
-            this.stars.push(star);
+            this.placeLevelStars(b, this.levelData.levels[index].stars, width, height);
         }
 
         b.button.setInteractive();
@@ -316,6 +313,44 @@ export default class LevelSelect extends Phaser.Scene {
             );
             this.scene.stop(this); // stop itself
         })
+    }
+
+    /**
+     * Moves text of b upwards to accommodate 3 star outlines and then however
+     * many stars count for stars
+     * @param {{
+     *   button: Phaser.GameObjects.Image;
+     *   text: Phaser.GameObjects.Text;
+     *   sound: Phaser.Sound.BaseSound;
+     * }} b 
+     * @param {number} stars 
+     * @param {number} width 
+     * @param {number} height 
+     */
+    placeLevelStars(b, stars, width, height) {
+        // shift up text
+        b.text.setPosition(b.text.x, b.text.y - b.button.displayHeight / 5);
+
+        // place 3 star outlines
+        let o1 = this.add.image(b.button.x, b.button.y + b.button.displayHeight / 5, 'star-outline');
+        let o2 = this.add.image(o1.x - b.button.displayWidth / 4, o1.y, 'star-outline');
+        let o3 = this.add.image(o1.x + b.button.displayWidth / 4,o1.y, 'star-outline');
+        let outlines = [o2, o1, o3]; // order for star indexing
+        outlines.forEach(o => {
+            o.setDisplaySize(width * 0.06, width * 0.06);
+            o.setOrigin(0.5);
+        })
+
+        // place stars
+        stars = (stars > 0) ? stars : 1; // null safe for all completed level entries
+        for (let j = 0; j < stars; j++) {
+            let star = this.add.image(outlines[j].x, outlines[j].y, 'star');
+            star.setDisplaySize(width * 0.06, width * 0.06);
+            star.setOrigin(0.5);
+
+            // destroy the outline
+            outlines[j].destroy(true);
+        }
     }
 
     /**
