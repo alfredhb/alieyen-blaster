@@ -5,7 +5,8 @@
     _id: string,                        //level name *or* scene name
     level: {
         difficulty_multiplier: [num, num, num],
-        objective: ENUM,                //TIMED, LIVES, TIMEKILLS, LIVEKILLS, TIMELIVES
+        objective: ENUM,                 //TIMED, LIVES, TIMEKILLS, LIVEKILLS, TIMELIVES
+        star_threshold: [num, num], //minimum scores to obtain each star. By default, completing an objective grants 1 star
         win_cond: {
             lives: num,
             time: num,                  //in seconds

@@ -50,6 +50,6 @@ export default class ScoreObject extends Phaser.GameObjects.GameObject {
             score += this.scene.levelData.level.aliens.boss.score
                  * this.scene.levelData.level.win_cond.kills.boss;
         }
-        return score * m;
+        return Math.ceil(score * m / 10) * 10; // round up to nearest factor of 10
     }
 }
