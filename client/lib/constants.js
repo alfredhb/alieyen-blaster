@@ -44,6 +44,11 @@ export default class Constants {
         ) * this.GetDifficultyMultiplier(d);
     }
 
+    /**
+     * The default difficulty multiplier (1, 1.5, 2)
+     * @param {number} d 
+     * @returns {number}
+     */
     GetDifficultyMultiplier = (d) => {
         return ((d > 1) ? (d + 1) / 2 : 1 );
     }
