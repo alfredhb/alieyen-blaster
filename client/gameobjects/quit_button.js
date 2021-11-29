@@ -6,7 +6,7 @@ export default class QuitButton extends Phaser.GameObjects.Group {
      * Creates a quit button which returns user to 'backMenu' on click, passes
      * along data to the next scene and executes any provided execFunc
      * @param {Phaser.Scene} scene 
-     * @param {{execFunc: function, backMenu: string, data: object}} config 
+     * @param {{execFunc: function, backMenu: string, data: object, cutscene: boolean?}} config 
      */
     constructor(scene, config) {
         super(scene);
@@ -48,7 +48,12 @@ export default class QuitButton extends Phaser.GameObjects.Group {
             clickSound.play();
             
             if (config.execFunc) { config.execFunc(); }
-            scene.scene.start(config.backMenu, config.data);
+            if (config.cutscene) { // overload for cutscene quit button
+                scene.scene.resume(config.backMenu, { cutscene: true });
+            } else {
+                scene.scene.start(config.backMenu, config.data);
+            }
+
             scene.scene.stop(scene); // stop the scene its in
             return;
         });
