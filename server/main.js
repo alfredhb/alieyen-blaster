@@ -187,12 +187,15 @@ Meteor.methods({
    * @param {string} level format world#level#
    * @returns {object} the save obj
    */
-  saveLevelData(id, level) {
+  saveLevelData(id, level, stars) {
     var levelEntry = String(level[5] + ' - ' + level[11]);
 
     SaveData.update(
       {_id: ("slot" + String(id + 1))},
-      { $set: { "levels.$[element].complete": true } },
+      { 
+        $set: { "levels.$[element].complete": true },
+        $max: { "levels.$[element].stars": stars }  
+      },
       {
         multi: true,
         arrayFilters: [ { "element.name": { $eq: levelEntry } } ]

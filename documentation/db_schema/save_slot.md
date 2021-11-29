@@ -6,7 +6,8 @@
     level: [
         {
             name: string,
-            complete: boolean
+            complete: boolean,
+            stars: number       // number of stars if complete is true [1, 3]
         }
         ...
     ],

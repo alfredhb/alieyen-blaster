@@ -57,21 +57,15 @@ export default class StoryReportScene extends Phaser.Scene {
         // Set scene data
         this.prevScene = data.scene.prevScene;
 
-        // Set Best Score
-        this.bestScore = (this.levelScore1 > this.levelScore2) ?
-            {score: this.levelScore1, player: this.players[0]} :
-            {score: this.levelScore2, player: this.players[1]}
-
-        // Fetch Highscore
-        this.highscore = { player: "None", score: 0 };
         if (this.levelData.level.objComplete) {
-            Meteor.call("saveLevelData", this.game.config.gameslot, this.name, (err, res) => {
+            this.starsEarned = this.getStarCount(this.calculateScore());
+            Meteor.call("saveLevelData", this.game.config.gameslot, this.name, this.starsEarned, (err, res) => {
                 if (err != null) {
                     console.log(err);
                     return;
                 }
     
-                this.attachSlotData(res);
+                this.attachSlotData(res, true);
             });
         } else {
             Meteor.call('getSlotData', this.game.config.gameslot, (err, res) => {
@@ -122,6 +116,9 @@ export default class StoryReportScene extends Phaser.Scene {
         // score breakdown + accuracy
         this.levelReport(width, height);
 
+        // place star outlines
+        this.starOutlines(width, height);
+
         // Add Alien Dummy
         this.initSprite(width, height);
 
@@ -135,11 +132,17 @@ export default class StoryReportScene extends Phaser.Scene {
     /**
      * saves the slot data to transitionary components and adds interactivity
      * @param {object} data 
+     * @param {boolean} objComplete
      */
-    attachSlotData(data) {
+    attachSlotData(data, objComplete) {
         this.levelData.levels = data.levels
         
         this.addClick(this.buttons);
+
+        // add completed stars
+        if (objComplete) {
+            this.placeStars();
+        }
 
         // quit button
         const quitButton = new QuitButton(this, {
@@ -157,9 +160,6 @@ export default class StoryReportScene extends Phaser.Scene {
     }
 
     update() {
-        if (this.highscoreStar) {
-            this.highscoreStar.rotation += 0.01;
-        }
     }
 
     /**
@@ -203,6 +203,49 @@ export default class StoryReportScene extends Phaser.Scene {
         } else {
             // Play levelfailed tts
         }
+    }
+
+    /**
+     * If level.liveScore exists for players, then increases the scores for each
+     * and returns the values
+     * @returns {number[]}
+     */
+    calculateScore() {
+        let scores = [];
+        for (let i = 0; i < this.levelData.meta.playerCount; i++) {
+            let score = this["levelScore" + (i + 1)];
+            let lives = this.levelData.level["liveScore" + (i + 1)];
+
+            score += (lives > 0) ? lives * 100 : 0;
+            scores.push(score);
+        }
+
+        return scores;
+    }
+
+    /**
+     * Reads the star thresholds from level data and compares them to the best
+     * score in scores. returns the highest star count achieved. star thresholds
+     * are multiplied with difficulty.
+     * TODO: update star thresholds to match difficulty
+     * @param {number[]} scores 
+     * @returns {number}
+     */
+    getStarCount(scores) {
+        let bestScore = 0;
+        for (let score of scores) {
+            bestScore = (score > bestScore) ? score : bestScore;
+        }
+
+        let multiplier = this.levelData.level?.difficulty_multiplier[this.levelData.meta.difficulty - 1];
+        if (!multiplier > 0) multiplier = 1; // failed to get multiplier
+
+        let stars = 1; // start with one star if completed 
+        for (let star_t of this.levelData.level.star_threshold) {
+            if (star_t * multiplier <= bestScore) stars += 1; // only increment if bestScore exceeds the threshold
+        }
+
+        return stars;
     }
 
     /**
@@ -256,10 +299,47 @@ export default class StoryReportScene extends Phaser.Scene {
             t.text.on('pointerover', () => {
                 if (!this.menuSounds.scoreTTS.isPlaying) {
                     t.sound.play({volume: this.game.config.ttsVolume});
-                    this.menuSounds.scoreTTS.play({delay: 0.75})
+                    this.menuSounds.scoreTTS.play({
+                        volume: this.game.config.ttsVolume,
+                        delay: 0.75
+                    })
                 }
             })
         })
+    }
+
+    /**
+     * Places star outlines where stars would go if earned. This is done regardless
+     * of completion of level to show how many stars can be earned.
+     * @param {number} width 
+     * @param {number} height 
+     */
+    starOutlines(width, height) {
+        let o1 = this.add.image(width * 0.5, height * 0.55, 'star-outline');
+        let o2 = this.add.image(width * 0.37, height * 0.55, 'star-outline');
+        let o3 = this.add.image(width * 0.63, height * 0.55, 'star-outline');
+
+        [o1, o2, o3].forEach(o => {
+            o.setDisplaySize(width * 0.125,width * 0.125);
+            o.setOrigin(0.5);
+        });
+    }
+
+    /**
+     * Places a star over each outline if it was earned on a 350ms timer.
+     * also plays collect powerup sound effect for each
+     */
+    placeStars() {
+        let width = this.constants.Width, height = this.constants.Height;
+        for (let i = 0; i < this.starsEarned; i++) {
+            setTimeout(() => {
+                this.sound.play('collect-powerup');
+
+                let star = this.add.image(width * 0.37 + i * width * 0.13, height * 0.55, 'star');
+                star.setDisplaySize(width * 0.125, width * 0.125);
+                star.setOrigin(0.5);
+            }, i * 350);
+        }
     }
 
     // Add life score counter --> places it between name and score, then plays
@@ -267,8 +347,8 @@ export default class StoryReportScene extends Phaser.Scene {
     /**
      * Requires level.liveScore# to exist for each player. Places num lives as
      * icons to the left of score and animates score increasing for each life left.
-     * After updating all scores, checks for best score and updates highscore 
-     * accordingly
+     * After updating all scores, checks for best score and updates starcount if 
+     * the result is more than already gained
      * @param {number} width 
      * @param {number} height 
      */
@@ -306,11 +386,11 @@ export default class StoryReportScene extends Phaser.Scene {
                         }
                         else if (lives.length > 1) {
                             if (lives[0].length > lives[1].length && i == 0) {
-                                this.restyleHighscore()
+                                console.log("update star count");
                             } else if (lives[0].length <= lives[1].length && i == 1) {
-                                this.restyleHighscore()
+                                console.log("update star count");
                             }
-                        } else this.restyleHighscore();
+                        } else console.log("update star count");
                     });
                 }
             }
@@ -334,103 +414,6 @@ export default class StoryReportScene extends Phaser.Scene {
             callbackScope: this,
             paused: false,
             repeat: false
-        });
-    }
-
-    /**
-     * TODO: rotate this as a star counter once scores are done
-     */
-    restyleHighscore() {
-        this.bestScore = (this.levelScore1 > this.levelScore2) ?
-            {score: this.levelScore1, player: this.players[0]} :
-            {score: this.levelScore2, player: this.players[1]};
-
-        if (this.highscore.score < this.bestScore.score) {
-            Meteor.call("getHighScore", this.prevScene.name, this.bestScore, (err, res) => {
-                if (err != null) {
-                    console.log(err);
-                    return;
-                }
-
-                // Clear old highscore content
-                this.highscoreTitle.setDepth(-1).removeInteractive();
-                this.highscorePlayer.setDepth(-1).removeInteractive();
-                this.highscoreVal.setDepth(-1).removeInteractive();
-                (this.highscoreStar?.active) ? this.highscoreStar.setDepth(-1).removeInteractive() : () => {};
-
-                // Initialize highscore report once data is returned.
-                const { width, height } = this.scale;
-                this.highscore = res;
-                this.highscoreReport(width, height);
-                this.styleHighScorer(width, height);
-            });
-        }
-    }
-
-    /**
-     * TODO: rotate this as a star counter once scores are done
-     * Posts the Highscore for this level including player who accomplished it
-     * @param {number} width
-     * @param {number} height
-     */
-    highscoreReport(width, height) {
-        this.highscoreTitle = this.add.text(
-            width * 0.5,
-            height * .5,
-            'HIGHSCORE',
-            this.constants.MenuButtonStyle()
-        );
-        this.highscorePlayer = this.add.text(
-            width * 0.275,
-            height * 0.575,
-            this.constants.Capitalize(this.highscore.player) + ": ",
-            this.constants.MenuButtonStyle()
-        );
-        this.highscoreVal = this.add.text(
-            width * 0.675,
-            height * 0.575,
-            this.constants.ZeroPad(this.highscore.score, 4),
-            this.constants.MenuButtonStyle("#00FF00")
-        );
-        this.highscoreTitle.setName('highscore');
-        this.highscorePlayer.setName(this.highscore.player);
-        this.highscoreVal.setName('score');
-
-        [this.highscoreTitle, this.highscorePlayer, this.highscoreVal].forEach(t => {
-            this.highscoreTitle.setOrigin(0.5);
-
-            t.setInteractive();
-            t.on('pointerover', () => {
-                this.sound.stopAll();
-                this.sound.play(t.name, {volume: this.game.config.ttsVolume});
-            });
-        });
-    }
-
-    /**
-     * Places a spinning golden star to the left of the player who just set a highscore
-     * or who's score matches their previous highscore
-     * @param {number} width
-     * @param {number} height
-     */
-    styleHighScorer(width, height) {
-        if (this.bestScore.score != this.highscore.score ||
-            this.bestScore.player != this.highscore.player) {
-            return;
-        }
-
-        // Determine player who has best score and give them a lil star
-        if (this.players[0] == this.bestScore.player) {
-            this.highscoreStar = this.add.image(width * 0.16, height * 0.3, 'star');
-        } else {
-            this.highscoreStar = this.add.image(width * 0.16, height * 0.375, 'star');
-        }
-        this.highscoreStar.setDisplaySize(width * 0.05, width * 0.05);
-
-        this.highscoreStar.setInteractive();
-        this.highscoreStar.on('pointerover', () => {
-            this.sound.stopAll();
-            this.sound.play('new-highscore', {volume: this.game.config.ttsVolume});
         });
     }
 
