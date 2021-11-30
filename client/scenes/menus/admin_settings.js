@@ -44,59 +44,245 @@ import Constants from "../../lib/constants";
         }).setOrigin(0.5); // No TTS here
 
         // tts
-        this.initTTSSettings(width, height);
+        // this.initTTSSettings(width, height);
 
         // savefile
-        this.initSaveManagement(width, height);
+        // this.initSaveManagement(width, height);
 
-        const qButton = new QuitButton(this, {execFunc: () => {
-            this.scene.resume(this.levelData, );
-            this.scene.stop();
-        }})
+        // Init content
+        this.initVolumeContent(width, height);
+
+        // Add tabs
+        this.initTabs(width, height);
+
+        const qButton = new QuitButton(this, {
+            backMenu: this.levelData,
+            cutscene: true, // to resume the last scene
+            execFunc: () => {}
+        })
     }
 
     /**
-     * Creates a section which handles global volume of tts. Maybe use a slider
-     * to show volume of text to speech (jquery slider or rexUI slider oooo)
+     * Creates content for volume section including sfx and tts volume slider
+     * sections which update mongo meta files ON EXIT. Then hides them and disables
+     * interaction
      * @param {number} width 
      * @param {number} height 
      */
-    initTTSSettings(width, height) {
-        // tts title (menu size)
-        const title = this.add.text(width * 0.5, height * 0.275, 'Text to Speech Volume', {
-            fontFamily: 'impact-custom',
-            fontSize: (height * 0.075) + "px",
-            color: "#FFF"
-        }).setOrigin(0.5);
-
-        // volume slider
-        let track = this.add.rectangle(0 + width * 0.05, 0, width * 0.35, height * 0.03, 0xFFFFFF);
-        let thumb = this.add.circle(0, 0, height * 0.035, this.constants.Red);
-        const slider = this.rexUI.add.slider({
-            x: width * 0.5,
-            y: height * 0.425,
-            width: width * 0.45,
+    initVolumeContent(width, height) {
+        // SFX
+        const sfxBG = this.rexUI.add.roundRectangle(width * 0.6, height * 0.3625, width * 0.6, height * 0.25, 20);
+        const sfxT = this.add.text(width * 0.325, height * 0.3625, "Sound FX", this.constants.MenuButtonStyle());
+        const sfxSlider = this.rexUI.add.slider({
+            x: width * .7,
+            y: height * 0.3625,
+            width: width * 0.275,
             height: height * 0.03,
             orientation: 0,
-            track: track,
-            thumb: thumb,
+            track: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.02, 0xFFFFFF),
+            indicator: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.025, this.constants.Pink),
+            thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.04, this.constants.Red),
+            gap: 0.1,
+            value: this.game.config.sfxVolume,
+
+            valuechangeCallback: (v) => {
+                this.updateSFXVolume(v);
+            }
+        }).layout();
+
+        // TTS
+        const ttsBG = this.rexUI.add.roundRectangle(width * 0.6, height * 0.6375, width * 0.6, height * 0.25, 20);
+        const ttsT = this.add.text(width * 0.325, height * 0.6375, "Text to Speech", this.constants.MenuButtonStyle());
+        const ttsSlider = this.rexUI.add.slider({
+            x: width * .7,
+            y: height * 0.6375,
+            width: width * 0.275,
+            height: height * 0.03,
+            orientation: 0,
+            track: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.02, 0xFFFFFF),
+            indicator: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.025, this.constants.Pink),
+            thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.04, this.constants.Red),
             gap: 0.1,
             value: this.game.config.ttsVolume,
-            // input: 'drag',
+
             valuechangeCallback: (v) => {
-                this.updateTTSVolume(v) 
+                this.updateTTSVolume(v)
             }
+        }).layout();
+
+        sfxBG.setStrokeStyle(10, this.constants.LightBlue, 1);
+        ttsBG.setStrokeStyle(10, this.constants.LightBlue, 1);
+
+        sfxT.setOrigin(0, 0.5);
+        ttsT.setOrigin(0, 0.5);
+
+        // Save values for later toggling
+        this.volume = {
+            sfx: {
+                bg: sfxBG,
+                t: sfxT,
+                s: sfxSlider
+            },
+            tts: {
+                bg: ttsBG,
+                t: ttsT,
+                s: ttsSlider
+            }
+        }
+    }
+
+    /**
+     * Creates a 3 tabbed UI for admin settings to be placed in
+     * @param {number} width 
+     * @param {number} height 
+     */
+    initTabs(width, height) {
+        // make panel
+        let rect = this.rexUI.add.roundRectangle(width * 0.1, height * 0.3, width * 0.7, height * 0.6, 20, 0x808080);
+        rect.setStrokeStyle(10, this.constants.Blue, 1).setDepth(1);
+
+        // make tabs
+        this.tabs = this.rexUI.add.tabs({
+            x: width * 0.5,
+            y: height * 0.5,
+            panel: rect,
+            leftButtons: [
+                this.createTabButton(width, height, 'Volume', true, 'volume'),
+                this.createTabButton(width, height, 'Eye Input', false, 'controls'),
+                this.createTabButton(width, height, 'Save Files', false, 'savefiles'),
+            ],
+            space: {
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 20,
+                leftButtonsOffset: 20,
+                leftButton: 10
+            }
+        }).layout();
+        this.tabs.on('button.click', this.handleTabClick, this);
+
+        this.selectedTabInd = 0;
+
+        // show selectedTabInd contents
+        this.showTabContent(this.selectedTabInd);
+    }
+
+    /**
+     * Pulls correct tab content to show from button name and colors the correct
+     * button blue from tabs.
+     * @param {rexUI.Label} b button
+     * @param {string} g groupname
+     * @param {number} i index of button in tab group
+     */
+    handleTabClick(b, g, i) {
+        if (this.selectedTabInd == i) return;
+
+        // Toggle tabs
+        this.toggleTabColor(b);
+
+        // Hide old content
+        this.hideTabContent();
+
+        // Show new Content
+        this.showTabContent(i);
+
+        // update selected tab
+        this.selectedTabInd = i;
+    }
+
+    /**
+     * Colors the current selected tab as gray and b's tab as blue
+     * @param {rexUI.Label} b 
+     */
+    toggleTabColor(b) {
+        this.tabs.childrenMap.leftButtons[this.selectedTabInd].backgroundChildren[0].setFillStyle(this.constants.Gray);
+
+        b.backgroundChildren[0].setFillStyle(this.constants.Blue);
+    }
+
+    /**
+     * hides the tab content for this.selectedTabInd
+     */
+    hideTabContent() {
+        switch(this.selectedTabInd) {
+            case 0:
+                console.log("hide volume buttons / sliders and disable interaction");
+                this.toggleVolumeContent(0);
+                break;
+            case 1:
+                console.log("hide eye tracking sliders and disable interaction");
+                break;
+            case 2:
+                console.log("hide savefile removal buttons and disable interaction");
+                break;
+            default:
+                console.log("nothing to hide");
+                break;
+        }
+    }
+
+    /**
+     * Shows the tab content for i
+     * @param {number} i 
+     */
+    showTabContent(i) {
+        switch(i) {
+            case 0:
+                console.log("show volume buttons / sliders and enable interaction");
+                this.toggleVolumeContent(2);
+                break;
+            case 1:
+                console.log("show eye tracking sliders and enable interaction");
+                break;
+            case 2:
+                console.log("show savefile removal buttons and enable interaction");
+                break;
+            default:
+                console.log("nothing to hide");
+                break;
+        }
+    }
+
+    /**
+     * sets depth of volume content to v and enables / disables sliders
+     * @param {number} v 
+     */
+    toggleVolumeContent(v) {
+        this.volume.sfx.bg.setDepth(v);
+        this.volume.tts.bg.setDepth(v);
+        this.volume.sfx.t.setDepth(v);
+        this.volume.tts.t.setDepth(v);
+        this.volume.sfx.s.setDepth(v).setEnable(v != 0);
+        this.volume.tts.s.setDepth(v).setEnable(v != 0);
+    }
+
+    /**
+     * TODO: remove name param if unused
+     * @param {number} width 
+     * @param {number} height 
+     * @param {string} text 
+     * @param {boolean} selected 
+     */
+    createTabButton(width, height, text, selected, name) {
+        return this.rexUI.add.label({
+            width: width * 0.2,
+            height: height * 0.1,
+            background: this.rexUI.add.roundRectangle(0, 0, 0, 0, { tl: 20, bl: 20}, 
+                (selected) ? this.constants.Blue : this.constants.Gray),
+            text: this.add.text(0, 0, text, this.constants.MenuButtonStyle()),
+            space: {
+                left: 10,
+                right: 10,
+            },
+            align: 'center',
+            name: name
         });
-        slider.layout();
+    }
 
-        // place text markers
-        const zero = this.add.text(width * 0.5 - width * 0.2, height * 0.36, '0%', this.constants.MenuButtonStyle());
-        const one = this.add.text(width * 0.5, height * 0.36, '50%', this.constants.MenuButtonStyle());
-        const two = this.add.text(width * 0.5 + width * 0.2, height * 0.36, '100%', this.constants.MenuButtonStyle());
-
-        zero.setOrigin(0.5);
-        one.setOrigin(0.5);
-        two.setOrigin(0.5);
+    updateSFXVolume(value) {
+        if (Math.abs(value - this.game.config.sfxVolume) > 0.12) return; // slider jumped rather than dragged
+        this.game.config.sfxVolume = (value == 0) ? (value + 0.01) : value;
     }
 
     /**

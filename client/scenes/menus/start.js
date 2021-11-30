@@ -170,6 +170,10 @@ export default class MenuScene4 extends Phaser.Scene {
             return;
         });
 
+        // // set default sfxVolume in game config unless already set
+        if (this.game.config.sfxVolume && this.game.config.sfxVolume != 0.5) return;
+        this.game.config.sfxVolume = 0.5;
+
         // // set default ttsvolume in game config unless already set
         if (this.game.config.ttsVolume && this.game.config.ttsVolume != 0.5) return;
         this.game.config.ttsVolume = 0.5;
