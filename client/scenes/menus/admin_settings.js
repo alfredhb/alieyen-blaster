@@ -51,6 +51,7 @@ import Constants from "../../lib/constants";
 
         // Init content
         this.initVolumeContent(width, height);
+        this.initEyeInputContent(width, height);
 
         // Add tabs
         this.initTabs(width, height);
@@ -58,7 +59,9 @@ import Constants from "../../lib/constants";
         const qButton = new QuitButton(this, {
             backMenu: this.levelData,
             cutscene: true, // to resume the last scene
-            execFunc: () => {}
+            execFunc: () => {
+                //TODO: update mongoDB entries for all settings
+            }
         })
     }
 
@@ -74,7 +77,7 @@ import Constants from "../../lib/constants";
         const sfxBG = this.rexUI.add.roundRectangle(width * 0.6, height * 0.3625, width * 0.6, height * 0.25, 20);
         const sfxT = this.add.text(width * 0.325, height * 0.3625, "Sound FX", this.constants.MenuButtonStyle());
         const sfxSlider = this.rexUI.add.slider({
-            x: width * .7,
+            x: width * .725,
             y: height * 0.3625,
             width: width * 0.275,
             height: height * 0.03,
@@ -94,7 +97,7 @@ import Constants from "../../lib/constants";
         const ttsBG = this.rexUI.add.roundRectangle(width * 0.6, height * 0.6375, width * 0.6, height * 0.25, 20);
         const ttsT = this.add.text(width * 0.325, height * 0.6375, "Text to Speech", this.constants.MenuButtonStyle());
         const ttsSlider = this.rexUI.add.slider({
-            x: width * .7,
+            x: width * .725,
             y: height * 0.6375,
             width: width * 0.275,
             height: height * 0.03,
@@ -127,6 +130,78 @@ import Constants from "../../lib/constants";
                 bg: ttsBG,
                 t: ttsT,
                 s: ttsSlider
+            }
+        }
+    }
+
+    /**
+     * Creates content for eye input section including dwell time and cursor size slider
+     * sections which update mongo meta files ON EXIT. Then hides them and disables
+     * interaction
+     * @param {number} width 
+     * @param {number} height 
+     */
+    initEyeInputContent(width, height) {
+        // Dwell Time
+        const dwtBG = this.rexUI.add.roundRectangle(width * 0.6, height * 0.3625, width * 0.6, height * 0.25, 20);
+        const dwtT = this.add.text(width * 0.325, height * 0.3625, "Dwell Speed", this.constants.MenuButtonStyle());
+        const dwtN = this.add.text(width * 0.85, height * 0.3625, (this.game.config.dwellTime * 5) + "s", this.constants.MenuButtonStyle());
+        const dwtS = this.rexUI.add.slider({
+            x: width * .675,
+            y: height * 0.3625,
+            width: width * 0.275,
+            height: height * 0.03,
+            orientation: 0,
+            track: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.02, 0xFFFFFF),
+            indicator: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.025, this.constants.Pink),
+            thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.04, this.constants.Red),
+            gap: 0.1,
+            value: this.game.config.dwellTime,
+
+            valuechangeCallback: (v) => {
+                this.updateDwellTime(v, dwtN);
+            }
+        }).layout();
+
+        // Cursor Size
+        const crsBG = this.rexUI.add.roundRectangle(width * 0.6, height * 0.6375, width * 0.6, height * 0.25, 20);
+        const crsT = this.add.text(width * 0.325, height * 0.6375, "Cursor Size", this.constants.MenuButtonStyle());
+        const crsS = this.rexUI.add.slider({
+            x: width * .675,
+            y: height * 0.6375,
+            width: width * 0.275,
+            height: height * 0.03,
+            orientation: 0,
+            track: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.02, 0xFFFFFF),
+            indicator: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.025, this.constants.Pink),
+            thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.04, this.constants.Red),
+            gap: 0.1,
+            value: this.game.config.ttsVolume,
+
+            valuechangeCallback: (v) => {
+                this.updateTTSVolume(v);
+            }
+        }).layout();
+
+        dwtBG.setStrokeStyle(10, this.constants.LightBlue, 1);
+        crsBG.setStrokeStyle(10, this.constants.LightBlue, 1);
+
+        dwtT.setOrigin(0, 0.5);
+        crsT.setOrigin(0, 0.5);
+        dwtN.setOrigin(0.5);
+
+        // Save values for later toggling
+        this.eyeInput = {
+            dwt: {
+                bg: dwtBG,
+                t: dwtT,
+                s: dwtS,
+                n: dwtN
+            },
+            crs: {
+                bg: crsBG,
+                t: crsT,
+                s: crsS
             }
         }
     }
@@ -212,6 +287,7 @@ import Constants from "../../lib/constants";
                 break;
             case 1:
                 console.log("hide eye tracking sliders and disable interaction");
+                this.toggleEyeInputContent(0);
                 break;
             case 2:
                 console.log("hide savefile removal buttons and disable interaction");
@@ -234,6 +310,7 @@ import Constants from "../../lib/constants";
                 break;
             case 1:
                 console.log("show eye tracking sliders and enable interaction");
+                this.toggleEyeInputContent(2);
                 break;
             case 2:
                 console.log("show savefile removal buttons and enable interaction");
@@ -255,6 +332,20 @@ import Constants from "../../lib/constants";
         this.volume.tts.t.setDepth(v);
         this.volume.sfx.s.setDepth(v).setEnable(v != 0);
         this.volume.tts.s.setDepth(v).setEnable(v != 0);
+    }
+
+    /**
+     * sets depth of volume content to v and enables / disables sliders
+     * @param {number} v 
+     */
+    toggleEyeInputContent(v) {
+        this.eyeInput.dwt.bg.setDepth(v);
+        this.eyeInput.crs.bg.setDepth(v);
+        this.eyeInput.dwt.t.setDepth(v);
+        this.eyeInput.crs.t.setDepth(v);
+        this.eyeInput.dwt.n.setDepth(v);
+        this.eyeInput.dwt.s.setDepth(v).setEnable(v != 0);
+        this.eyeInput.crs.s.setDepth(v).setEnable(v != 0);
     }
 
     /**
@@ -280,6 +371,13 @@ import Constants from "../../lib/constants";
         });
     }
 
+    /**
+     * sets the playback volume for all sfx sounds to this value by setting its
+     * value in the game config after normalizing it ( 0.5 == 1, 1 == 2, 0 / mute = 0.01 )
+     * sfx can never be silent just in case there are 'complete' listeners for them
+     * @param {number} value 
+     */
+
     updateSFXVolume(value) {
         if (Math.abs(value - this.game.config.sfxVolume) > 0.12) return; // slider jumped rather than dragged
         this.game.config.sfxVolume = (value == 0) ? (value + 0.01) : value;
@@ -294,6 +392,16 @@ import Constants from "../../lib/constants";
     updateTTSVolume(value) {
         if (Math.abs(value - this.game.config.ttsVolume) > 0.12) return; // slider jumped rather than dragged
         this.game.config.ttsVolume = (value == 0) ? (value + 0.01) : value;
+    }
+
+    /**
+     * sets the dell time for hover clicks
+     * @param {number} value 
+     */
+     updateDwellTime(value, text) {
+        if (Math.abs(value - this.game.config.dwellTime) > 0.12) return; // slider jumped rather than dragged
+        this.game.config.dwellTime = (Math.round(value * 10) / 10).toFixed(1); // round to nearest factor of 1/2
+        text.setText((this.game.config.dwellTime * 5) + "s");
     }
 
     /**

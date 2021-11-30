@@ -177,5 +177,9 @@ export default class MenuScene4 extends Phaser.Scene {
         // // set default ttsvolume in game config unless already set
         if (this.game.config.ttsVolume && this.game.config.ttsVolume != 0.5) return;
         this.game.config.ttsVolume = 0.5;
+
+        // // set default dwellTime in game config unless already set
+        if (this.game.config.dwellTime && this.game.config.dwellTime != 0.2) return;
+        this.game.config.dwellTime = 0.2;
     }
 }
