@@ -82,4 +82,13 @@ export default class AlienGroup extends Phaser.GameObjects.Group {
 
         this.alienTimers[0].paused = false;
     }
+
+    /**
+     * Passes 'slowdown' event to the alien sublayers
+     */
+    slow(duration) {
+        this.getChildren().forEach(a => {
+            a.slow(duration);
+        });
+    }
 }

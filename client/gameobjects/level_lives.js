@@ -59,20 +59,6 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
             }
         });
 
-        /**
-         * add heal listener
-         */
-        scene.events.on('healplayer', (health) => {
-            if (this.numLives < lives) {
-                for (let i = this.numLives; i < this.numLives + health; i++) {
-                    if (i >= lives) break;
-
-                    this.addLife(i);
-                }
-                this.numLives = (this.numLives + health > lives) ? lives : this.numLives + health;
-            }
-        });
-
         // add self to scene
         scene.add.existing(this);
     }
@@ -107,6 +93,22 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
                 this.scene.events.emit('levelliveszero');
             }
         });
+    }
+
+    /**
+     * Called when scene receives 'healplayer' event. This heals the player by the specified amount
+     * of health.
+     * @param {number} health number of lives to heal
+     */
+    healLives(health) {
+        if (this.numLives < lives) {
+            for (let i = this.numLives; i < this.numLives + health; i++) {
+                if (i >= lives) break;
+
+                this.addLife(i);
+            }
+            this.numLives = (this.numLives + health > lives) ? lives : this.numLives + health;
+        }
     }
 
     /**

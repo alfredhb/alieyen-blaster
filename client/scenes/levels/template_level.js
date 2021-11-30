@@ -14,6 +14,7 @@ import ScoreObject from "../../gameobjects/scoreObject";
 import Turrets from "../../gameobjects/turret";
 import Constants from "../../lib/constants";
 import AlienMini from "../../gameobjects/alien_mini";
+import Slow from "../../gameobjects/powerups/slow";
 
 export default class TemplateLevelScene extends Phaser.Scene {
     constructor() {
@@ -432,6 +433,15 @@ export default class TemplateLevelScene extends Phaser.Scene {
                             })
                         );
                         break;
+                    case "slow":
+                        this.powerups.push(
+                            this.physics.add.group({
+                                classType: Slow,
+                                runChildUpdate: true,
+                                maxSize: 1
+                            })
+                        );
+                        break;
                     default:
                         console.log("unimplemented powerup: " + powerup.name);
                 }
@@ -467,6 +477,10 @@ export default class TemplateLevelScene extends Phaser.Scene {
      */
     createPowerupListeners() {
         // Health
+        this.events.addListener('healplayer', (health) => {
+            console.log('Heal! ' + health);
+            this.levelLives.healLives(health);
+        });
 
         // Increase Turret Speed
         this.events.addListener('increaseturretspeed', (amount) => {
@@ -479,6 +493,14 @@ export default class TemplateLevelScene extends Phaser.Scene {
             console.log('Shield! ' + amount);
             this.levelLives.shieldLives(amount);
         });
+
+        // Slow aliens
+        this.events.addListener('slowaliens', (duration) => {
+            console.log('Slow aliens! ' + duration);
+            this.aliens.forEach(a => {
+                a.slow(duration);
+            });
+        });
     }
 
     /**
@@ -488,6 +510,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         this.events.removeListener('healplayer');
         this.events.removeListener('increaseturretspeed');
         this.events.removeListener('shieldplayer');
+        this.events.removeListener('slowaliens')
     }
 
     /**
@@ -596,7 +619,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
                 if (d.cutscene) {
                     this.events.removeListener('pause');
                     this.scene.setVisible(false);
-                    
+
                     this.scene.launch('templateCutscene', {
                         url: this.levelData.scene.cutscene.close,
                         open: false,
@@ -686,8 +709,8 @@ export default class TemplateLevelScene extends Phaser.Scene {
                             world: this.levelData.meta.world
                         },
                         level: this.levelData.level, // pass score
-                        scene: { 
-                            prevScene: (this.levelData.scene.type) ? 
+                        scene: {
+                            prevScene: (this.levelData.scene.type) ?
                             {
                                 name: 'arcadeMenu',
                                 type: 'ARCADE',

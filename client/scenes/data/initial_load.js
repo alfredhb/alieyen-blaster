@@ -43,6 +43,8 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "shield-outline",     "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/shield_outline.png"},
             {"key": "shield-placed",      "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/shield_placed.png"},
             {"key": "speed-up",           "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/speed-up.png"},
+            {"key": "slow",               "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/slow.png"},
+            {"key": "frozen",             "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/frozen.png"},
             {"key": "empty-heart",        "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/empty_heart.png"},
             {"key": "star",               "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/star.png"},
             {"key": "star-outline",       "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/star_outline.png"},
@@ -137,7 +139,7 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "time-tutorial-13",     "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_13.m4a",      "config": { loop: false, seek: 0.4 }},
             {"key": "time-tutorial-14",     "path": "https://storage.googleapis.com/alieyen-blaster/public/sounds/voicelines/timed-tutorial/L_14.m4a",      "config": { loop: false, seek: 0.6 }},
         ]
-        
+
         // Loading Text
         const loadText = this.add.text(width * 0.5, height * 0.35, 'Loading...', {
             fontSize: (height * 0.11) + "px",
@@ -190,7 +192,7 @@ export default class DataScene1 extends Phaser.Scene {
             loadBlock.setOrigin(0, 0.5);
             loadBlock.setTint(this.constants.Red);
             loadBlock.setDepth(10);
-            
+
             this.assetsLoaded += 1;
             if (this.assetsLoaded == this.totalAssets) {
                 setTimeout(() => {
@@ -236,7 +238,7 @@ export default class DataScene1 extends Phaser.Scene {
             'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_fire_114_160_small.png',
             { frameWidth: 114, frameHeight: 160 },
         );
-        
+
         this.load.spritesheet(
             'alien-grunt-fire-sheet-medium',
             'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_fire_114_160_medium.png',
@@ -310,7 +312,7 @@ export default class DataScene1 extends Phaser.Scene {
     }
 
     /**
-     * Rather than having individual scenes add the sounds they want to the soundManager, add them here and then 
+     * Rather than having individual scenes add the sounds they want to the soundManager, add them here and then
      * retrieve them later so as to reduce unnecessary caching. Use Get along with any sound config to retreive
      * sound based on its level
      */

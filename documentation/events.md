@@ -34,3 +34,7 @@ and then break
 * emitted by a weapon powerup when hit. This should reduce the cooldown timer of
 turrets to some lower constant - (0.1 second?) for the provided duration before
 returning it to its normal value
+
+### *slowaliens* (duration)
+* emitted by a slow powerup when hit. This should slow down the movement speed of aliens to make
+them easier to hit.

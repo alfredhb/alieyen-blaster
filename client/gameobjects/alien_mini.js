@@ -45,7 +45,7 @@ export default class AlienMini extends Alien {
             this.xSpeed *= -1;
             this.setVelocity(this.xSpeed, 0);
             this.shield.setVelocity(this.xSpeed, 0);
-        } 
+        }
 
         // no fire stuff yet
     }
@@ -60,7 +60,7 @@ export default class AlienMini extends Alien {
         let y = Math.random() * this.maxY * 0.5 + 75;
         this.speed = this.constants.GetSpeed(this.difficulty);
         this.xSpeed = direction * this.speed * 1000;
-        
+
         this.x = (direction > 0) ? -50 : this.maxX;
         this.setPosition(this.x, y);
         this.setVelocity(this.xSpeed, 0);
@@ -90,7 +90,7 @@ export default class AlienMini extends Alien {
             this.constants.Height * 0.07
         );
         this.anims.play('alien-mini-boss-float');
-        
+
         this.setActive(true);
         this.setVisible(true);
     }
@@ -100,9 +100,9 @@ export default class AlienMini extends Alien {
     }
 
     /**
-     * deal damage to this.hp. If 0, kill the alien and return true, else return 
+     * deal damage to this.hp. If 0, kill the alien and return true, else return
      * false. A shield soaks up damage if it exists
-     * @param {number} d 
+     * @param {number} d
      */
     damage(d) {
         if (this.shieldHP > 0) {
@@ -183,5 +183,16 @@ export default class AlienMini extends Alien {
      */
     getType() {
         return 1;
+    }
+
+    /**
+     * Called when scene receives 'slowaliens' event. Causes aliens to slow down
+     * If the timer is already active when another powerup is received, then appends the duration
+     * of the timer
+     * @param {number} duration time in ms
+     */
+    slow(duration) {
+        // we don't want bosses to be affected by this powerup
+        return;
     }
 }
