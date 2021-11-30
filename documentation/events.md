@@ -37,4 +37,8 @@ returning it to its normal value
 
 ### *slowaliens* (duration)
 * emitted by a slow powerup when hit. This should slow down the movement speed of aliens to make
-them easier to hit.
+them easier to hit. (does not affect bosses)
+
+### *onehitko*
+* emitted by a one hit ko powerup when hit. This should kill all aliens on the screen.
+(does not affect bosses)

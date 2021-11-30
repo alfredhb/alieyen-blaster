@@ -292,6 +292,15 @@ export default class AlienGrunt extends Alien {
             this.xSpeed = this.xSpeed * this.slowMultiplier;
             this.setVelocity(this.xSpeed, this.ySpeed);
         }
+    }
 
+    /**
+     * Called when scene receives 'onehitko' event. Kills aliens
+     */
+    onehitko() {
+        let kills = [0, 0, 0];
+        kills[this.getType()] = 1;
+        this.kill();
+        return kills;
     }
 }

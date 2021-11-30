@@ -45,6 +45,7 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "speed-up",           "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/speed-up.png"},
             {"key": "slow",               "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/slow.png"},
             {"key": "frozen",             "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/frozen.png"},
+            {"key": "onehitko",           "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/onehitko.png"},
             {"key": "empty-heart",        "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/empty_heart.png"},
             {"key": "star",               "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/star.png"},
             {"key": "star-outline",       "path": "https://storage.googleapis.com/alieyen-blaster/public/assets/features/star_outline.png"},

@@ -195,4 +195,12 @@ export default class AlienMini extends Alien {
         // we don't want bosses to be affected by this powerup
         return;
     }
+
+    /**
+     * Called when scene receives 'onehitko' event. Kills aliens
+     */
+    onehitko() {
+        // we don't want bosses to be affected by this powerup
+        return [0, 0, 0];
+    }
 }

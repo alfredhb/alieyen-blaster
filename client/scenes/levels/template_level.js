@@ -15,6 +15,7 @@ import Turrets from "../../gameobjects/turret";
 import Constants from "../../lib/constants";
 import AlienMini from "../../gameobjects/alien_mini";
 import Slow from "../../gameobjects/powerups/slow";
+import OneHitKO from "../../gameobjects/powerups/onehitko";
 
 export default class TemplateLevelScene extends Phaser.Scene {
     constructor() {
@@ -442,6 +443,15 @@ export default class TemplateLevelScene extends Phaser.Scene {
                             })
                         );
                         break;
+                    case "onehitko":
+                        this.powerups.push(
+                            this.physics.add.group({
+                                classType: OneHitKO,
+                                runChildUpdate: true,
+                                maxSize: 1
+                            })
+                        );
+                        break;
                     default:
                         console.log("unimplemented powerup: " + powerup.name);
                 }
@@ -501,6 +511,21 @@ export default class TemplateLevelScene extends Phaser.Scene {
                 a.slow(duration);
             });
         });
+
+        // One hit KO
+        this.events.addListener('onehitko', () => {
+            console.log('One hit KO! ');
+            let kills = [0, 0, 0];
+            this.aliens.forEach(a => {
+                let kill = a.onehitko();
+                for (let i = 0; i < 3; i++) {
+                    kills[i] += kill[i];
+                }
+            });
+            this.kills.grunt += kills[0];
+            this.kills.miniBoss += kills[1];
+            this.kills.boss += kills[2];
+        });
     }
 
     /**
@@ -510,7 +535,8 @@ export default class TemplateLevelScene extends Phaser.Scene {
         this.events.removeListener('healplayer');
         this.events.removeListener('increaseturretspeed');
         this.events.removeListener('shieldplayer');
-        this.events.removeListener('slowaliens')
+        this.events.removeListener('slowaliens');
+        this.events.removeListener('onehitko');
     }
 
     /**
