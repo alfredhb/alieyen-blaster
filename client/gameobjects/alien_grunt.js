@@ -279,7 +279,7 @@ export default class AlienGrunt extends Alien {
                     this.xSpeed = this.xSpeed / this.slowMultiplier;
                     this.setVelocity(this.xSpeed, this.ySpeed);
                 }
-                this.scene.sound.play('glass-break');
+                this.scene.sound.play('glass-break', { volume: 0.2 });
             },
             callbackScope: this,
             paused: false
