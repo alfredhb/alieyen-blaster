@@ -12,6 +12,12 @@ export default class MenuScene4 extends Phaser.Scene {
      * Loads up game data such as difficulty from DB and passes along to future scenes
      */
     init() {
+        // Set default game configs if unavailable from db
+        if (!this.game.config.sfxVolume) this.game.config.sfxVolume = 0.5;
+        if (!this.game.config.ttsVolume) this.game.config.ttsVolume = 0.5;
+        if (!this.game.config.dwellTime) this.game.config.dwellTime = 0.2;
+        if (!this.game.config.cursorSize) this.game.config.cursorSize = 0.4;
+
         Meteor.call("getDifficulty", (err, res) => {
             if (err != null) {
                 console.log(err);
@@ -19,8 +25,36 @@ export default class MenuScene4 extends Phaser.Scene {
             }
 
             this.difficulty = res;
-            console.log("Fetched Difficulty as " + this.difficulty);
-        })
+            // console.log("Fetched Difficulty as " + this.difficulty);
+        });
+        Meteor.call("getVolume", (err, res) => {
+            if (err != null) {
+                console.log(err);
+                return;
+            }
+
+            this.game.config.sfxVolume = res.sfx;
+            this.game.config.ttsVolume = res.tts;
+            // console.log("Fetched volume as " + res.sfx + " " + res.tts);
+        });
+        Meteor.call("getDwellTime", (err, res) => {
+            if (err != null) {
+                console.log(err);
+                return;
+            }
+
+            this.game.config.dwellTime = res;
+            // console.log("Fetched dwell time as " + res);
+        });
+        Meteor.call("getCursorSize", (err, res) => {
+            if (err != null) {
+                console.log(err);
+                return;
+            }
+
+            this.game.config.cursorSize = res;
+            // console.log("Fetched dwell time as " + res);
+        });
     }
 
     /**
@@ -165,21 +199,9 @@ export default class MenuScene4 extends Phaser.Scene {
         sButton.on('pointerup', () => {
             this.menuSounds.menuClick.play();
 
-            this.scene.pause(this);
             this.scene.launch('adminSettingsMenu', this);
+            this.scene.stop(this);
             return;
         });
-
-        // // set default sfxVolume in game config unless already set
-        if (this.game.config.sfxVolume && this.game.config.sfxVolume != 0.5) return;
-        this.game.config.sfxVolume = 0.5;
-
-        // // set default ttsvolume in game config unless already set
-        if (this.game.config.ttsVolume && this.game.config.ttsVolume != 0.5) return;
-        this.game.config.ttsVolume = 0.5;
-
-        // // set default dwellTime in game config unless already set
-        if (this.game.config.dwellTime && this.game.config.dwellTime != 0.2) return;
-        this.game.config.dwellTime = 0.2;
     }
 }

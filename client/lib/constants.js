@@ -9,8 +9,6 @@ export default class Constants {
     constructor(width, height) {
         this.Width = width;
         this.Height = height;
-
-        this.hoverMiliseconds = 1000;
     }
 
     Blue = 0x0000FF;
@@ -151,9 +149,12 @@ export default class Constants {
      */
     HoverClick(scene, button, callbackFunc) {
         this.hoverFill = scene.add.sprite(-50, -50, 'cursor-fill-2', 0).setDepth(30);
+        this.hoverFill.setScale(scene.game.config.cursorSize / 0.4);
+
         this.hoverTimerActive = false;
+        let delayTimeSec = scene.game.config.dwellTime * 5;
         let hoverTimer = scene.time.addEvent({
-            delay: this.hoverMiliseconds,
+            delay: (delayTimeSec * 1000), // dwell is a decimal [0, 1] corresponding to [0, 5] seconds
             callback: () => {
                 this.cancelHover(hoverTimer);
                 callbackFunc()
@@ -175,6 +176,10 @@ export default class Constants {
             document.body.style.cursor = 'none';
             this.hoverFill.setVisible(true);
             this.hoverFill.play('cursor-fill-animation-2');
+            this.hoverFill.play({
+                key: 'cursor-fill-animation-2',
+                frameRate: (20 / delayTimeSec), // 20 is the default fps, so ensure all frames are played no matter the well time
+            })
             hoverTimer.paused = false;
             
         }).on('pointermove', () => {

@@ -43,9 +43,6 @@ import Constants from "../../lib/constants";
             color: "#FFF"
         }).setOrigin(0.5); // No TTS here
 
-        // tts
-        // this.initTTSSettings(width, height);
-
         // savefile
         // this.initSaveManagement(width, height);
 
@@ -58,9 +55,10 @@ import Constants from "../../lib/constants";
 
         const qButton = new QuitButton(this, {
             backMenu: this.levelData,
-            cutscene: true, // to resume the last scene
+            // cutscene: true, // to resume the last scene
             execFunc: () => {
                 //TODO: update mongoDB entries for all settings
+                this.updateSettings();
             }
         })
     }
@@ -144,10 +142,10 @@ import Constants from "../../lib/constants";
     initEyeInputContent(width, height) {
         // Dwell Time
         const dwtBG = this.rexUI.add.roundRectangle(width * 0.6, height * 0.3625, width * 0.6, height * 0.25, 20);
-        const dwtT = this.add.text(width * 0.325, height * 0.3625, "Dwell Speed", this.constants.MenuButtonStyle());
+        const dwtT = this.add.text(width * 0.315, height * 0.3625, "Dwell Speed", this.constants.MenuButtonStyle());
         const dwtN = this.add.text(width * 0.85, height * 0.3625, (this.game.config.dwellTime * 5) + "s", this.constants.MenuButtonStyle());
         const dwtS = this.rexUI.add.slider({
-            x: width * .675,
+            x: width * .66,
             y: height * 0.3625,
             width: width * 0.275,
             height: height * 0.03,
@@ -155,7 +153,7 @@ import Constants from "../../lib/constants";
             track: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.02, 0xFFFFFF),
             indicator: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.025, this.constants.Pink),
             thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.04, this.constants.Red),
-            gap: 0.1,
+            gap: 0.05,
             value: this.game.config.dwellTime,
 
             valuechangeCallback: (v) => {
@@ -165,9 +163,17 @@ import Constants from "../../lib/constants";
 
         // Cursor Size
         const crsBG = this.rexUI.add.roundRectangle(width * 0.6, height * 0.6375, width * 0.6, height * 0.25, 20);
-        const crsT = this.add.text(width * 0.325, height * 0.6375, "Cursor Size", this.constants.MenuButtonStyle());
+        const crsT = this.add.text(width * 0.315, height * 0.6375, "Cursor Size", this.constants.MenuButtonStyle());
+        let adjustedSize = this.game.config.cursorSize * 100;
+        const crsC = this.rexUI.add.roundRectangle(
+            width * 0.85,
+            height * 0.6375, 
+            null, 
+            null, 
+            adjustedSize / 2, 
+            this.constants.Green); 
         const crsS = this.rexUI.add.slider({
-            x: width * .675,
+            x: width * .66,
             y: height * 0.6375,
             width: width * 0.275,
             height: height * 0.03,
@@ -176,10 +182,10 @@ import Constants from "../../lib/constants";
             indicator: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.025, this.constants.Pink),
             thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, height * 0.04, this.constants.Red),
             gap: 0.1,
-            value: this.game.config.ttsVolume,
+            value: this.game.config.cursorSize,
 
             valuechangeCallback: (v) => {
-                this.updateTTSVolume(v);
+                this.updateCursorSize(v, crsC);
             }
         }).layout();
 
@@ -201,7 +207,8 @@ import Constants from "../../lib/constants";
             crs: {
                 bg: crsBG,
                 t: crsT,
-                s: crsS
+                s: crsS,
+                c: crsC
             }
         }
     }
@@ -282,11 +289,9 @@ import Constants from "../../lib/constants";
     hideTabContent() {
         switch(this.selectedTabInd) {
             case 0:
-                console.log("hide volume buttons / sliders and disable interaction");
                 this.toggleVolumeContent(0);
                 break;
             case 1:
-                console.log("hide eye tracking sliders and disable interaction");
                 this.toggleEyeInputContent(0);
                 break;
             case 2:
@@ -305,11 +310,9 @@ import Constants from "../../lib/constants";
     showTabContent(i) {
         switch(i) {
             case 0:
-                console.log("show volume buttons / sliders and enable interaction");
                 this.toggleVolumeContent(2);
                 break;
             case 1:
-                console.log("show eye tracking sliders and enable interaction");
                 this.toggleEyeInputContent(2);
                 break;
             case 2:
@@ -344,6 +347,7 @@ import Constants from "../../lib/constants";
         this.eyeInput.dwt.t.setDepth(v);
         this.eyeInput.crs.t.setDepth(v);
         this.eyeInput.dwt.n.setDepth(v);
+        this.eyeInput.crs.c.setDepth(v);
         this.eyeInput.dwt.s.setDepth(v).setEnable(v != 0);
         this.eyeInput.crs.s.setDepth(v).setEnable(v != 0);
     }
@@ -400,8 +404,22 @@ import Constants from "../../lib/constants";
      */
      updateDwellTime(value, text) {
         if (Math.abs(value - this.game.config.dwellTime) > 0.12) return; // slider jumped rather than dragged
-        this.game.config.dwellTime = (Math.round(value * 10) / 10).toFixed(1); // round to nearest factor of 1/2
+        this.game.config.dwellTime = (Math.round(value * 20) / 20).toFixed(2); // round to nearest factor of 1/2
         text.setText((this.game.config.dwellTime * 5) + "s");
+    }
+
+    /**
+     * Sets the width and height of cursor to value and updates its radius
+     * @param {number} value 
+     * @param {rexUI.roundRectangle} cursor 
+     */
+    updateCursorSize(value, cursor) {
+        if (Math.abs(value - this.game.config.cursorSize) > 0.12) return;
+        this.game.config.cursorSize = (value == 0) ? 0.05 : value;
+
+        // update preview
+        let size = this.game.config.cursorSize * 100;
+        cursor.setDisplaySize(size, size);
     }
 
     /**
@@ -572,6 +590,35 @@ import Constants from "../../lib/constants";
             b.d.x = width * 0.74;
             b.x.x = width * 0.8;
             b.bg.x = width * 0.5;
+        });
+    }
+
+    /**
+     * Calls setters for all settings to persist them to db
+     */
+    updateSettings() {
+        // save volume
+        Meteor.call("setVolume", this.game.config.sfxVolume, this.game.config.ttsVolume, (err) => {
+            if (err != null) {
+                console.log(err);
+                return;
+            }
+        });
+        
+        // save dwell time
+        Meteor.call("setDwellTime", this.game.config.dwellTime, (err) => {
+            if (err != null) {
+                console.log(err);
+                return;
+            }
+        });
+
+        // save cursor size
+        Meteor.call("setCursorSize", this.game.config.cursorSize, (err) => {
+            if (err != null) {
+                console.log(err);
+                return;
+            }
         });
     }
 }
