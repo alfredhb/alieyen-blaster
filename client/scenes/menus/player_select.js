@@ -226,6 +226,9 @@
                     this.p2Text.setDepth(2);
                 }
             });
+
+            // disable interaction until ready
+            b.button.disableInteractive();
         });
     }
 
@@ -292,6 +295,7 @@
         this.personButtons.forEach(b => {
             b.button.setDepth(2);
             b.text.setDepth(2);
+            b.button.setInteractive();
 
             this.constants.FlashColor(this, b.button, this.constants.Gray, 750)
         });
