@@ -42,3 +42,7 @@ them easier to hit. (does not affect bosses)
 ### *onehitko*
 * emitted by a one hit ko powerup when hit. This should kill all aliens on the screen.
 (does not affect bosses)
+
+### *autoaim*
+* emitted by a autoaim powerup when hit.  This makes the turrets automatically fire at aliens
+without user input.

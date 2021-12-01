@@ -16,6 +16,7 @@ import Constants from "../../lib/constants";
 import AlienMini from "../../gameobjects/alien_mini";
 import Slow from "../../gameobjects/powerups/slow";
 import OneHitKO from "../../gameobjects/powerups/onehitko";
+import Autoaim from "../../gameobjects/powerups/autoaim";
 
 export default class TemplateLevelScene extends Phaser.Scene {
     constructor() {
@@ -452,6 +453,15 @@ export default class TemplateLevelScene extends Phaser.Scene {
                             })
                         );
                         break;
+                    case "autoaim":
+                        this.powerups.push(
+                            this.physics.add.group({
+                                classType: Autoaim,
+                                runChildUpdate: true,
+                                maxSize: 1
+                            })
+                        );
+                        break;
                     default:
                         console.log("unimplemented powerup: " + powerup.name);
                 }
@@ -526,6 +536,12 @@ export default class TemplateLevelScene extends Phaser.Scene {
             this.kills.miniBoss += kills[1];
             this.kills.boss += kills[2];
         });
+
+        // Autoaim
+        this.events.addListener('autoaim', (duration) => {
+            console.log('Autoaim! ' + duration);
+            this.turrets.autoaim(duration);
+        })
     }
 
     /**
@@ -537,6 +553,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         this.events.removeListener('shieldplayer');
         this.events.removeListener('slowaliens');
         this.events.removeListener('onehitko');
+        this.events.removeListener('autoaim');
     }
 
     /**
