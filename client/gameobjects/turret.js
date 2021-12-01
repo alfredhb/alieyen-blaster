@@ -13,12 +13,13 @@ class Turret {
      */
     constructor(c, turret, cooldownTimer, inCooldown, cooldownEffect) {
         this.constants = c;
-        this.cooldownTime = 750; // 500 ms
+        this.cooldownTime = 500; // 500 ms
 
         this.turret = turret;
         this.cooldownTimer = cooldownTimer;
         this.inCooldown = inCooldown;
         this.cooldownEffect = cooldownEffect;
+        this.autoaim = false;
     }
 
     /**
@@ -29,6 +30,16 @@ class Turret {
         this.cooldownTimer.delay = this.cooldownTime;
 
         this.turret.setTexture((this.cooldownTime == 100) ? 'turret-speed-up' : 'turret-colored');
+    }
+
+    /**
+     * swaps whether autoaim is turned on or off and textures the turret appropriately
+     */
+    toggleAutoaim() {
+        this.autoaim = !this.autoaim;
+        // TODO: set cooldown timer?
+
+        this.turret.setTexture(this.autoaim ? 'turret-autoaim' : 'turret-colored');
     }
 
     /**
@@ -127,6 +138,13 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
 
             this.fire(aliens, collisionFunc);
         });
+        if (!this.scene.events.listenerCount('turretcooldowndone')) {
+            this.scene.events.addListener('turretcooldowndone', (turret) => {
+                if (this.turrets[0].autoaim || this.turrets[1].autoaim) {
+                    this.fireSingle(aliens, collisionFunc, turret);
+                }
+            });
+        }
     }
 
     /**
@@ -144,31 +162,43 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
      */
     fire(aliens, collisionFunc) {
         this.turrets.forEach(t => {
-            // Rotate turret and fire only if within angle
-            let angle = Phaser.Math.Angle.Between(
-                    t.turret.x, t.turret.y,
-                    this.scene.input.activePointer.x,
-                    this.scene.input.activePointer.y
-                ) + Math.PI / 2;
-            if (Math.abs(angle) <= 1.9) {
-                // Add cooldown timer
-                t.cooldownTimer = this.scene.time.addEvent({
-                    delay: t.cooldownTime,
-                    callback: () => {
-                        t.inCooldown = false;
-                    },
-                    callbackScope: this.scene,
-                    paused: true
-                });
-
-                // place turret in cooldown
-                t.inCooldown = true;
-                t.cooldownTimer.paused = false;
-
-                t.turret.setRotation(angle);
-                this.addBullet(t, angle, aliens, collisionFunc);
-            }
+            this.fireSingle(aliens, collisionFunc, t);
         });
+    }
+
+    /**
+     * fires specified turrets at the given activepointer location and adds cooldown
+     * timers
+     * @param {Phaser.GameObjects.Group[]} aliens
+     * @param {function} collisionFunc
+     * @param {Turret} t
+     */
+    fireSingle(aliens, collisionFunc, t) {
+        // Rotate turret and fire only if within angle
+        let angle = Phaser.Math.Angle.Between(
+            t.turret.x, t.turret.y,
+            this.scene.input.activePointer.x,
+            this.scene.input.activePointer.y
+        ) + Math.PI / 2;
+        if (Math.abs(angle) <= 1.9) {
+            // Add cooldown timer
+            t.cooldownTimer = this.scene.time.addEvent({
+                delay: t.cooldownTime,
+                callback: () => {
+                    t.inCooldown = false;
+                    this.scene.events.emit('turretcooldowndone', (t));
+                },
+                callbackScope: this.scene,
+                paused: true
+            });
+
+            // place turret in cooldown
+            t.inCooldown = true;
+            t.cooldownTimer.paused = false;
+
+            t.turret.setRotation(angle);
+            this.addBullet(t, angle, aliens, collisionFunc);
+        }
     }
 
     /**
@@ -192,7 +222,48 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
                     this.scene
                 ));
             });
-            bullet.fire(null, t.turret.x, t.turret.y + 50, angle);
+
+            // calculate where autoaim bullet should go
+            if (t.autoaim) {
+                let positions = [];
+                aliens.forEach(group => {
+                    group.getMatching('active', true).forEach(a => {
+                        positions.push([a.x, a.y, a.xSpeed, a.fired]);
+                    });
+                });
+
+                // sort by if alien is firing
+                positions.sort((pos1, pos2) => {
+                    if (pos1[3] && !pos2[3]) {
+                        return -1;
+                    } else if (!pos1[3] && pos2[3]) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                });
+
+                // select alien that is firing first, otherwise choose randomly
+                let alien = positions[0];
+
+                // if alien has fired, don't account for movement
+                let angle = 0;
+                if (alien[3]) {
+                    angle = Phaser.Math.Angle.Between(
+                        t.turret.x, t.turret.y + 50,
+                        alien[0], alien[1]
+                    ) + Math.PI / 2;
+                } else {
+                    angle = Phaser.Math.Angle.Between(
+                        t.turret.x, t.turret.y + 50,
+                        alien[0] + alien[2] * 0.25, alien[1]
+                    ) + Math.PI / 2;
+                }
+                bullet.fire(null, t.turret.x, t.turret.y + 50, angle);
+            } else {
+                bullet.fire(null, t.turret.x, t.turret.y + 50, angle);
+            }
+
             bullet.setDepth(8);
         }
     }
@@ -227,5 +298,29 @@ export default class Turrets extends Phaser.GameObjects.GameObject {
             paused: false
         });
         this.turrets.forEach(t => t.toggleCooldownTime());
+    }
+
+    /**
+     * Called when scene receives 'autoaim' event. This makes the turrets automatically fire at
+     * aliens without user input. If the timer is already
+     * active when another powerup is received, then appends the duration of the timer
+     * @param {number} duration time in ms
+     */
+    autoaim(duration) {
+        if (this.autoaimTimer && this.autoaimTimer.getProgress() < 1) {
+            this.autoaimTimer.delay += duration;
+            return;
+        }
+
+        // Create autoaimTimer with duration and toggle cooldown time
+        this.autoaimTimer = this.scene.time.addEvent({
+            delay: duration,
+            callback: () => {
+                this.turrets.forEach(t => t.toggleAutoaim());
+            },
+            callbackScope: this,
+            paused: false
+        });
+        this.turrets.forEach(t => t.toggleAutoaim());
     }
 }

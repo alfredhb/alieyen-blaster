@@ -34,3 +34,15 @@ and then break
 * emitted by a weapon powerup when hit. This should reduce the cooldown timer of
 turrets to some lower constant - (0.1 second?) for the provided duration before
 returning it to its normal value
+
+### *slowaliens* (duration)
+* emitted by a slow powerup when hit. This should slow down the movement speed of aliens to make
+them easier to hit. (does not affect bosses)
+
+### *onehitko*
+* emitted by a one hit ko powerup when hit. This should kill all aliens on the screen.
+(does not affect bosses)
+
+### *autoaim*
+* emitted by a autoaim powerup when hit.  This makes the turrets automatically fire at aliens
+without user input.

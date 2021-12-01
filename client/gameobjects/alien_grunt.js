@@ -12,6 +12,10 @@ export default class AlienGrunt extends Alien {
         let { width, height } = scene.scale;
         this.constants = new Constants(width, height);
 
+        this.slowMultiplier = 0.25;
+        this.slowed = false;
+        this.fired = false;
+
         // Add to physics and to canvas
         scene.physics.add.existing(this);
         this.setInteractive();
@@ -39,6 +43,17 @@ export default class AlienGrunt extends Alien {
             this.dMultiplier = scene.levelData.level.difficulty_multiplier[this.difficulty - 1];
         }
 
+        // Create frozen alien for slow powerup
+        this.frozen = scene.add.sprite(0, 0, 'frozen');
+        this.setPosition(width + 50, height + 50);
+        this.frozen.setDisplaySize(width * 0.1, height * 0.15);
+        this.frozen.setDepth(13);
+        this.frozen.setAlpha(0.65);
+        this.frozen.setVisible(false);
+        if (this.slowed) {
+            this.frozen.setVisible(true);
+        }
+
         // Add Animation
         this.anims.get('alien-grunt-float');
     }
@@ -62,6 +77,8 @@ export default class AlienGrunt extends Alien {
             this.fire();
             this.doesFire = false;
         }
+
+        this.frozen.setPosition(this.x, this.y);
     }
 
     /**
@@ -74,6 +91,9 @@ export default class AlienGrunt extends Alien {
         let y = Math.random() * this.maxY * 0.5 + 75;
         this.speed = this.constants.GetSpeed(this.difficulty);
         this.xSpeed = direction * this.speed * 1000;
+        if (this.slowed) {
+            this.xSpeed = this.xSpeed * this.slowMultiplier;
+        }
         this.ySpeed = 0 * 1000;
 
         this.x = (direction > 0) ? -50 : this.maxX;
@@ -93,8 +113,13 @@ export default class AlienGrunt extends Alien {
             );
             this.doesFire = true;
         }
+        this.fired = false;
 
         this.deadVal = false;
+
+        if (this.slowed) {
+            this.frozen.setVisible(true);
+        }
     }
 
     /**
@@ -127,6 +152,8 @@ export default class AlienGrunt extends Alien {
             return;
         }
 
+        this.fired = true;
+
         // Stop moving and begin animation
         this.setVelocity(0, 0);
         this.anims.play(this.getFireAnimation());
@@ -156,11 +183,13 @@ export default class AlienGrunt extends Alien {
     kill() {
         this.deadVal = true;
 
+        this.frozen.setVisible(false);
+
         // let projectile handle killed alien
         if (this.projectile && this.projectile.alienKilled()) {
             this.projectile.destroy();
         }
-        
+
         // Stop any charge sound and play animation
         this.play('explode', { loop: false, volume: 0.25 });
         this.on('animationcomplete', () => {
@@ -226,5 +255,52 @@ export default class AlienGrunt extends Alien {
      */
     getType() {
         return 0; // alien grunt
+    }
+
+    /**
+     * Called when scene receives 'slowaliens' event. Causes aliens to slow down
+     * If the timer is already active when another powerup is received, then appends the duration
+     * of the timer
+     * @param {number} duration time in ms
+     */
+    slow(duration) {
+        if (this.slowTimer && this.slowTimer.getProgress() < 1) {
+            this.slowTimer.delay += duration;
+            return;
+        }
+
+        // Create slowdown timer with duration and toggle cooldown time
+        this.slowTimer = this.scene.time.addEvent({
+            delay: duration,
+            callback: () => {
+                this.slowed = false;
+                this.frozen.setVisible(false);
+                if (!this.fired) {
+                    this.xSpeed = this.xSpeed / this.slowMultiplier;
+                    this.setVelocity(this.xSpeed, this.ySpeed);
+                }
+                this.scene.sound.play('glass-break');
+            },
+            callbackScope: this,
+            paused: false
+        });
+
+        this.slowed = true;
+        this.frozen.setVisible(true);
+
+        if (!this.fired) {
+            this.xSpeed = this.xSpeed * this.slowMultiplier;
+            this.setVelocity(this.xSpeed, this.ySpeed);
+        }
+    }
+
+    /**
+     * Called when scene receives 'onehitko' event. Kills aliens
+     */
+    onehitko() {
+        let kills = [0, 0, 0];
+        kills[this.getType()] = 1;
+        this.kill();
+        return kills;
     }
 }

@@ -82,4 +82,27 @@ export default class AlienGroup extends Phaser.GameObjects.Group {
 
         this.alienTimers[0].paused = false;
     }
+
+    /**
+     * Passes 'slowdown' event to the alien subclasses
+     */
+    slow(duration) {
+        this.getChildren().forEach(a => {
+            a.slow(duration);
+        });
+    }
+
+    /**
+     * Passes 'onehitko' event to the alien subclasses
+     */
+    onehitko() {
+        let kills = [0, 0, 0];
+        this.getChildren().forEach(a => {
+            let kill = a.onehitko();
+            for (let i = 0; i < 3; i++) {
+                kills[i] += kill[i];
+            }
+        });
+        return kills;
+    }
 }
