@@ -14,6 +14,7 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
     constructor(scene, constants, lives) {
         super(scene);
 
+        this.maxLives = lives;
         this.numLives = lives;
         this.shielded = false;
 
@@ -101,13 +102,13 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
      * @param {number} health number of lives to heal
      */
     healLives(health) {
-        if (this.numLives < lives) {
+        if (this.numLives < this.maxLives) {
             for (let i = this.numLives; i < this.numLives + health; i++) {
-                if (i >= lives) break;
+                if (i >= this.maxLives) break;
 
                 this.addLife(i);
             }
-            this.numLives = (this.numLives + health > lives) ? lives : this.numLives + health;
+            this.numLives = (this.numLives + health > this.maxLives) ? this.maxLives : this.numLives + health;
         }
     }
 
