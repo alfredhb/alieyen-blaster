@@ -195,7 +195,7 @@ export default class MenuScene4 extends Phaser.Scene {
     addSettings(width, height) {
         // Hidden settings button
         const sButton = this.add.image(width * 0.95, height * 0.07, '__WHITE');
-        sButton.setDisplaySize(width * 0.075, width * 0.075).setTint(0x000).setAlpha(0.075);
+        sButton.setDisplaySize(width * 0.075, width * 0.075).setTint(0x000).setAlpha(0.15);
 
         sButton.setInteractive();
         sButton.on('pointerup', () => {
