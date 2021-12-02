@@ -637,8 +637,9 @@ export default class TemplateLevelScene extends Phaser.Scene {
         */
         this.cleanupLevel();
 
-        // append objComplete to leveldata
-        this.levelData.level.objComplete = this.checkObjective(); // boolean (if wincondition is satisfied)
+        // append objComplete to leveldata. If it's already assigned and true, then don't overwrite
+        let levelObj = this.checkObjective();
+        this.levelData.level.objComplete = (this.levelData.level.objComplete) ? true : levelObj;
         if (!this.levelData.level.objComplete) {
             /*
             Objective failed! - transition to any held cutscene, if so, carry over

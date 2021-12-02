@@ -72,6 +72,10 @@ export default class LevelFactory extends Phaser.Scene {
             if (data?.level?.hasOwnProperty("liveScore" + (this.currentPlayer))) {
                 res.level["liveScore" + (this.currentPlayer)] = data.level["liveScore" + (this.currentPlayer)];
             }
+            // if data.level has objectiveComplete, save it
+            if (data?.level?.objComplete) {
+                res.level.objComplete = data.level.objComplete;
+            }
 
             // Go to template cutscene first
             if (res.scene.cutscene?.open) {
