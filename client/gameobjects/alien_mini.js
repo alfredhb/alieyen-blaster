@@ -32,8 +32,8 @@ export default class AlienMini extends Alien {
         } catch (e) {
             this.dMultiplier = this.constants.GetDifficultyMultiplier(this.difficulty);
         }
-        this.shieldHP = 20 * this.dMultiplier;
-        this.hp = 15 * this.dMultiplier;
+        this.shieldHP = Math.round(20 * this.dMultiplier); //Ensure whole numbers
+        this.hp = Math.round(15 * this.dMultiplier);
         this.shieldBreak1 = 12 * this.dMultiplier;
         this.shieldBreak2 = 7 * this.dMultiplier;
 
@@ -76,6 +76,9 @@ export default class AlienMini extends Alien {
         this.shield.setVelocity(this.xSpeed, 0);
         this.shield.setActive(true);
         this.shield.setVisible(true);
+
+        // healthbar
+        this.placeHealthbar();
     }
 
     /**
@@ -110,6 +113,8 @@ export default class AlienMini extends Alien {
         }
 
         this.hp -= d;
+        this.reduceHealthBar(d);
+
         if (this.hp <= 0) {
             return this.kill();
         }
@@ -123,6 +128,8 @@ export default class AlienMini extends Alien {
      */
     damageShield(d) {
         this.shieldHP -= d;
+        this.reduceShieldBar(d);
+
         if (this.shieldHP <= 0) {
             this.scene.sound.play('glass-break', { volume: this.scene.game.config.sfxVolume });
             setTimeout(() => {
@@ -146,7 +153,7 @@ export default class AlienMini extends Alien {
     kill() {
         this.deadVal = true;
 
-        this.play('explode', { loop: false, volume: 0.25 * this.scene.game.config.sfxVolume });
+        this.play({ key: 'explode', loop: false, repeat: 2 });
         this.on('animationcomplete', () => {
             this.off('animationcomplete');
             this.setVisible(false);
@@ -202,5 +209,91 @@ export default class AlienMini extends Alien {
     onehitko() {
         // we don't want bosses to be affected by this powerup
         return [0, 0, 0];
+    }
+
+    /**
+     * Places a healthbar for this alien at the top of the screen in place of
+     * the timer (maybe below the timer if that is part of an objective?).
+     * The healthbar begins blue and displays the alien's name, then as shield
+     * is destroyed, the shield depletes and shows health which eventually leaves too.
+     */
+    placeHealthbar() {
+        // place backbar
+        const backbar = this.scene.add.image(
+            this.constants.Width * 0.5,
+            this.constants.Height * 0.1,
+            '__WHITE'
+        );
+        backbar.setDisplaySize(this.constants.Width * 0.35, this.constants.Height * 0.04);
+        backbar.setDepth(11).setOrigin(0.5);
+
+        // place title
+        const name = this.scene.add.text(
+            this.constants.Width * 0.5, 
+            this.constants.Height * 0.15,
+            'General',
+            this.constants.MenuButtonStyle()
+        );
+        name.setDepth(11).setOrigin(0.5);
+
+        // place healthbar
+        this.healthpips = [];
+        let healthpipSize = this.constants.Width * 0.34 / this.hp;
+        for (let i = 0; i < this.hp; i++) {
+            let healthpip = this.scene.add.image(
+                this.constants.Width * 0.33 + i * healthpipSize,
+                this.constants.Height * 0.1,
+                '__WHITE'
+            );
+            healthpip.setDisplaySize(healthpipSize, this.constants.Height * 0.035);
+            healthpip.setDepth(11).setOrigin(0, 0.5).setTint(0xFF0000);
+            
+            this.healthpips.push(healthpip);
+        }
+
+        // place shieldbar
+        this.shieldpips = [];
+        let shieldpipSize = this.constants.Width * 0.34 / this.shieldHP;
+        for (let i = 0; i < this.shieldHP; i++) {
+            let shieldpip = this.scene.add.image(
+                this.constants.Width * 0.33 + i * shieldpipSize,
+                this.constants.Height * 0.1,
+                '__WHITE'
+            );
+            shieldpip.setDisplaySize(shieldpipSize, this.constants.Height * 0.035);
+            shieldpip.setDepth(11).setOrigin(0, 0.5).setTint(this.constants.LightBlue);
+            
+            this.shieldpips.push(shieldpip);
+        }
+    }
+
+    /**
+     * Destroys and pops d pips from this.healthpips. if it's empty, then stops
+     * @param {number} d 
+     */
+    reduceHealthBar(d) {
+        for (let i = 0; i < d; i++) {
+            let pip = this.healthpips.pop();
+            if (!pip) {
+                break;
+            }
+
+            pip.destroy(true);
+        }
+    }
+
+    /**
+     * Destroys and pops d pips from this.shieldpips. if it's empty, then stops
+     * @param {number} d 
+     */
+    reduceShieldBar(d) {
+        for (let i = 0; i < d; i++) {
+            let pip = this.shieldpips.pop();
+            if (!pip) {
+                break;
+            }
+
+            pip.destroy(true);
+        }
     }
 }
