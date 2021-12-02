@@ -112,7 +112,7 @@ export default class MenuScene2 extends Phaser.Scene {
 
             // Add hoverclick and normal click
             this.constants.HoverClick(this, b.button, () => {
-                this.menuSounds.menuClick.play();
+                this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
                 this.scene.start(
                     b.text.name,
                     {

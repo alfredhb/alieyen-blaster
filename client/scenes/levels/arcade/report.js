@@ -233,7 +233,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
             t.text.on('pointerover', () => {
                 if (!this.menuSounds.scoreTTS.isPlaying) {
                     t.sound.play({volume: this.game.config.ttsVolume});
-                    this.menuSounds.scoreTTS.play({delay: 0.75})
+                    this.menuSounds.scoreTTS.play({delay: 0.75, volume: this.game.config.ttsVolume})
                 }
             })
         })
@@ -436,7 +436,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
             box.setInteractive();
             this.constants.HoverClick(this, box, () => {
-                this.sound.play('explode-3', { loop: false, volume: 0.25 });
+                this.sound.play('explode-3', { loop: false, volume: 0.25 * this.game.config.sfxVolume});
                 alien.play('explode');
                 alien.on('animationcomplete', () => {
                     setTimeout(() => {
@@ -496,7 +496,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
     addClick(b) {
         // hoverclick for replay
         this.constants.HoverClick(this, b[0].button, () => {
-            this.menuSounds.menuClick.play();
+            this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
 
             this.scene.start(
                 (this.playerCount == 1) ? 'levelFactory': 'arcadeReadyScene',
@@ -525,7 +525,7 @@ export default class ArcadeReportScene extends Phaser.Scene {
 
         // hoverclick for arcade
         this.constants.HoverClick(this, b[1].button, () => {
-            this.menuSounds.menuClick.play();
+            this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
 
             this.scene.start(
                 'arcadeMenu',

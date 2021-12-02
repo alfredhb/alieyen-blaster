@@ -52,6 +52,9 @@ if (constants.isIOS()) {
 
 // Create Game canvas and begin with InitialLoad scene
 const game = new Phaser.Game(config);
+game.events.addListener("cursorsizeset", () => {
+  document.body.style.cursor = game.config.cursorStyle;
+});
 
 /**
  * Sample Call to server for savedata

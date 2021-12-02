@@ -48,10 +48,10 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
          */
         scene.events.on('playerhit', (damage) => {
             if (this.shielded) {
-                this.scene.sound.play('armor-dink'); // U.S. spelling... USA! USA! USA!
+                this.scene.sound.play('armor-dink', { volume: this.scene.game.config.sfxVolume }); // U.S. spelling... USA! USA! USA!
                 return;
             };
-            this.scene.sound.play('oof-damage'); // real sound take-damage
+            this.scene.sound.play('oof-damage', { volume: this.scene.game.config.sfxVolume }); // real sound take-damage
             this.numLives -= damage;
 
             // remove lives
@@ -129,7 +129,7 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
             delay: duration,
             callback: () => {
                 this.shielded = false;
-                this.scene.sound.play('glass-break');
+                this.scene.sound.play('glass-break', { volume: this.scene.game.config.sfxVolume });
                 this.shieldCover.play('lose-shield').on('animationcomplete', () => {
                     this.shieldCover.setTexture('shield-placed');
                     this.shieldCover.setVisible(false);

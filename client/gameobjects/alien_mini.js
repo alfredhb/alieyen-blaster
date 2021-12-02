@@ -113,7 +113,7 @@ export default class AlienMini extends Alien {
         if (this.hp <= 0) {
             return this.kill();
         }
-        this.scene.sound.play('take-damage');
+        this.scene.sound.play('take-damage', { volume: this.scene.game.config.sfxVolume });
 
         return false;
     }
@@ -124,7 +124,7 @@ export default class AlienMini extends Alien {
     damageShield(d) {
         this.shieldHP -= d;
         if (this.shieldHP <= 0) {
-            this.scene.sound.play('glass-break');
+            this.scene.sound.play('glass-break', { volume: this.scene.game.config.sfxVolume });
             setTimeout(() => {
                 this.shield.setActive(false);
                 this.shield.setVisible(false);
@@ -135,7 +135,7 @@ export default class AlienMini extends Alien {
         } else if (this.shieldHP <= this.shieldBreak1 && this.shieldHP + d > this.shieldBreak1) {
             this.shield.setTexture('mini-boss-shield-break-sheet', 1);
         }
-        this.scene.sound.play('armor-dink');
+        this.scene.sound.play('armor-dink', { volume: this.scene.game.config.sfxVolume });
 
         return false;
     }
@@ -146,7 +146,7 @@ export default class AlienMini extends Alien {
     kill() {
         this.deadVal = true;
 
-        this.play('explode', { loop: false, volume: 0.25 });
+        this.play('explode', { loop: false, volume: 0.25 * this.scene.game.config.sfxVolume });
         this.on('animationcomplete', () => {
             this.off('animationcomplete');
             this.setVisible(false);

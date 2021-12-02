@@ -26,7 +26,7 @@ export default class AlienProjectile extends Phaser.Physics.Arcade.Sprite {
         this.setPosition(x, y);
         this.setDisplaySize(5, 5);
 
-        this.chargeSound.play();
+        this.chargeSound.play({ volume: this.scene.game.config.sfxVolume });
     }
 
     /**
@@ -63,7 +63,7 @@ export default class AlienProjectile extends Phaser.Physics.Arcade.Sprite {
             // Swap audio events
             if (this.displayWidth >= this.constants.Width * 0.055) {
                 this.chargeSound.stop();
-                this.scene.sound.get('energy-blast').play()
+                this.scene.sound.get('energy-blast').play({ volume: this.scene.game.config.sfxVolume })
             }
         } else if (this.displayWidth >= this.constants.Width * 0.055
             && this.y < this.constants.Height) {

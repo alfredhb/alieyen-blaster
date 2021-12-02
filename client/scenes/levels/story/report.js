@@ -333,7 +333,7 @@ export default class StoryReportScene extends Phaser.Scene {
         let width = this.constants.Width, height = this.constants.Height;
         for (let i = 0; i < this.starsEarned; i++) {
             setTimeout(() => {
-                this.sound.play('collect-powerup');
+                this.sound.play('collect-powerup', { volume: this.game.config.sfxVolume });
 
                 let star = this.add.image(width * 0.37 + i * width * 0.13, height * 0.55, 'star');
                 star.setDisplaySize(width * 0.125, width * 0.125);
@@ -443,7 +443,7 @@ export default class StoryReportScene extends Phaser.Scene {
 
             box.setInteractive();
             this.constants.HoverClick(this, box, () => {
-                this.sound.play('explode-3', { loop: false, volume: 0.25 });
+                this.sound.play('explode-3', { loop: false, volume: 0.25 * this.game.config.sfxVolume });
                 alien.play('explode');
                 alien.on('animationcomplete', () => {
                     setTimeout(() => {
@@ -501,7 +501,7 @@ export default class StoryReportScene extends Phaser.Scene {
     addClick(b) {
         // hoverclick for replay
         this.constants.HoverClick(this, b[0].button, () => {
-            this.menuSounds.menuClick.play();
+            this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
 
             this.scene.start(
                 (this.playerCount == 1) ? 'levelFactory': 'storyReadyScene',
@@ -532,7 +532,7 @@ export default class StoryReportScene extends Phaser.Scene {
 
         // hoverclick for story
         this.constants.HoverClick(this, b[1].button, () => {
-            this.menuSounds.menuClick.play();
+            this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
 
             this.scene.start(
                 'levelSelectMenu',

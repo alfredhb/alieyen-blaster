@@ -83,6 +83,86 @@ Meteor.methods({
   },
 
   /**
+   * Reads global sound var which contains values for SFX and TTS volume.
+   * If the entry doesn't exist in DB, then inserts it with default values of 0.5
+   */
+  getVolume() {
+    var v = MetaData.findOne("volume", { "fields": { sfx: 1, tts: 1 } });
+    if (v) {
+      return { sfx: v.sfx, tts: v.tts };
+    }
+
+    MetaData.insert({
+      "_id": "volume",
+      "sfx": 0.5,
+      "tts": 0.5
+    });
+    return { sfx: 0.5, tts: 0.5 };
+  },
+
+  /**
+   * Sets volume entry with sfx and tts values
+   * @param {number} sfx 
+   * @param {number} tts 
+   * @returns 
+   */
+  setVolume(sfx, tts) {
+    MetaData.update("volume", { $set: { "sfx": Number(sfx), "tts": Number(tts) } });
+    return;
+  },
+
+  /**
+   * Fetches dwell time setting from db, and if it doesn't exist, then inserts it.
+   */
+  getDwellTime() {
+    var d = MetaData.findOne("dwell", { "fields": { value: 1 } });
+    if (d) {
+      return d.value;
+    }
+
+    MetaData.insert({
+      "_id": "dwell",
+      "value": 0.2 // 1 second
+    });
+    return 0.2;
+  },
+
+  /**
+   * Sets dwell time in db to time
+   * @param {number} time 
+   */
+  setDwellTime(time) {
+    MetaData.update("dwell", { $set: { "value": Number(time) } });
+    return;
+  },
+
+  /**
+   * Fetchs cursor size from db or inserts default if it doesnt exist
+   */
+  getCursorSize() {
+    var c = MetaData.findOne("cursor", { "fields": { value: 1 } });
+    if (c) {
+      return c.value;
+    }
+
+    MetaData.insert({
+      "_id": "cursor",
+      "value": 0.4 // 40 pixels
+    });
+    return 0.4;
+  },
+
+  /**
+   * Sets cursor size in db to size
+   * @param {number}} size 
+   * @returns 
+   */
+  setCursorSize(size) {
+    MetaData.update("cursor", { $set: { "value": Number(size) } });
+    return;
+  },
+
+  /**
    * Finds the value of the highscore entry of '${gamemode}-${level}-highscore'.
    * If lower than score, then updates the DB entry with score and player. Finally
    * returns the highscore object

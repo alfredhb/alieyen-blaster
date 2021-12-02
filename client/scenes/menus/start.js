@@ -12,6 +12,12 @@ export default class MenuScene4 extends Phaser.Scene {
      * Loads up game data such as difficulty from DB and passes along to future scenes
      */
     init() {
+        // Set default game configs if unavailable from db
+        if (!this.game.config.sfxVolume) this.game.config.sfxVolume = 0.5;
+        if (!this.game.config.ttsVolume) this.game.config.ttsVolume = 0.5;
+        if (!this.game.config.dwellTime) this.game.config.dwellTime = 0.2;
+        if (!this.game.config.cursorSize) this.game.config.cursorSize = 0.4;
+
         Meteor.call("getDifficulty", (err, res) => {
             if (err != null) {
                 console.log(err);
@@ -19,8 +25,38 @@ export default class MenuScene4 extends Phaser.Scene {
             }
 
             this.difficulty = res;
-            console.log("Fetched Difficulty as " + this.difficulty);
-        })
+        });
+        Meteor.call("getVolume", (err, res) => {
+            if (err != null) {
+                console.log(err);
+                return;
+            }
+
+            this.game.config.sfxVolume = res.sfx;
+            this.game.config.ttsVolume = res.tts;
+        });
+        Meteor.call("getDwellTime", (err, res) => {
+            if (err != null) {
+                console.log(err);
+                return;
+            }
+
+            this.game.config.dwellTime = res;
+        });
+        Meteor.call("getCursorSize", (err, res) => {
+            if (err != null) {
+                console.log(err);
+                return;
+            }
+
+            this.game.config.cursorSize = res;
+
+            // set cursorSize
+            let size = Math.round(this.game.config.cursorSize * 20) * 5;
+            let cursorURL = this.constants.CursorPath + (size) + ".png";
+            this.game.config.cursorStyle = "url(" + cursorURL + ") " + (size / 2 - 1) + " " + (size / 2 - 1) + ", pointer";
+            this.game.events.emit("cursorsizeset");
+        });
     }
 
     /**
@@ -97,7 +133,7 @@ export default class MenuScene4 extends Phaser.Scene {
         }).setOrigin(0.5);
         const plSound = this.menuSounds.playTTS;
         const plFunc = () => {
-            this.menuSounds.menuClick.play();
+            this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
             this.scene.start(
                 'playerSelectMenu',
                 {
@@ -159,19 +195,15 @@ export default class MenuScene4 extends Phaser.Scene {
     addSettings(width, height) {
         // Hidden settings button
         const sButton = this.add.image(width * 0.95, height * 0.07, '__WHITE');
-        sButton.setDisplaySize(width * 0.075, width * 0.075).setTint(0x000).setAlpha(0.075);
+        sButton.setDisplaySize(width * 0.075, width * 0.075).setTint(0x000).setAlpha(0.15);
 
         sButton.setInteractive();
         sButton.on('pointerup', () => {
-            this.menuSounds.menuClick.play();
+            this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
 
-            this.scene.pause(this);
             this.scene.launch('adminSettingsMenu', this);
+            this.scene.stop(this);
             return;
         });
-
-        // // set default ttsvolume in game config unless already set
-        if (this.game.config.ttsVolume && this.game.config.ttsVolume != 0.5) return;
-        this.game.config.ttsVolume = 0.5;
     }
 }

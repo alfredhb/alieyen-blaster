@@ -127,7 +127,7 @@ export default class MenuScene3 extends Phaser.Scene {
 
         // Add hoverclick and normalclick
         this.constants.HoverClick(this, difButton, () => {
-            this.menuSounds.menuClick.play();
+            this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
             this.scene.start('difficultySelectMenu', {
                 meta: {
                     playerCount: this.playerCount,
@@ -216,12 +216,12 @@ export default class MenuScene3 extends Phaser.Scene {
                 b.text.clearTint();
             });
             b.button.on('pointerup', () => {
-                this.menuSounds.menuClick.play();
+                this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
             });
 
             // Add Hoverclick and normal click
             this.constants.HoverClick(this, b.button, () => {
-                this.menuSounds.menuClick.play();
+                this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
                 this.scene.stop(this); // stop itself
                 this.scene.start(
                     (this.playerCount == 1) ? b.text.name : "arcadeReadyScene",
