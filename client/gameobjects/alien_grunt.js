@@ -12,6 +12,11 @@ export default class AlienGrunt extends Alien {
         let { width, height } = scene.scale;
         this.constants = new Constants(width, height);
 
+        this.staticTexture = (this.scene?.levelData?.assets?.grunt) ? 
+            this.scene.levelData.assets.grunt : 'alien-grunt'; //pull static texture from config
+        this.floatTexture = this.staticTexture + "-float";
+        this.fireTexture = this.staticTexture + "-fire";
+
         this.slowMultiplier = 0.25;
         this.slowed = false;
         this.fired = false;
@@ -55,7 +60,7 @@ export default class AlienGrunt extends Alien {
         }
 
         // Add Animation
-        this.anims.get('alien-grunt-float');
+        this.anims.get(this.floatTexture);
     }
 
     /**
@@ -99,7 +104,7 @@ export default class AlienGrunt extends Alien {
         this.x = (direction > 0) ? -50 : this.maxX;
         this.setPosition(this.x, y);
         this.setVelocity(this.xSpeed, this.ySpeed);
-        this.anims.play('alien-grunt-float');
+        this.anims.play(this.floatTexture);
         this.setActive(true);
         this.setVisible(true);
 
@@ -133,7 +138,7 @@ export default class AlienGrunt extends Alien {
             this.constants.Width * 0.03,
             this.constants.Height * 0.05
         );
-        this.anims.play('alien-grunt-float');
+        this.anims.play(this.floatTexture);
 
         this.setActive(true);
         this.setVisible(true);
@@ -242,12 +247,14 @@ export default class AlienGrunt extends Alien {
     }
 
     /**
-     * returns the correct spritesheet based on difficulty
+     * returns the spritesheet with correct framerate based on difficulty
      */
     getFireAnimation() {
-        return (this.difficulty == 3) ? 'alien-grunt-fire-hard' :
-                (this.difficulty == 2) ? 'alien-grunt-fire-medium' :
-                'alien-grunt-fire-easy'
+        return {
+            key: this.fireTexture,
+            frameRate: (this.difficulty == 3) ? (24 / 4.3) :
+                    (this.difficulty == 2) ? (24 / 5.3) : 3
+        }
     }
 
     /**

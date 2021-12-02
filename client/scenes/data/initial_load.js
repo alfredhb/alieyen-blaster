@@ -182,7 +182,7 @@ export default class DataScene1 extends Phaser.Scene {
      */
     addLoadListener(width, height) {
         this.assetsLoaded = 0;
-        this.totalAssets = this.onlineImages.length + 13/* # of spritesheets */;
+        this.totalAssets = this.onlineImages.length + 11/* # of spritesheets */;
         let loadBlockWidth = (width * 0.45) / this.totalAssets;
 
         this.textures.on('addtexture', (k, t) => {
@@ -239,18 +239,6 @@ export default class DataScene1 extends Phaser.Scene {
         this.load.spritesheet(
             'alien-grunt-fire-sheet-easy',
             'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_fire_114_160_small.png',
-            { frameWidth: 114, frameHeight: 160 },
-        );
-
-        this.load.spritesheet(
-            'alien-grunt-fire-sheet-medium',
-            'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_fire_114_160_medium.png',
-            { frameWidth: 114, frameHeight: 160 },
-        );
-
-        this.load.spritesheet(
-            'alien-grunt-fire-sheet-hard',
-            'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_fire_114_160_hard.png',
             { frameWidth: 114, frameHeight: 160 },
         );
 
@@ -361,22 +349,8 @@ export default class DataScene1 extends Phaser.Scene {
 
         // Alien Grunt Animations
         this.anims.create({
-            key: 'alien-grunt-fire-easy',
+            key: 'alien-grunt-fire',
             frames: this.anims.generateFrameNumbers('alien-grunt-fire-sheet-easy', { start: 0 }),
-            frameRate: 3,
-            repeat: 0,
-        });
-
-        this.anims.create({
-            key: 'alien-grunt-fire-medium',
-            frames: this.anims.generateFrameNumbers('alien-grunt-fire-sheet-medium', { start: 0 }),
-            frameRate: 3,
-            repeat: 0,
-        });
-
-        this.anims.create({
-            key: 'alien-grunt-fire-hard',
-            frames: this.anims.generateFrameNumbers('alien-grunt-fire-sheet-hard', { start: 0 }),
             frameRate: 3,
             repeat: 0,
         });

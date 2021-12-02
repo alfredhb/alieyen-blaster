@@ -12,6 +12,11 @@ export default class AlienMini extends Alien {
         let { width, height } = scene.scale;
         this.constants = new Constants(width, height);
 
+        this.staticTexture = (this.scene?.levelData?.assets?.mini_boss) ? 
+            this.scene.levelData.assets.mini_boss : 'alien-mini-boss'; //pull static texture from config
+        this.floatTexture = this.staticTexture + "-float";
+        this.fireTexture = this.staticTexture + "-fire";
+
         scene.physics.add.existing(this);
         this.setInteractive();
         this.setPosition(width + 50, height + 50);
@@ -64,7 +69,7 @@ export default class AlienMini extends Alien {
         this.x = (direction > 0) ? -50 : this.maxX;
         this.setPosition(this.x, y);
         this.setVelocity(this.xSpeed, 0);
-        this.anims.play('mini-boss-float');
+        this.anims.play(this.floatTexture);
         this.setActive(true);
         this.setVisible(true);
 
@@ -92,7 +97,7 @@ export default class AlienMini extends Alien {
             this.constants.Width * 0.05,
             this.constants.Height * 0.07
         );
-        this.anims.play('alien-mini-boss-float');
+        this.anims.play(this.floatTexture);
 
         this.setActive(true);
         this.setVisible(true);
