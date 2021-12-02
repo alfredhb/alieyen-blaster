@@ -42,10 +42,10 @@ export default class DifficultyDisplay extends Phaser.GameObjects.GameObject {
         this.diffBg.setInteractive();
         this.diffBg.on('pointerover', () => {
             if (diffSound.isPlaying && sound.isPlaying) return;
-            diffSound.play();
+            diffSound.play({volume: this.scene.game.config.ttsVolume});
             diffSound.on('complete', () => {
                 diffSound.off('complete');
-                sound.play();
+                sound.play({volume: this.scene.game.config.ttsVolume});
             })
         });
 

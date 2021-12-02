@@ -191,7 +191,7 @@ export default class AlienGrunt extends Alien {
         }
 
         // Stop any charge sound and play animation
-        this.play('explode', { loop: false, volume: 0.25 });
+        this.play('explode', { loop: false, volume: 0.25 * this.scene.game.config.sfxVolume });
         this.on('animationcomplete', () => {
             this.setVisible(false);
             this.setActive(false);
@@ -279,7 +279,7 @@ export default class AlienGrunt extends Alien {
                     this.xSpeed = this.xSpeed / this.slowMultiplier;
                     this.setVelocity(this.xSpeed, this.ySpeed);
                 }
-                this.scene.sound.play('glass-break', { volume: 0.2 });
+                this.scene.sound.play('glass-break', { volume: 0.2  * this.scene.game.config.sfxVolume });
             },
             callbackScope: this,
             paused: false

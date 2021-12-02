@@ -191,7 +191,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
                 this.buttons.forEach(b => b.button.setTint(this.constants.Gray));
                 b.button.setTint(this.constants.Blue);
 
-                this.menuSounds.menuClick.play();
+                this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
                 this.styleStart();
             });
         });
@@ -230,7 +230,7 @@ export default class MenuScene9 extends Phaser.Scene {constructor() {
                 this.timer.remove();
                 this.persistDifficulty();
 
-                this.menuSounds.menuClick.play();
+                this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
                 this.levelData.meta.difficulty = this.difficulty;
                 this.scene.start(
                     this.nextScene.name,

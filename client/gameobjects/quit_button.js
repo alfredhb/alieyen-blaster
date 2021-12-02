@@ -45,7 +45,7 @@ export default class QuitButton extends Phaser.GameObjects.Group {
         // Add hoverclick and normal click
         this.constants.HoverClick(scene, button, () => {
             this.scene.sound.stopAll();
-            clickSound.play();
+            clickSound.play({ volume: this.scene.game.config.sfxVolume });
             
             if (config.execFunc) { config.execFunc(); }
             if (config.cutscene) { // overload for cutscene quit button

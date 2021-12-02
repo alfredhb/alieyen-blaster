@@ -133,7 +133,7 @@ export default class MenuScene4 extends Phaser.Scene {
         }).setOrigin(0.5);
         const plSound = this.menuSounds.playTTS;
         const plFunc = () => {
-            this.menuSounds.menuClick.play();
+            this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
             this.scene.start(
                 'playerSelectMenu',
                 {
@@ -199,7 +199,7 @@ export default class MenuScene4 extends Phaser.Scene {
 
         sButton.setInteractive();
         sButton.on('pointerup', () => {
-            this.menuSounds.menuClick.play();
+            this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
 
             this.scene.launch('adminSettingsMenu', this);
             this.scene.stop(this);

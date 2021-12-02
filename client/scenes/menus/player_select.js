@@ -208,7 +208,7 @@
                 this.players.push(b);
                 this.players.forEach(p => p.button.setTint(p.button.name));
     
-                this.menuSounds.menuClick.play();
+                this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
 
                 // Play tts like 'bubba selected'
                 this.menuSounds.selTTS.play({volume: this.game.config.ttsVolume, delay: 0.25});
@@ -368,7 +368,7 @@
                 this.playerButtons.forEach(b => b.button.setTint(this.constants.Gray));
                 b.button.setTint(this.constants.Blue);
     
-                this.menuSounds.menuClick.play();
+                this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
             });
         });
     }
@@ -422,7 +422,7 @@
         this.constants.HoverClick(this, this.startButton, () => {
             if (this.playersSelected()) {
                 this.timer.remove();
-                this.menuSounds.menuClick.play();
+                this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
                 this.scene.start(
                     'gamemodeMenu',
                     {

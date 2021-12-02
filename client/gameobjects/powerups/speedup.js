@@ -108,7 +108,7 @@ export default class SpeedUp extends Phaser.Physics.Arcade.Sprite {
         - play hit animation
         - hide and move content on animationcomplete
         */
-        this.scene.sound.play('collect-powerup');
+        this.scene.sound.play('collect-powerup', { volume: this.scene.game.config.sfxVolume });
         this.play('collect-powerup-animation');
         this.on('animationcomplete', () => {
             this.setVelocity(0);

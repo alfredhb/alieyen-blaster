@@ -535,7 +535,7 @@ import Constants from "../../lib/constants";
             // create popup menu
             if (menu === undefined) {
                 menu = this.createFileMenu(pointer.x, pointer.y, (button) => {
-                    this.sound.play('menu-click');
+                    this.sound.play('menu-click', { volume: this.game.config.sfxVolume });
                     if (button.text == 'Cancel') {
                         menu.collapse();
                         menu = undefined

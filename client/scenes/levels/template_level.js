@@ -358,7 +358,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
             bullet.kill();
             let dead = alien.damage(1); // deal 1 damage
             if (dead) {
-                this.sound.play('explode-3', { volume: 0.25 });
+                this.sound.play('explode-3', { volume: 0.25 * this.game.config.sfxVolume });
                 switch(alien.getType()) {
                     case 1:
                         this.kills.miniBoss += 1;
