@@ -30,6 +30,9 @@ export default class Constants {
     MinSpeed = 100;
     MaxSpeed = 300;
 
+    // Cursor file prefix
+    CursorPath = "https://storage.googleapis.com/alieyen-blaster/public/assets/cursors/cursor-";
+
     /**
      * Creates speed based on min and max and applies a difficulty multiplier
      * Multiplier: d == 1: 1, d == 2: 1.5, d == 3: 2
@@ -125,9 +128,10 @@ export default class Constants {
 
     /**
      * cancels and resets the given timer
+     * @param {Phaser.Scene} scene
      * @param {Phaser.Time.TimerEvent} timer 
      */
-    cancelHover(timer) {
+    cancelHover(scene, timer) {
         timer.paused = true;
         timer.elapsed = 0;
 
@@ -135,7 +139,7 @@ export default class Constants {
         this.hoverFill.stop();
 
         // Show cursor
-        document.body.style.cursor = "url(https://storage.googleapis.com/alieyen-blaster/public/assets/features/cursor.png) 19 19, pointer";
+        scene.game.events.emit("cursorsizeset");
     } 
     
     /**
@@ -156,7 +160,7 @@ export default class Constants {
         let hoverTimer = scene.time.addEvent({
             delay: (delayTimeSec * 1000), // dwell is a decimal [0, 1] corresponding to [0, 5] seconds
             callback: () => {
-                this.cancelHover(hoverTimer);
+                this.cancelHover(scene, hoverTimer);
                 callbackFunc()
             },
             loop: false,
@@ -166,7 +170,7 @@ export default class Constants {
 
         button.on('pointerover', () => {
             // Kill an active timer
-            if (this.hoverTimerActive) this.cancelHover(hoverTimer);
+            if (this.hoverTimerActive) this.cancelHover(scene, hoverTimer);
 
             this.hoverFill.setPosition(
                 scene.input.activePointer.x,
@@ -190,9 +194,9 @@ export default class Constants {
 
         }).on('pointerout', () => {
             // cancel any active timer
-            this.cancelHover(hoverTimer);
+            this.cancelHover(scene, hoverTimer);
         }).on('pointerup', () => {
-            this.cancelHover(hoverTimer);
+            this.cancelHover(scene, hoverTimer);
             callbackFunc();
         });
     }

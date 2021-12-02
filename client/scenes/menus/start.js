@@ -25,7 +25,6 @@ export default class MenuScene4 extends Phaser.Scene {
             }
 
             this.difficulty = res;
-            // console.log("Fetched Difficulty as " + this.difficulty);
         });
         Meteor.call("getVolume", (err, res) => {
             if (err != null) {
@@ -35,7 +34,6 @@ export default class MenuScene4 extends Phaser.Scene {
 
             this.game.config.sfxVolume = res.sfx;
             this.game.config.ttsVolume = res.tts;
-            // console.log("Fetched volume as " + res.sfx + " " + res.tts);
         });
         Meteor.call("getDwellTime", (err, res) => {
             if (err != null) {
@@ -44,7 +42,6 @@ export default class MenuScene4 extends Phaser.Scene {
             }
 
             this.game.config.dwellTime = res;
-            // console.log("Fetched dwell time as " + res);
         });
         Meteor.call("getCursorSize", (err, res) => {
             if (err != null) {
@@ -53,7 +50,12 @@ export default class MenuScene4 extends Phaser.Scene {
             }
 
             this.game.config.cursorSize = res;
-            // console.log("Fetched dwell time as " + res);
+
+            // set cursorSize
+            let size = Math.round(this.game.config.cursorSize * 20) * 5;
+            let cursorURL = this.constants.CursorPath + (size) + ".png";
+            this.game.config.cursorStyle = "url(" + cursorURL + ") " + (size / 2 - 1) + " " + (size / 2 - 1) + ", pointer";
+            this.game.events.emit("cursorsizeset");
         });
     }
 
