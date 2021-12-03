@@ -6,6 +6,7 @@
     level: {
         difficulty_multiplier: [num, num, num],
         objective: ENUM,                 //TIMED, LIVES, TIMEKILLS, LIVEKILLS, TIMELIVES
+        objective_text: string
         star_threshold: [num, num], //minimum scores to obtain each star. By default, completing an objective grants 1 star
         win_cond: {
             lives: num,
@@ -45,7 +46,9 @@
     assets: {
         hud: string,
         turret: string,
-        background: string
+        background: string,
+        grunt: string,
+        mini_boss: string
     },
     scene: {
         type: ENUM                      //ARCADE, STORY
