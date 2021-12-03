@@ -196,7 +196,6 @@ export default class TemplateLevelScene extends Phaser.Scene {
         - create liveCounter logiv for LIVES, LIVEKILLS, TIMELIVES
         - call any end animations needed
         */
-        let customText = "";
         switch (this.levelData.level.objective) {
             // TIMED
             case 0:
@@ -241,7 +240,6 @@ export default class TemplateLevelScene extends Phaser.Scene {
             case 3:
                 this.levelLives = new LevelLives(this, this.constants, this.levelData.level.win_cond.lives);
                 this.levelScore = new ScoreObject(this, this.constants);
-                customText = "Defeat Glorber's General!!!";
 
                 if (!this.events.listenerCount('levelliveszero')) {
                     this.events.addListener('levelliveszero', () => {
@@ -251,9 +249,13 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
                 if (!this.events.listenerCount('minibosskilled')) {
                     this.events.addListener('minibosskilled', () => {
-                        if (this.kills.miniBoss == this.levelData.level.win_cond.kills.mini_boss) this.endLevel();
-                        // TODO, fix for Omega - this is a short since only mini-bosses are in the game
-                        // currently. Add obj checker before ending the level completely!
+                        if (this.checkObjective()) this.endLevel();
+                    }); // special case listener for boss levels
+                }
+
+                if (!this.events.listenerCount('gruntkilled')) {
+                    this.events.addListener('gruntkilled', () => {
+                        if (this.checkObjective()) this.endLevel();
                     }); // special case listener for boss levels
                 }
                 break;
@@ -284,7 +286,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         }
 
         // Add objective denotion
-        this.objText = new Objective(this, this.constants, null, customText);
+        this.objText = new Objective(this, this.constants, null, this.levelData.level?.objective_text);
 
         // Initilize Kill Tracking
         this.kills = {
@@ -711,7 +713,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
             // LIVEKILLS
             case 3:
-                pScore = this.calculateScore();
+                pScore = this.calculateScore(3);
                 sScore = this.levelScore.getSuccessScore(this.getMultiplier());
                 if (this.levelLives.numLives > 0 && sScore <= pScore) {
                     return true; // lives complete and score sufficient

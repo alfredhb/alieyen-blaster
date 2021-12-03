@@ -204,6 +204,10 @@ export default class AlienGrunt extends Alien {
             // Respawn logic
             this.respawn();
         });
+
+        setTimeout(() => {
+            this.scene.events.emit('gruntkilled');
+        }, 1000);
         return this.deadVal;
     }
 
