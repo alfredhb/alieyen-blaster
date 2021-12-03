@@ -296,6 +296,11 @@ export default class TemplateLevelScene extends Phaser.Scene {
         };
     }
 
+    removeAlienListeners() {
+        this.events.removeListener('gruntkilled');
+        this.events.removeListener('minibosskilled');
+    }
+
     /**
      * uses provided data.levels.aliens along with data.level.objective and related
      * content to create alien groups with determined spawn and respawn behavior
@@ -825,6 +830,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         try{
             this.input.removeAllListeners();
             this.removePowerupListeners();
+            this.removeAlienListeners();
         } catch (e) {
             console.log(e);
         }
