@@ -38,6 +38,14 @@ export default class LevelSelect extends Phaser.Scene {
         console.log("initialized levelSelectMenu as World " + this.world + 
         " for " + this.playerCount + " players  players being: " + 
         this.players.toString() + " on difficulty " + this.difficulty);
+
+        // filter levels
+        this.worldLevels = [];
+        for (let level of data.levels) {
+            if (level.name[0] == this.world) {
+                this.worldLevels.push(level);
+            }
+        }
     }
 
     /**
@@ -226,11 +234,11 @@ export default class LevelSelect extends Phaser.Scene {
         // Put a green outline and star around each compelted level,
         // put a red outline around next incomplete level
         // set alpha of rest as partial and uninteractable
-        for (let i = 0; i < this.levelData.levels.length; i++) {
-            if (this.levelData.levels[i].complete) {
+        for (let i = 0; i < this.worldLevels.length; i++) {
+            if (this.worldLevels[i].complete) {
                 this.styleActiveButton(width, height, i, true);
 
-            } else if ((i > 0 && this.levelData.levels[i - 1].complete) || i == 0) {
+            } else if ((i > 0 && this.worldLevels[i - 1].complete) || i == 0) {
                 this.styleActiveButton(width, height, i, false);
 
             } else {
@@ -261,7 +269,7 @@ export default class LevelSelect extends Phaser.Scene {
 
         // Move text up, place 3 star outlines, and place num stars
         if (complete) {
-            this.placeLevelStars(b, this.levelData.levels[index].stars, width, height);
+            this.placeLevelStars(b, this.worldLevels[index].stars, width, height);
         }
 
         b.button.setInteractive();

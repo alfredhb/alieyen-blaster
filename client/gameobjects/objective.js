@@ -19,6 +19,7 @@ export default class Objective extends Phaser.GameObjects.GameObject {
         // Determine correct text
         let objNum = (obj != null) ? obj : scene.levelData.level.objective
         let text = "";
+        let sScore = 0;
         switch(objNum) {
             // TIMED
             case 0:
@@ -32,13 +33,14 @@ export default class Objective extends Phaser.GameObjects.GameObject {
 
             // TIMEKILLS
             case 2:
-                let sScore = scene.levelScore.getSuccessScore(scene.getMultiplier());
+                sScore = scene.levelScore.getSuccessScore(scene.getMultiplier());
                 text = 'Get a Score of  ' + sScore + '  Before Time Runs Out!!!'
                 break;
 
             // LIVEKILLS
             case 3:
-                text = 'Kill All the Aliens Before They Attack!!!'
+                sScore = scene.levelScore.getSuccessScore(scene.getMultiplier());
+                text = 'Survive and Get a Score of ' + sScore + '!!!';
                 break;
 
             // TIMELIVES (score is killcount + numLives * scorecount)
