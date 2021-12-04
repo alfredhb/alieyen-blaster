@@ -106,6 +106,11 @@ export default class TemplateLevelScene extends Phaser.Scene {
                     + this.levelData.meta.currentPlayer);
     }
 
+    update() {
+        let d = new Date();
+        this.gameTime = d.getTime() - this.startTime;
+    }
+
     /**
      * Get all appropriate sounds (assume they're already cached)
      */
@@ -583,6 +588,10 @@ export default class TemplateLevelScene extends Phaser.Scene {
         // Start each alien's first spawn timer
         this.aliens.forEach(a => a.spawn());
         this.spawnPowerups();
+
+        let d = new Date();
+        this.startTime = d.getTime();
+        this.gameTime = 0;
     }
 
     /**
