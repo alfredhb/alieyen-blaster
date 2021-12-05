@@ -38,7 +38,10 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "endless-button",     "path": path + "assets/features/infinity.png"},
             {"key": "lives-button",       "path": path + "assets/features/heart.png"},
             {"key": "gauntlet-button",    "path": path + "assets/features/alien.png"},
+            {"key": "alien-boss",         "path": path + "assets/characters/boss_in_ship.png"},
             {"key": "alien-mini-boss",    "path": path + "assets/characters/boss_min_1.png"},
+            {"key": "alien-mini-boss-2",  "path": path + "assets/characters/mini_boss_2.png"},
+            {"key": "alien-mini-boss-3",  "path": path + "assets/characters/mini_boss_3.png"},
             {"key": "mini-boss-shield",   "path": path + "assets/characters/mini_boss_shield.png"},
             {"key": "turret-colored",     "path": path + "assets/features/turret_col.png"},
             {"key": "turret-speed-up",    "path": path + "assets/features/turret_col_outline.png"},
@@ -50,6 +53,7 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "shield-placed",      "path": path + "assets/features/shield_placed.png"},
             {"key": "speed-up",           "path": path + "assets/features/speed-up.png"},
             {"key": "slow",               "path": path + "assets/features/slow.png"},
+            {"key": "lightning",          "path": path + "assets/features/lightning.png"},
             {"key": "frozen",             "path": path + "assets/features/frozen.png"},
             {"key": "onehitko",           "path": path + "assets/features/onehitko.png"},
             {"key": "autoaim",            "path": path + "assets/features/autoaim.png"},
@@ -57,6 +61,8 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "star",               "path": path + "assets/features/star.png"},
             {"key": "star-outline",       "path": path + "assets/features/star_outline.png"},
             {"key": "alien-grunt",        "path": path + "assets/characters/green_alien_1_1.png"},
+            {"key": "alien-grunt-2",      "path": path + "assets/characters/alien_grunt_2.png"},
+            {"key": "alien-grunt-3",      "path": path + "assets/characters/alien_grunt_3.png"},
             {"key": "mentor-happy",       "path": path + "assets/characters/mentor_happy.png"},
             {"key": "mentor-side",        "path": path + "assets/characters/mentor_side.png"},
        ];
@@ -187,7 +193,7 @@ export default class DataScene1 extends Phaser.Scene {
      */
     addLoadListener(width, height) {
         this.assetsLoaded = 0;
-        this.totalAssets = this.onlineImages.length + 11/* # of spritesheets */;
+        this.totalAssets = this.onlineImages.length + 19/* # of spritesheets */;
         let loadBlockWidth = (width * 0.45) / this.totalAssets;
 
         this.textures.on('addtexture', (k, t) => {
@@ -228,6 +234,24 @@ export default class DataScene1 extends Phaser.Scene {
         );
 
         this.load.spritesheet(
+            'mini-boss-2-float-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/mini_boss_2_float_sheet.png',
+            { frameWidth: 258, frameHeight: 198 },
+        );
+
+        this.load.spritesheet(
+            'mini-boss-3-float-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/mini_boss_3_float_sheet.png',
+            { frameWidth: 230, frameHeight: 190 },
+        );
+
+        this.load.spritesheet(
+            'boss-float-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/alien_boss_float_spritesheet.png',
+            { frameWidth: 440, frameHeight: 300 },
+        );
+
+        this.load.spritesheet(
             'mini-boss-shield-break-sheet',
             'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/mini_boss_shield_break_sheet.png',
             { frameWidth: 228, frameHeight: 218 },
@@ -242,9 +266,43 @@ export default class DataScene1 extends Phaser.Scene {
 
         // Alien Grunt Fire Animations
         this.load.spritesheet(
+            'alien-grunt-2-float-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/alien_grunt_2_float_spritesheet.png',
+            { frameWidth: 182, frameHeight: 172 },
+        );
+
+        // Alien Grunt Fire Animations
+        this.load.spritesheet(
+            'alien-grunt-3-float-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/alien_grunt_3_float_spritesheet.png',
+            { frameWidth: 176, frameHeight: 170 },
+        );
+
+        // Alien Grunt Fire Animations
+        this.load.spritesheet(
             'alien-grunt-fire-sheet-easy',
             'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/green_alien_fire_114_160_small.png',
             { frameWidth: 114, frameHeight: 160 },
+        );
+
+        // Alien Grunt Fire Animations
+        this.load.spritesheet(
+            'mini-boss-2-fire-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/mini_boss_2_fire_sheet.png',
+            { frameWidth: 258, frameHeight: 198 },
+        );
+
+        // Alien Grunt Fire Animations
+        this.load.spritesheet(
+            'mini-boss-3-fire-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/mini_boss_3_fire_sheet.png',
+            { frameWidth: 230, frameHeight: 200 },
+        );
+
+        this.load.spritesheet(
+            'boss-fire-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/alien_boss_fire_spritesheet.png',
+            { frameWidth: 440, frameHeight: 300 },
         );
 
         this.load.spritesheet(
@@ -339,6 +397,27 @@ export default class DataScene1 extends Phaser.Scene {
         });
 
         this.anims.create({
+            key: 'alien-mini-boss-2-float',
+            frames: this.anims.generateFrameNumbers('mini-boss-2-float-sheet', { start: 0 }),
+            frameRate: 3,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: 'alien-mini-boss-3-float',
+            frames: this.anims.generateFrameNumbers('mini-boss-3-float-sheet', { start: 0 }),
+            frameRate: 3,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: 'alien-boss-float',
+            frames: this.anims.generateFrameNumbers('boss-float-sheet', { start: 0 }),
+            frameRate: 3,
+            repeat: -1,
+        });
+
+        this.anims.create({
             key: 'mini-boss-shield-break',
             frames: this.anims.generateFrameNumbers('mini-boss-shield-break-sheet', { start: 0 }),
             frameRate: 3,
@@ -348,6 +427,43 @@ export default class DataScene1 extends Phaser.Scene {
         this.anims.create({
             key: 'alien-grunt-float',
             frames: this.anims.generateFrameNumbers('alien-grunt-float-sheet', { start: 0 }),
+            frameRate: 3,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: 'alien-grunt-2-float',
+            frames: this.anims.generateFrameNumbers('alien-grunt-2-float-sheet', { start: 0 }),
+            frameRate: 3,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: 'alien-grunt-3-float',
+            frames: this.anims.generateFrameNumbers('alien-grunt-3-float-sheet', { start: 0 }),
+            frameRate: 3,
+            repeat: -1,
+        });
+
+        // Alien Grunt Animations
+        this.anims.create({
+            key: 'alien-mini-boss-2-fire',
+            frames: this.anims.generateFrameNumbers('mini-boss-2-fire-sheet', { start: 0 }),
+            frameRate: 3,
+            repeat: 0,
+        });
+
+        // Alien Grunt Animations
+        this.anims.create({
+            key: 'alien-mini-boss-3-fire',
+            frames: this.anims.generateFrameNumbers('mini-boss-3-fire-sheet', { start: 0 }),
+            frameRate: 3,
+            repeat: 0,
+        });
+
+        this.anims.create({
+            key: 'alien-boss-fire',
+            frames: this.anims.generateFrameNumbers('boss-fire-sheet', { start: 0 }),
             frameRate: 3,
             repeat: -1,
         });
