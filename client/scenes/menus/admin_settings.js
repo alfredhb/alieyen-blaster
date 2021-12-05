@@ -430,7 +430,7 @@ import Constants from "../../lib/constants";
 
     updateSFXVolume(value) {
         if (Math.abs(value - this.game.config.sfxVolume) > 0.12) return; // slider jumped rather than dragged
-        this.game.config.sfxVolume = (value == 0) ? (value + 0.01) : value;
+        this.game.config.sfxVolume = (value == 0) ? (value + 0.001) : value;
     }
 
     /**
@@ -441,7 +441,7 @@ import Constants from "../../lib/constants";
      */
     updateTTSVolume(value) {
         if (Math.abs(value - this.game.config.ttsVolume) > 0.12) return; // slider jumped rather than dragged
-        this.game.config.ttsVolume = (value == 0) ? (value + 0.01) : value;
+        this.game.config.ttsVolume = (value == 0) ? (value + 0.001) : value;
     }
 
     /**

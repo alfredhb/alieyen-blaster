@@ -254,6 +254,26 @@ Meteor.methods({
           name: "1 - 5",
           complete: false,
         },
+        {
+          name: "2 - 1",
+          complete: false,
+        },
+        {
+          name: "2 - 2",
+          complete: false,
+        },
+        {
+          name: "2 - 3",
+          complete: false,
+        },
+        {
+          name: "2 - 4",
+          complete: false,
+        },
+        {
+          name: "2 - 5",
+          complete: false,
+        },
       ]
     };
     SaveData.insert(save);

@@ -169,24 +169,42 @@ export default class WorldSelect extends Phaser.Scene {
         w1B.setName('levelSelectMenu');
         w1T.setName(1);
 
-        const w2B = this.add.image(width * 0.5, height * 0.55, '__WHITE');
+        const w2B = this.add.image(width * 0.5, height * 0.55, 'world-2-button');
         const w2T = this.add.text(w2B.x, height * 0.55, 'World 2', this.constants.MenuButtonStyle('#000000'));
-        w2B.setName('levelSelectMenu').setAlpha(0.5);
-        w2T.setName(2).setOrigin(0.5).setAlpha(0.5);
+        w2B.setName('levelSelectMenu');
+        w2T.setName(2);
         
-        const w3B = this.add.image(width * 0.775, height * 0.55, '__WHITE');
+        const w3B = this.add.image(width * 0.775, height * 0.55, 'world-3-button');
         const w3T = this.add.text(w3B.x, height * 0.55, 'World 3', this.constants.MenuButtonStyle('#000000'));
-        w3B.setName('levelSelectMenu').setAlpha(0.5);
-        w3T.setName(3).setOrigin(0.5).setAlpha(0.5);
+        w3B.setName('levelSelectMenu');
+        w3T.setName(3);
 
+        const [ w1, w2, w3, w1Stars, w2Stars, w3Stars ] = this.checkCompleted();
         this.buttons = [
-            {button: w1B,  text: w1T, sound: this.sound.get('world-1')},
-            // {button: w2B,  text: w2T, sound: this.sound.get('slot-2')}, NOT DONE
-            // {button: w3B,  text: w3T, sound: this.sound.get('slot-3')},
+            {button: w1B,  text: w1T, sound: this.sound.get('1'), complete: w1, fullStars: w1Stars, playable: true},
+            {button: w2B,  text: w2T, sound: this.sound.get('2'), complete: w2, fullStars: w2Stars, playable: w1},
+            {button: w3B,  text: w3T, sound: this.sound.get('3'), complete: w3, fullStars: w3Stars, playable: w2},
         ].forEach(b => {
             b.button.setDisplaySize(width * 0.25, height * 0.6);
             b.button.setOrigin(0.5);
             b.text.setOrigin(0.5);
+
+            if (!b.playable) {
+                b.button.setAlpha(0.5);
+                b.text.setAlpha(0.5);
+                return;
+            } else if (b.complete) {
+                let highlight = new Phaser.Geom.Rectangle(
+                    b.button.x - width * 0.125,
+                    b.button.y - height * 0.3,
+                    width * 0.25,
+                    height * 0.6
+                );
+                let gfx = this.add.graphics().setDepth(3);
+                gfx.lineStyle(15, (b.fullStars == 15) ? this.constants.Gold : this.constants.Blue, 1);
+                gfx.strokeRectShape(highlight)
+            }
+
             b.button.setInteractive();
 
             b.button.on('pointerover', () => {
@@ -213,6 +231,24 @@ export default class WorldSelect extends Phaser.Scene {
                 this.scene.stop(this); // stop itself
             })
         })
+    }
+
+    /**
+     * Checks whether each world is completed
+     * @returns {boolean[]}
+     */
+    checkCompleted() {
+        let w1 = false, w2 = false, w3 = false;
+        let stars = [0, 0, 0];
+        for (let level of this.levelData.levels) {
+            if (level.name == "1 - 5" && level.complete) w1 = true;
+            if (level.name == "2 - 5" && level.complete) w2 = true;
+            if (level.name == "3 - 5" && level.complete) w3 = true;
+            stars[Number(level.name[0]) - 1] += (level?.stars) ? level.stars : 0;
+        }
+        let res = [ w1, w2, w3 ];
+        stars.forEach(s => res.push(s));
+        return res;
     }
 
 }
