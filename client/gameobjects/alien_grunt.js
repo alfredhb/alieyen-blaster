@@ -14,6 +14,10 @@ export default class AlienGrunt extends Alien {
 
         this.staticTexture = (this.scene?.levelData?.assets?.grunt) ? 
             this.scene.levelData.assets.grunt : 'alien-grunt'; //pull static texture from config
+        if (this.scene?.levelData?.assets?.grunt) {
+            this.staticTexture = (typeof(this.scene.levelData.assets.grunt) === "string") 
+            ? this.scene.levelData.assets.grunt : this.scene.levelData.assets.grunt[0];
+        }
         this.floatTexture = this.staticTexture + "-float";
         this.fireTexture = this.staticTexture + "-fire";
 
@@ -26,9 +30,13 @@ export default class AlienGrunt extends Alien {
         this.setInteractive();
         this.setPosition(width + 50, height + 50);
         this.setDisplaySize(width * 0.03, height * 0.05);
+        // if later grunt textures, then reduce size further
+        if (this.staticTexture != 'alien-grunt') {
+            this.setDisplaySize(width * 0.01, height * 0.015);
+        }
+
         this.body.setSize(this.displayWidth * 0.7, this.displayHeight * 1.5);
-        // this.setOrigin(0.5);
-        this.body.setOffset(this.displayWidth * 1.1, this.displayHeight)
+        this.body.setOffset(this.displayWidth * 1.1, this.displayHeight);
 
         this.maxX = width + 65;
         this.maxY = height + 65;
@@ -92,6 +100,8 @@ export default class AlienGrunt extends Alien {
      * in middle half of screen and firing a bomb at the player.
      */
     launch() {
+        this.updateTextures();
+
         let direction = (Math.random() >= 0.5) ? 1 : -1;
         let y = Math.random() * this.maxY * 0.5 + 75;
         this.speed = this.constants.GetSpeed(this.difficulty);
@@ -107,6 +117,7 @@ export default class AlienGrunt extends Alien {
         this.anims.play(this.floatTexture);
         this.setActive(true);
         this.setVisible(true);
+        this.flipX = direction;
 
         // Alien fires 34% of the time. If firing, then creates a timer which
         // stops when alien should be over its zone and makes it fire
@@ -223,6 +234,7 @@ export default class AlienGrunt extends Alien {
      * After 300ms, stops any sprite animations and calls launch()
      */
     respawn() {
+        if (this.endSpawn) return;
         setTimeout(() => {
             // Check if level finished in the 300ms
             if (this == null) {
@@ -244,10 +256,14 @@ export default class AlienGrunt extends Alien {
     leave(respawn) {
         // TODO: play an animation specific to leaving the level
 
+        this.setVelocity(0);
         this.setPosition(this.maxX, this.maxy);
         this.setVisible(false);
+        this.endSpawn = !respawn;
 
-        if (respawn) this.respawn();
+        if (respawn) {
+            this.respawn();
+        }
     }
 
     /**
@@ -258,6 +274,25 @@ export default class AlienGrunt extends Alien {
             key: this.fireTexture,
             frameRate: (this.difficulty == 3) ? (24 / 4.3) :
                     (this.difficulty == 2) ? (24 / 5.3) : 3
+        }
+    }
+
+    /**
+     * if scene has currentBoss, then updates texutes to current asset.
+     * Also disables firing for aliens past first type
+     */
+    updateTextures() {
+        if (this.scene?.currentBoss) {
+            if (this.scene.currentBoss > 0) this.canFire = false;
+
+            this.staticTexture = this.scene.levelData.assets.grunt[this.scene.currentBoss];
+            this.floatTexture = this.staticTexture + "-float";
+            this.fireTexture = this.staticTexture + "-fire";
+        }
+
+        if (this.staticTexture === undefined) {
+            this.endSpawn = true;
+            console.log("unable to find static texture for grunt");
         }
     }
 

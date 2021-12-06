@@ -17,6 +17,8 @@ import AlienMini from "../../gameobjects/alien_mini";
 import Slow from "../../gameobjects/powerups/slow";
 import OneHitKO from "../../gameobjects/powerups/onehitko";
 import Autoaim from "../../gameobjects/powerups/autoaim";
+import AlienBoss from "../../gameobjects/alien_boss";
+import EMP from "../../gameobjects/powerups/emp";
 
 export default class TemplateLevelScene extends Phaser.Scene {
     constructor() {
@@ -284,6 +286,39 @@ export default class TemplateLevelScene extends Phaser.Scene {
                 }
                 break;
 
+            // GAUNTLET
+            case 5:
+                // Add score, lives
+                this.levelLives = new LevelLives(this, this.constants, this.levelData.level.win_cond.lives);
+                this.levelScore = new ScoreObject(this, this.constants);
+                this.currentBoss = 0; // first boss, zero indexed
+
+                // add kill listeners
+                if (!this.events.listenerCount('levelliveszero')) {
+                    this.events.addListener('levelliveszero', () => {
+                        this.endLevel();
+                    });
+                }
+                if (!this.events.listenerCount('minibosskilled')) {
+                    this.events.addListener('minibosskilled', () => {
+                        if (this.currentBoss == 3) {
+                            // kill all grunts and minibosses
+                            this.aliens[0].getChildren().forEach(a => a.leave(false));
+                            // trigger boss spawn
+                            this.aliens[2].spawn();
+                        }
+                        if (this.checkObjective()) this.endLevel();
+                    }); // special case listener for boss levels
+                }
+                if (!this.events.listenerCount('bosskilled')) {
+                    this.events.addListener('bosskilled', () => {
+                        this.currentBoss += 1;
+                        if (this.checkObjective()) this.endLevel();
+                    });
+                }
+
+                break
+
             // UNKNOWN
             default:
                 console.log("Unknown objective found for level " + this.levelData.name);
@@ -340,6 +375,14 @@ export default class TemplateLevelScene extends Phaser.Scene {
             }, this.constants)
         );
 
+        let bossData = this.levelData.level.aliens.boss;
+        this.aliens.push(
+            new AlienGroup(this, {
+                classType: AlienBoss,
+                runChildUpdate: true,
+                maxSize: (bossData.spawn) ? bossData.quantity : 0
+            }, this.constants));
+
         // Create alien spawntimers
         this.aliens.forEach(a => {
             a.createSpawnTimers(this.levelData.level.win_cond.lives > 0); // if lives are in wincondition then alien can fire
@@ -374,7 +417,6 @@ export default class TemplateLevelScene extends Phaser.Scene {
                 switch(alien.getType()) {
                     case 1:
                         this.kills.miniBoss += 1;
-                        console.log(this.kills);
                         break;
                     case 2:
                         this.kills.boss += 1;
@@ -479,6 +521,17 @@ export default class TemplateLevelScene extends Phaser.Scene {
                 }
             }
         }
+
+        // Always generate emp if boss exists -- only way to kill
+        if (this.levelData.level.aliens.boss.spawn) {
+            this.powerups.push(
+                this.physics.add.group({
+                    classType: EMP,
+                    runChildUpdate: true,
+                    maxSize: 1,
+                })
+            );
+        }
     }
 
     /**
@@ -532,6 +585,13 @@ export default class TemplateLevelScene extends Phaser.Scene {
             this.aliens.forEach(a => {
                 a.slow(duration);
             });
+        });
+
+        // Slow aliens
+        this.events.addListener('emp', (duration) => {
+            console.log('EMP aliens! ' + duration);
+            // REQUIRES BOSS TO EXIST
+            this.aliens[2].emp(duration);
         });
 
         // One hit KO
@@ -593,7 +653,10 @@ export default class TemplateLevelScene extends Phaser.Scene {
         }
 
         // Start each alien's first spawn timer
-        this.aliens.forEach(a => a.spawn());
+        this.aliens.forEach((a, i) => { 
+            if (i == 2 && this.levelData.level.objective == 5) return; // don't spawn the final boss imediately
+            a.spawn();
+        });
         this.spawnPowerups();
 
         let d = new Date();
@@ -615,7 +678,8 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
         // spawn a random powerup
         let spawnFunc = () => {
-            let pInd = Phaser.Math.RND.between(0, this.powerups.length - 1);
+            let offset = (this.levelData.level.objective == 5 && this.currentBoss < 3) ? 2 : 1;
+            let pInd = Phaser.Math.RND.between(0, this.powerups.length - offset);
             if (pInd < 0 || pInd >= this.powerups.length) return;
 
             this.powerups[pInd].getChildren()[0].spawn();
@@ -742,6 +806,14 @@ export default class TemplateLevelScene extends Phaser.Scene {
 
                 return false; // lives out or timer ended and lives were out
 
+            case 5:
+                // You can only win after defeating the big boss at the end (0 indexed)
+                this.calculateScore(5);
+                if (this.levelLives.numLives < 0) return false;
+                if (this.currentBoss < 4) return false;
+
+                return true;
+
             // UNKNOWN
             default:
                 console.log("Unknown objective found for level " + this.levelData.name);
@@ -818,7 +890,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         let score = this.levelScore.calculateScore();
         this.levelData.level['score' + (this.levelData.meta.currentPlayer + 1)] = score;
 
-        if (objective == 3 || objective == 4) {
+        if (objective == 3 || objective == 4 || objective == 5) {
             this.levelData.level['liveScore' + (this.levelData.meta.currentPlayer + 1)] =
                 this.levelLives.numLives; // score mult determined elsewhere
         }
@@ -843,6 +915,8 @@ export default class TemplateLevelScene extends Phaser.Scene {
         } catch (e) {
             console.log(e);
         }
+
+        this.currentBoss = undefined;
 
         // remove overlappers
         try {

@@ -75,6 +75,8 @@ export default class DataScene1 extends Phaser.Scene {
         this.onlineSounds = [
             {"key": "menu-click",       "path": path + "sounds/sprite/men-click.wav",            "config": { loop: false, volume: 0.5 }},
             {"key": "collect-powerup",  "path": path + "sounds/sprite/powerup-2.wav",            "config": { loop: false }},
+            {"key": "power-up",         "path": path + "sounds/sprite/power-up.wav",           "config": { loop: false }},
+            {"key": "power-down",       "path": path + "sounds/sprite/power-down.wav",         "config": { loop: false }},
             {"key": "1",                "path": path + "sounds/tts/1.mp3",                       "config": { loop: false }},
             {"key": "2",                "path": path + "sounds/tts/2.mp3",                       "config": { loop: false }},
             {"key": "3",                "path": path + "sounds/tts/3.mp3",                       "config": { loop: false }},
@@ -193,7 +195,7 @@ export default class DataScene1 extends Phaser.Scene {
      */
     addLoadListener(width, height) {
         this.assetsLoaded = 0;
-        this.totalAssets = this.onlineImages.length + 19/* # of spritesheets */;
+        this.totalAssets = this.onlineImages.length + 20/* # of spritesheets */;
         let loadBlockWidth = (width * 0.45) / this.totalAssets;
 
         this.textures.on('addtexture', (k, t) => {
@@ -248,6 +250,12 @@ export default class DataScene1 extends Phaser.Scene {
         this.load.spritesheet(
             'boss-float-sheet',
             'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/alien_boss_float_spritesheet.png',
+            { frameWidth: 440, frameHeight: 300 },
+        );
+
+        this.load.spritesheet(
+            'boss-stun-sheet',
+            'https://storage.googleapis.com/alieyen-blaster/public/assets/characters/alien_boss_stun_spritesheet.png',
             { frameWidth: 440, frameHeight: 300 },
         );
 
@@ -387,6 +395,13 @@ export default class DataScene1 extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('cursor-fill-2', { start: 0 }),
             frameRate: 20,
             repeat: 0,
+        });
+
+        this.anims.create({
+            key: 'alien-boss-stun',
+            frames: this.anims.generateFrameNumbers('boss-stun-sheet', { start: 0 }),
+            frameRate: 3,
+            repeat: -1,
         });
 
         this.anims.create({
