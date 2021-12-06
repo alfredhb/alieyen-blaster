@@ -256,7 +256,6 @@ export default class AlienGrunt extends Alien {
         this.setVisible(false);
 
         if (respawn) {
-            console.log("respawning", respawn);
             this.respawn();
         }
     }

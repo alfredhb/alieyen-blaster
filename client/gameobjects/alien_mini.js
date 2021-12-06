@@ -55,7 +55,7 @@ export default class AlienMini extends Alien {
 
     update(time, delta) {
         if (this.x < -50 || this.x > this.maxX) { // reverse speed direction
-            this.willFire = (Math.random() >= 0.33) ? false : true;
+            this.willFire = (Math.random() >= 0.5) ? false : true;
             this.xSpeed *= -1;
             this.setVelocity(this.xSpeed, 0);
             this.shield.setVelocity(this.xSpeed, 0);
@@ -63,7 +63,7 @@ export default class AlienMini extends Alien {
         }
 
         // handle firing
-        if (this.canFire && this.willFire && Math.abs(this.x - this.constants.Width / 2) < 50) {
+        if (this.willFire && Math.abs(this.x - this.constants.Width / 2) < 100) {
             this.fire();
             this.willFire = false;
         }
@@ -239,6 +239,7 @@ export default class AlienMini extends Alien {
             setTimeout(() => {
                 // Respawn boss as new dude if it's still miniboss type
                 this.scene.currentBoss += 1;
+                this.canFire = true;
                 if (this.scene?.currentBoss < 3) {
                     this.currentBoss = this.scene.currentBoss;
                     this.staticTexture = this.scene.levelData.assets.mini_boss[this.currentBoss];
