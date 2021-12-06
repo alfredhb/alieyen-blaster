@@ -187,7 +187,8 @@ export default class MenuScene3 extends Phaser.Scene {
         const bbButton = this.add.image(width * 0.75, height * 0.7, 'gameslot-button');
         const bbIcon = this.add.image(width * 0.75, height * 0.675, 'gauntlet-button');
         const bbText = this.add.text(bbButton.x, height * 0.775, 'Boss Battle', this.constants.MenuButtonStyle('#000000'));
-        bbText.setName('arcadeMenu'); // TODO: change me
+        bbText.setName('levelFactory'); // TO
+        bbIcon.setName('gauntletLevelArcade');
 
         this.buttons = [
             {button: tiButton, icon: tiIcon, text: tiText, sound: this.menuSounds.timedTTS},

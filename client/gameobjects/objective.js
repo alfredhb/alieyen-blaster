@@ -48,6 +48,11 @@ export default class Objective extends Phaser.GameObjects.GameObject {
                 text = 'Survive Until Time Runs Out!!!'
                 break;
 
+            // GAUNTLET (score is killcount + numLives * scorecount)
+            case 5:
+                text = 'Survive the Gauntlet!!!'
+                break;
+
             // UNKNOWN
             default:
                 console.log("Unknown objective found for level " + this.levelData.name);
@@ -61,7 +66,7 @@ export default class Objective extends Phaser.GameObjects.GameObject {
             text,
             constants.MenuButtonStyle()
         );
-        this.objText.setWordWrapWidth(constants.Width * 0.35)
+        this.objText.setWordWrapWidth(constants.Width * 0.325)
         this.objText.setOrigin(0, 0.5);
         this.objText.setDepth(11);
     }
