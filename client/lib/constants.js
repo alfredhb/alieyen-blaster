@@ -19,6 +19,7 @@ export default class Constants {
     LightGreen = 0x90EE90;
     Red = 0xFF0000;
     Pink = 0xFF69B4;
+    Purple = 0x800080;
 
     PersonColors = {
         "bubba": this.Green,

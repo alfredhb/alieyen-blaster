@@ -113,6 +113,7 @@ export default class EMP extends Phaser.Physics.Arcade.Sprite {
             // Respawn it after spawn time
             this.setTexture('lightning')
             this.launch();
+            this.spawnTimer.paused = false; // keep emp going always
         });
     }
 }

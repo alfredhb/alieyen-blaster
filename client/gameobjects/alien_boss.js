@@ -35,16 +35,24 @@ export default class AlienBoss extends Alien {
         } catch (e) {
             this.dMultiplier = this.constants.GetDifficultyMultiplier(this.difficulty);
         }
+
+        this.willFire = false;
     }
 
     update(time, delta) {
         if (this.x < -50 || this.x > this.maxX) { // reverse speed direction
+            this.willFire = (Math.random() >= 0.3) ? false : true;
             this.xSpeed *= -1;
             this.setVelocity(this.xSpeed, 0);
+            this.shield.setVelocity(this.xSpeed, 0);
             this.flipX = !this.flipX; // set correct orientation
         }
 
-        // no fire stuff yet
+        // handle firing
+        if (this.willFire && Math.abs(this.x - this.constants.Width / 2) < 100) {
+            this.fire();
+            this.willFire = false;
+        }
     }
 
     launch() {
@@ -63,13 +71,46 @@ export default class AlienBoss extends Alien {
         this.setVisible(true);
         this.flipX = direction;
 
+        // give an infinite shield
+        this.shield = this.scene.physics.add.sprite(this.x, this.y, 'mini-boss-shield');
+        this.shield.setPosition(this.x, y);
+        this.shield.setVelocity(this.xSpeed, 0);
+        this.shield.setActive(true);
+        this.shield.setVisible(true);
+
         // healthbar
         this.placeHealthbar();
     }
 
     fire() {
-        return;
+        if (this.deadVal) {
+            return;
+        }
+
+        // Stop moving and begin animation
+        this.setVelocity(0, 0);
+        this.anims.play({
+            key: this.fireTexture,
+            frameRate: (this.difficulty == 3) ? (20 / 4.3) : (this.difficulty == 2) ? (20 / 5.3) : 3
+        });
+        this.on('animationcomplete', () => {
+            this.off('animationcomplete');
+            this.anims.play(this.floatTexture);
+            this.setVelocity(this.xSpeed, 0);
+        });
+
+        this.addProjectile();
     }
+
+    /**
+    * Adds a projectile to this scene. BOSS DEALS 3 HP
+    */
+   addProjectile() {
+       this.projectile = this.scene.projectiles.get(this.constants.Width, this.constants.Height, this.dMultiplier, 3);
+       if (this.projectile) {
+           this.projectile.fire(this.x, this.y + this.height * 0.75);
+       }
+   }
 
     /**
      * deal damage to this.hp. If 0, kill the alien and return true, else return
@@ -152,6 +193,12 @@ export default class AlienBoss extends Alien {
     }
 
     emp(duration) {
+        // Destroy projectile if empd
+        if (this.projectile) {
+            this.projectile.chargeSound.stop();
+            this.projectile.destroy();
+        }
+
         if (this.empTimer && this.empTimer.getProgress() < 1) {
             this.empTimer.delay += duration;
             return;
@@ -164,6 +211,9 @@ export default class AlienBoss extends Alien {
                 // set different texture
                 this.anims.play(this.floatTexture);
                 this.setVelocity(this.xSpeed, 0);
+                this.shield.setVelocity(this.xSpeed, 0);
+                this.shield.setVisible(true);
+                this.shieldbar.setDepth(11);
 
                 // play powerup sound sound
                 this.scene.sound.play('power-up', { volume: this.scene.game.config.sfxVolume });
@@ -174,6 +224,9 @@ export default class AlienBoss extends Alien {
         setTimeout(() => {
             this.emped = true;
             this.setVelocity(0);
+            this.shield.setVelocity(0);
+            this.shield.setVisible(false);
+            this.shieldbar.setDepth(0);
             this.anims.play({
                 key: this.stunTexture,
                 frameRate: (18 * 1000 / duration)
@@ -230,6 +283,15 @@ export default class AlienBoss extends Alien {
             
             this.healthpips.push(healthpip);
         }
+
+        // place infinite shield
+        this.shieldbar = this.scene.add.image(
+            this.constants.Width * 0.5,
+            this.constants.Height * 0.1,
+            '__WHITE'
+        );
+        this.shieldbar.setDisplaySize(this.constants.Width * 0.34, this.constants.Height * 0.035);
+        this.shieldbar.setDepth(11).setOrigin(0.5).setAlpha(0.8).setTint(this.constants.LightBlue);
     }
 
     /**
