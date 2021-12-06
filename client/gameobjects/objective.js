@@ -66,7 +66,7 @@ export default class Objective extends Phaser.GameObjects.GameObject {
             text,
             constants.MenuButtonStyle()
         );
-        this.objText.setWordWrapWidth(constants.Width * 0.325)
+        this.objText.setWordWrapWidth(constants.Width * 0.25)
         this.objText.setOrigin(0, 0.5);
         this.objText.setDepth(11);
     }

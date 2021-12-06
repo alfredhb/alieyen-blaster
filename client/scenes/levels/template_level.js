@@ -306,6 +306,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
                             this.aliens[0].getChildren().forEach(a => a.leave(false));
                             // trigger boss spawn
                             this.aliens[2].spawn();
+                            // spawn an emp?
                         }
                         if (this.checkObjective()) this.endLevel();
                     }); // special case listener for boss levels
@@ -626,6 +627,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         this.events.removeListener('slowaliens');
         this.events.removeListener('onehitko');
         this.events.removeListener('autoaim');
+        this.events.removeListener('emp');
     }
 
     /**

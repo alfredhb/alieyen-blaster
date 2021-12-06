@@ -83,12 +83,13 @@ export default class AlienBoss extends Alien {
     }
 
     fire() {
-        if (this.deadVal) {
+        if (this.deadVal || this.emped) {
             return;
         }
 
         // Stop moving and begin animation
         this.setVelocity(0, 0);
+        this.toggleShield(0);
         this.anims.play({
             key: this.fireTexture,
             frameRate: (this.difficulty == 3) ? (20 / 4.3) : (this.difficulty == 2) ? (20 / 5.3) : 3
@@ -97,6 +98,7 @@ export default class AlienBoss extends Alien {
             this.off('animationcomplete');
             this.anims.play(this.floatTexture);
             this.setVelocity(this.xSpeed, 0);
+            this.toggleShield(this.xSpeed);
         });
 
         this.addProjectile();
@@ -118,7 +120,7 @@ export default class AlienBoss extends Alien {
      * @param {number} d
      */
     damage(d) {
-        if (!this.emped) {
+        if (this.shield.visible) {
             this.scene.sound.play('armor-dink', { volume: this.scene.game.config.sfxVolume });
             return; // no damage if not empd
         }
@@ -145,6 +147,8 @@ export default class AlienBoss extends Alien {
             this.off('animationcomplete');
             this.setVisible(false);
             this.setActive(false);
+            this.shield.setVisible(false);
+            this.shield.setActive(false);
 
             this.mobName.destroy(true);
 
@@ -211,9 +215,7 @@ export default class AlienBoss extends Alien {
                 // set different texture
                 this.anims.play(this.floatTexture);
                 this.setVelocity(this.xSpeed, 0);
-                this.shield.setVelocity(this.xSpeed, 0);
-                this.shield.setVisible(true);
-                this.shieldbar.setDepth(11);
+                this.toggleShield(this.xSpeed);
 
                 // play powerup sound sound
                 this.scene.sound.play('power-up', { volume: this.scene.game.config.sfxVolume });
@@ -224,9 +226,7 @@ export default class AlienBoss extends Alien {
         setTimeout(() => {
             this.emped = true;
             this.setVelocity(0);
-            this.shield.setVelocity(0);
-            this.shield.setVisible(false);
-            this.shieldbar.setDepth(0);
+            this.toggleShield(0);
             this.anims.play({
                 key: this.stunTexture,
                 frameRate: (18 * 1000 / duration)
@@ -292,6 +292,15 @@ export default class AlienBoss extends Alien {
         );
         this.shieldbar.setDisplaySize(this.constants.Width * 0.34, this.constants.Height * 0.035);
         this.shieldbar.setDepth(11).setOrigin(0.5).setAlpha(0.8).setTint(this.constants.LightBlue);
+    }
+
+    /**
+     * shows or hides the shield depending on its visibility
+     */
+    toggleShield(xspeed) {
+        this.shield.setVisible((xspeed) ? true : false);
+        this.shield.setVelocity(xspeed, 0);
+        this.shieldbar.setDepth((xspeed) ? 12 : 0);
     }
 
     /**
