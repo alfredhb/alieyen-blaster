@@ -234,6 +234,7 @@ export default class AlienGrunt extends Alien {
      * After 300ms, stops any sprite animations and calls launch()
      */
     respawn() {
+        if (this.endSpawn) return;
         setTimeout(() => {
             // Check if level finished in the 300ms
             if (this == null) {
@@ -258,6 +259,7 @@ export default class AlienGrunt extends Alien {
         this.setVelocity(0);
         this.setPosition(this.maxX, this.maxy);
         this.setVisible(false);
+        this.endSpawn = !respawn;
 
         if (respawn) {
             this.respawn();
@@ -289,9 +291,7 @@ export default class AlienGrunt extends Alien {
         }
 
         if (this.staticTexture === undefined) {
-            // this.leave(false);
-            // this.setVelocity(0);
-            this.destroy(true);
+            this.endSpawn = true;
             console.log("unable to find static texture for grunt");
         }
     }
