@@ -181,7 +181,7 @@ export default class AlienGrunt extends Alien {
      * Adds a projectile to this scene.
      */
     addProjectile() {
-        this.projectile = this.scene.projectiles.get(this.constants.Width, this.constants.Height, this.dMultiplier);
+        this.projectile = this.scene.projectiles.get(this.constants.Width, this.constants.Height, this.dMultiplier, 1);
         if (this.projectile) {
             this.projectile.fire(this.x, this.y + this.height * 0.75);
         }

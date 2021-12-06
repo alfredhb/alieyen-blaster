@@ -2,15 +2,24 @@ import Phaser from "phaser";
 import Constants from "../lib/constants";
 
 export default class AlienProjectile extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, width, height, dMultiplier) {
+    constructor(scene, width, height, dMultiplier, damage) {
         super(scene, 0, 0, 'alien-bomb');
         this.constants = new Constants(width, height);
 
         this.dMultiplier = dMultiplier;
+        this.damage = damage;
 
         scene.physics.add.existing(this);
 
-        this.setTint(this.constants.LightBlue);
+        // TODO: remove magic numbers
+        if (damage == 1) {
+            this.setTint(this.constants.LightBlue);
+        } else if (damage == 2) {
+            this.setTint(this.constants.Pink);
+        } else if (damage == 3) {
+            this.setTint(this.constants.Red);
+        }
+
         this.setDisplaySize(5, 5);
 
         this.chargeSound = this.scene.sound.get('energy-charge');
@@ -51,7 +60,7 @@ export default class AlienProjectile extends Phaser.Physics.Arcade.Sprite {
 
         if (this.y >= this.constants.Height * 0.85) {
             this.setVisible(false);
-            this.scene.events.emit('playerhit', 1 /* alien grunt deals 1 damage */);
+            this.scene.events.emit('playerhit', this.damage /* alien grunt deals 1 damage */);
         }
 
         if (this.displayWidth < this.constants.Width * 0.055) {
