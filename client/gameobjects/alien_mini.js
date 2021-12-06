@@ -12,7 +12,7 @@ export default class AlienMini extends Alien {
         let { width, height } = scene.scale;
         this.constants = new Constants(width, height);
 
-        this.staticTexture = (this.scene?.levelData?.assets?.mini_boss) ? 
+        this.staticTexture = (this.scene?.levelData?.assets?.mini_boss) ?
             this.scene.levelData.assets.mini_boss : 'alien-mini-boss'; //pull static texture from config
         this.floatTexture = this.staticTexture + "-float";
         this.fireTexture = this.staticTexture + "-fire";
@@ -29,6 +29,11 @@ export default class AlienMini extends Alien {
 
         // for beta, this alien wont fire
         this.canFire = canFire || false;
+        // hardcoded because mini boss 1 shouldn't fire
+        if (this.staticTexture == 'alien-mini-boss') {
+            this.canFire = false;
+        }
+        this.willFire = false;
         this.difficulty = scene.difficulty;
 
         this.dMultiplier;
@@ -47,12 +52,18 @@ export default class AlienMini extends Alien {
 
     update(time, delta) {
         if (this.x < -50 || this.x > this.maxX) { // reverse speed direction
+            this.willFire = (Math.random() >= 0.33) ? false : true;
             this.xSpeed *= -1;
             this.setVelocity(this.xSpeed, 0);
             this.shield.setVelocity(this.xSpeed, 0);
         }
 
-        // no fire stuff yet
+        // handle firing
+        if (this.canFire && this.willFire && Math.abs(this.x - this.constants.Width / 2) < 50) {
+            this.fire();
+            this.willFire = false;
+        }
+
     }
 
     /**
@@ -103,8 +114,56 @@ export default class AlienMini extends Alien {
         this.setVisible(true);
     }
 
-    fire() {
-        return;
+    /**
+     * returns the correct spritesheet based on difficulty
+     */
+     getFireAnimation() {
+        return {
+            key: this.fireTexture,
+            frameRate: (this.difficulty == 3) ? (24 / 4.3) :
+                    (this.difficulty == 2) ? (24 / 5.3) : 3
+        }
+    }
+
+    /**
+     * Fires at the player's ship
+     *
+     * Requires: alien is not dead (signifying it's in flight)
+     * Requires: alien has canFire as true meaning it can fire
+     * Requires: different animations for charge- different frame num so
+     *              easy, med, hard charge times are all represented correctly
+     */
+     fire() {
+        if (this.deadVal || !this.canFire) {
+            return;
+        }
+
+        // Stop moving and begin animation
+        this.setVelocity(0, 0);
+        if (this.shield.active) {
+            this.shield.setVelocity(0, 0);
+        }
+        this.anims.play(this.getFireAnimation());
+        this.on('animationcomplete', () => {
+            this.off('animationcomplete');
+            this.anims.play(this.floatTexture);
+            this.setVelocity(this.xSpeed, 0);
+            if (this.shield.active) {
+                this.shield.setVelocity(this.xSpeed, 0);
+            }
+        });
+
+        this.addProjectile();
+    }
+
+     /**
+     * Adds a projectile to this scene.
+     */
+    addProjectile() {
+        this.projectile = this.scene.projectiles.get(this.constants.Width, this.constants.Height, this.dMultiplier, 2);
+        if (this.projectile) {
+            this.projectile.fire(this.x, this.y + this.height * 0.75);
+        }
     }
 
     /**
@@ -234,7 +293,7 @@ export default class AlienMini extends Alien {
 
         // place title
         const name = this.scene.add.text(
-            this.constants.Width * 0.5, 
+            this.constants.Width * 0.5,
             this.constants.Height * 0.15,
             'General',
             this.constants.MenuButtonStyle()
@@ -252,7 +311,7 @@ export default class AlienMini extends Alien {
             );
             healthpip.setDisplaySize(healthpipSize, this.constants.Height * 0.035);
             healthpip.setDepth(11).setOrigin(0, 0.5).setTint(0xFF0000);
-            
+
             this.healthpips.push(healthpip);
         }
 
@@ -267,14 +326,14 @@ export default class AlienMini extends Alien {
             );
             shieldpip.setDisplaySize(shieldpipSize, this.constants.Height * 0.035);
             shieldpip.setDepth(11).setOrigin(0, 0.5).setTint(this.constants.LightBlue);
-            
+
             this.shieldpips.push(shieldpip);
         }
     }
 
     /**
      * Destroys and pops d pips from this.healthpips. if it's empty, then stops
-     * @param {number} d 
+     * @param {number} d
      */
     reduceHealthBar(d) {
         for (let i = 0; i < d; i++) {
@@ -289,7 +348,7 @@ export default class AlienMini extends Alien {
 
     /**
      * Destroys and pops d pips from this.shieldpips. if it's empty, then stops
-     * @param {number} d 
+     * @param {number} d
      */
     reduceShieldBar(d) {
         for (let i = 0; i < d; i++) {
