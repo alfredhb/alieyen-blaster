@@ -17,7 +17,7 @@ export default class AlienProjectile extends Phaser.Physics.Arcade.Sprite {
         } else if (damage == 2) {
             this.setTint(this.constants.Pink);
         } else if (damage == 3) {
-            this.setTint(this.constants.Red);
+            this.setTint(this.constants.Purple);
         }
 
         this.setDisplaySize(5, 5);

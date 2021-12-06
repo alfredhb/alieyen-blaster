@@ -480,7 +480,7 @@ export default class DataScene1 extends Phaser.Scene {
             key: 'alien-boss-fire',
             frames: this.anims.generateFrameNumbers('boss-fire-sheet', { start: 0 }),
             frameRate: 3,
-            repeat: -1,
+            repeat: 0,
         });
 
         // Alien Grunt Animations

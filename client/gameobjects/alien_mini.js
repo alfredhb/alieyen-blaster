@@ -130,8 +130,8 @@ export default class AlienMini extends Alien {
      getFireAnimation() {
         return {
             key: this.fireTexture,
-            frameRate: (this.difficulty == 3) ? (24 / 4.3) :
-                    (this.difficulty == 2) ? (24 / 5.3) : 3
+            frameRate: (this.difficulty == 3) ? (20 / 4.3) :
+                    (this.difficulty == 2) ? (20 / 5.3) : 3
         }
     }
 
