@@ -92,6 +92,10 @@ export default class AlienGroup extends Phaser.GameObjects.Group {
         });
     }
 
+    emp(duration) {
+        this.getChildren().forEach(a => a.emp(duration));
+    }
+
     /**
      * Passes 'onehitko' event to the alien subclasses
      */

@@ -2,6 +2,9 @@ import Phaser from "phaser";
 import Constants from "../lib/constants";
 import Alien from "./alien";
 
+const Base_Health = [15, 25, 35];
+const Base_Shield = [20, 30, 50];
+
 export default class AlienMini extends Alien {
     /**
      * @param {Phaser.Scene} scene
@@ -14,6 +17,10 @@ export default class AlienMini extends Alien {
 
         this.staticTexture = (this.scene?.levelData?.assets?.mini_boss) ? 
             this.scene.levelData.assets.mini_boss : 'alien-mini-boss'; //pull static texture from config
+        if (this.scene?.levelData?.assets?.mini_boss) {
+            this.staticTexture = (typeof(this.scene.levelData.assets.mini_boss) === "string") 
+            ? this.scene.levelData.assets.mini_boss : this.scene.levelData.assets.mini_boss[0];
+        }
         this.floatTexture = this.staticTexture + "-float";
         this.fireTexture = this.staticTexture + "-fire";
 
@@ -37,12 +44,8 @@ export default class AlienMini extends Alien {
         } catch (e) {
             this.dMultiplier = this.constants.GetDifficultyMultiplier(this.difficulty);
         }
-        this.shieldHP = Math.round(20 * this.dMultiplier); //Ensure whole numbers
-        this.hp = Math.round(15 * this.dMultiplier);
-        this.shieldBreak1 = 12 * this.dMultiplier;
-        this.shieldBreak2 = 7 * this.dMultiplier;
 
-        this.anims.get('mini-boss-float');
+        this.currentBoss = (this.scene?.currentBoss) ? this.scene.currentBoss : 0;
     }
 
     update(time, delta) {
@@ -50,6 +53,7 @@ export default class AlienMini extends Alien {
             this.xSpeed *= -1;
             this.setVelocity(this.xSpeed, 0);
             this.shield.setVelocity(this.xSpeed, 0);
+            this.flipX = !this.flipX;
         }
 
         // no fire stuff yet
@@ -61,6 +65,11 @@ export default class AlienMini extends Alien {
      * in middle half of screen and firing a bomb at the player.
      */
     launch() {
+        this.shieldHP = Math.round(Base_Shield[this.currentBoss] * this.dMultiplier); //Ensure whole numbers
+        this.hp = Math.round(Base_Health[this.currentBoss] * this.dMultiplier);
+        this.shieldBreak1 = this.shieldHP * 0.66;
+        this.shieldBreak2 = this.shieldHP * 0.33;
+
         let direction = (Math.random() >= 0.5) ? 1 : -1;
         let y = Math.random() * this.maxY * 0.5 + 75;
         this.speed = this.constants.GetSpeed(this.difficulty);
@@ -72,6 +81,7 @@ export default class AlienMini extends Alien {
         this.anims.play(this.floatTexture);
         this.setActive(true);
         this.setVisible(true);
+        this.flipX = direction;
 
         // no fire
 
@@ -164,7 +174,21 @@ export default class AlienMini extends Alien {
             this.setVisible(false);
             this.setActive(false);
 
+            this.mobName.destroy(true);
+            this.healthbar.destroy(true);
+
             setTimeout(() => {
+                // Respawn boss as new dude if it's still miniboss type
+                this.scene.currentBoss += 1;
+                if (this.scene?.currentBoss < 3) {
+                    this.currentBoss = this.scene.currentBoss;
+                    this.staticTexture = this.scene.levelData.assets.mini_boss[this.currentBoss];
+                    this.floatTexture = this.staticTexture + "-float";
+                    this.fireTexture = this.staticTexture + "-fire";
+                    this.deadVal = false;
+                    this.launch();
+                }
+
                 this.scene.events.emit('minibosskilled');
             }, 1000);
         });
@@ -224,22 +248,22 @@ export default class AlienMini extends Alien {
      */
     placeHealthbar() {
         // place backbar
-        const backbar = this.scene.add.image(
+        this.healthbar = this.scene.add.image(
             this.constants.Width * 0.5,
             this.constants.Height * 0.1,
             '__WHITE'
         );
-        backbar.setDisplaySize(this.constants.Width * 0.35, this.constants.Height * 0.04);
-        backbar.setDepth(11).setOrigin(0.5);
+        this.healthbar.setDisplaySize(this.constants.Width * 0.35, this.constants.Height * 0.04);
+        this.healthbar.setDepth(11).setOrigin(0.5);
 
         // place title
-        const name = this.scene.add.text(
+        this.mobName = this.scene.add.text(
             this.constants.Width * 0.5, 
             this.constants.Height * 0.15,
-            'General',
+            this.getName(),
             this.constants.MenuButtonStyle()
         );
-        name.setDepth(11).setOrigin(0.5);
+        this.mobName.setDepth(11).setOrigin(0.5);
 
         // place healthbar
         this.healthpips = [];
@@ -270,6 +294,27 @@ export default class AlienMini extends Alien {
             
             this.shieldpips.push(shieldpip);
         }
+    }
+
+    /**
+     * for gauntlet -- if this.scene.currentBoss, then returns the correct name
+     */
+    getName() {
+        if (this.scene?.currentBoss) {
+            switch(this.scene.currentBoss) {
+                case 0: {
+                    return 'General';
+                }
+                case 1: {
+                    return 'Commander';
+                }
+                case 2: {
+                    return 'Chancellor';
+                }
+            }
+        }
+        return (this.staticTexture == 'alien-mini-boss-2') ? 'Commander' :
+            (this.staticTexture == 'alien-mini-boss-3') ? 'Chancellor' : 'General';
     }
 
     /**

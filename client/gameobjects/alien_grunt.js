@@ -14,6 +14,10 @@ export default class AlienGrunt extends Alien {
 
         this.staticTexture = (this.scene?.levelData?.assets?.grunt) ? 
             this.scene.levelData.assets.grunt : 'alien-grunt'; //pull static texture from config
+        if (this.scene?.levelData?.assets?.grunt) {
+            this.staticTexture = (typeof(this.scene.levelData.assets.grunt) === "string") 
+            ? this.scene.levelData.assets.grunt : this.scene.levelData.assets.grunt[0];
+        }
         this.floatTexture = this.staticTexture + "-float";
         this.fireTexture = this.staticTexture + "-fire";
 
@@ -92,6 +96,8 @@ export default class AlienGrunt extends Alien {
      * in middle half of screen and firing a bomb at the player.
      */
     launch() {
+        this.updateTextures();
+
         let direction = (Math.random() >= 0.5) ? 1 : -1;
         let y = Math.random() * this.maxY * 0.5 + 75;
         this.speed = this.constants.GetSpeed(this.difficulty);
@@ -107,6 +113,7 @@ export default class AlienGrunt extends Alien {
         this.anims.play(this.floatTexture);
         this.setActive(true);
         this.setVisible(true);
+        this.flipX = direction;
 
         // Alien fires 34% of the time. If firing, then creates a timer which
         // stops when alien should be over its zone and makes it fire
@@ -244,10 +251,14 @@ export default class AlienGrunt extends Alien {
     leave(respawn) {
         // TODO: play an animation specific to leaving the level
 
+        this.setVelocity(0);
         this.setPosition(this.maxX, this.maxy);
         this.setVisible(false);
 
-        if (respawn) this.respawn();
+        if (respawn) {
+            console.log("respawning", respawn);
+            this.respawn();
+        }
     }
 
     /**
@@ -258,6 +269,27 @@ export default class AlienGrunt extends Alien {
             key: this.fireTexture,
             frameRate: (this.difficulty == 3) ? (24 / 4.3) :
                     (this.difficulty == 2) ? (24 / 5.3) : 3
+        }
+    }
+
+    /**
+     * if scene has currentBoss, then updates texutes to current asset.
+     * Also disables firing for aliens past first type
+     */
+    updateTextures() {
+        if (this.scene?.currentBoss) {
+            if (this.scene.currentBoss > 0) this.canFire = false;
+
+            this.staticTexture = this.scene.levelData.assets.grunt[this.scene.currentBoss];
+            this.floatTexture = this.staticTexture + "-float";
+            this.fireTexture = this.staticTexture + "-fire";
+        }
+
+        if (this.staticTexture === undefined) {
+            // this.leave(false);
+            // this.setVelocity(0);
+            this.destroy(true);
+            console.log("unable to find static texture for grunt");
         }
     }
 
