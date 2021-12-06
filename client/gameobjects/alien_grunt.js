@@ -32,7 +32,7 @@ export default class AlienGrunt extends Alien {
         this.setDisplaySize(width * 0.03, height * 0.05);
         // if later grunt textures, then reduce size further
         if (this.staticTexture != 'alien-grunt') {
-            this.setDisplaySize(width * 0.01, height * 0.015);
+            this.setDisplaySize(width * 0.025, height * 0.042);
         }
 
         this.body.setSize(this.displayWidth * 0.7, this.displayHeight * 1.5);

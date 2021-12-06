@@ -9,6 +9,9 @@ export default class Constants {
     constructor(width, height) {
         this.Width = width;
         this.Height = height;
+
+        this.hoverTimers = [];
+        this.gameOutListener = false;
     }
 
     Blue = 0x0000FF;
@@ -142,6 +145,19 @@ export default class Constants {
         // Show cursor
         scene.game.events.emit("cursorsizeset");
     } 
+
+    /**
+     * Stops and resets all timers in hovertimers
+     */
+    cancelAllHovers() {
+        this.hoverTimers.forEach(t => {
+            t.paused = true;
+            t.elapsed = 0;
+        });
+
+        this.hoverFill.setVisible(false);
+        this.hoverFill.stop();
+    }
     
     /**
      * Adds listeners to button. Checks for X seconds that
@@ -200,6 +216,14 @@ export default class Constants {
             this.cancelHover(scene, hoverTimer);
             callbackFunc();
         });
+        this.hoverTimers.push(hoverTimer);
+
+        if (!this.gameOutListener) {
+            scene.input.on('gameout', () => {
+                this.cancelAllHovers();
+            });
+            this.gameOutListener = true;
+        }
     }
 
     /**
