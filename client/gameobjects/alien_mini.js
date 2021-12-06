@@ -227,6 +227,11 @@ export default class AlienMini extends Alien {
     kill() {
         this.deadVal = true;
 
+        // let projectile handle killed alien
+        if (this.projectile && this.projectile.alienKilled()) {
+            this.projectile.destroy();
+        }
+
         this.play({ key: 'explode', loop: false, repeat: 2 });
         this.on('animationcomplete', () => {
             this.off('animationcomplete');

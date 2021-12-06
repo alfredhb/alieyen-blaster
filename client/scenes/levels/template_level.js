@@ -890,7 +890,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         let score = this.levelScore.calculateScore();
         this.levelData.level['score' + (this.levelData.meta.currentPlayer + 1)] = score;
 
-        if (objective == 3 || objective == 4 || 5) {
+        if (objective == 3 || objective == 4 || objective == 5) {
             this.levelData.level['liveScore' + (this.levelData.meta.currentPlayer + 1)] =
                 this.levelLives.numLives; // score mult determined elsewhere
         }

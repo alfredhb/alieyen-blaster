@@ -30,9 +30,13 @@ export default class AlienGrunt extends Alien {
         this.setInteractive();
         this.setPosition(width + 50, height + 50);
         this.setDisplaySize(width * 0.03, height * 0.05);
+        // if later grunt textures, then reduce size further
+        if (this.staticTexture != 'alien-grunt') {
+            this.setDisplaySize(width * 0.01, height * 0.015);
+        }
+
         this.body.setSize(this.displayWidth * 0.7, this.displayHeight * 1.5);
-        // this.setOrigin(0.5);
-        this.body.setOffset(this.displayWidth * 1.1, this.displayHeight)
+        this.body.setOffset(this.displayWidth * 1.1, this.displayHeight);
 
         this.maxX = width + 65;
         this.maxY = height + 65;
