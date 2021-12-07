@@ -228,7 +228,7 @@ import Constants from "../../lib/constants";
                 console.log(err);
             }
 
-            this.addSaveSlots(width, height, res);
+            this.addSaveSlots(width, height, res.slots);
             if (show) {
                 this.hideTabContent();
                 this.showTabContent(this.selectedTabInd);
@@ -506,11 +506,16 @@ import Constants from "../../lib/constants";
         const title = this.add.text(width * 0.4, slotHeight, 'Slot ' + slot._id[4], textStyle);
 
         let closestLevel = "1 - 1";
+        let completedLevels = 0;
         for (let level of slot.levels) {
             if (!level.complete) {
                 closestLevel = level.name;
                 break;
             }
+            completedLevels += 1;
+        }
+        if (completedLevels == 16) {
+            closestLevel = "Completed"
         }
         const level = this.add.text(width * 0.55, slotHeight, closestLevel, textStyle);
 

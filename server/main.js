@@ -209,7 +209,11 @@ Meteor.methods({
       res.push(s);
     }
 
-    return res;
+    // get intro cutscene
+    var cs = MetaData.findOne("introCutscene", { "fields": { url: 1 } });
+    if (cs == null) cs = {url: null};
+
+    return {slots: res, cutscene: cs.url};
   },
 
   /**

@@ -22,7 +22,7 @@ export default class TemplateCutscene extends Phaser.Scene {
      */
     init(data) {
         this.videoURL = data.url;
-        this.nextScene = (data.open) ? "levelFactory" : "templateLevelScene";
+        this.nextScene = (typeof(data.open) == "string") ? data.open : (data.open) ? "levelFactory" : "templateLevelScene";
         this.levelData = data.scene;
     }
 

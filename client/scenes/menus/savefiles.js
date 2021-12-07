@@ -28,7 +28,11 @@ export default class MenuScene5 extends Phaser.Scene {
                 console.log(err);
             }
 
-            for (let slot of res) {
+            // save cutscene if it exists
+            if (res.cutscene) {
+                this.cutsceneURL = res.cutscene;
+            }
+            for (let slot of res.slots) {
                 // style a full slot
                 this.styleFullSlot(slot);
             }
@@ -237,44 +241,68 @@ export default class MenuScene5 extends Phaser.Scene {
             }
 
             this.setCurrentSlot(slotId);
+            if (this.cutsceneURL) {
+                this.scene.pause(this, res);
 
-            this.scene.start(
-                (this.playerCount == 1) ? 'timedTutorialScene' : 'storyReadyScene',
-                {
-                    meta: {
-                        difficulty: this.difficulty,
-                        players: this.players,
-                        currentPlayer: 0,
-                        playerCount: this.playerCount,
-                        levelName: 'timedTutorialScene'
-                    },
-                    level: {
-                        difficulty_multiplier: [1, 1.5, 2],
-                        powerup_spawnrate: 500,
-                        aliens: {
-                            grunt: {
-                                score: 10,
-                            },
-                            mini_boss: {
-                                score: 10,
-                            },
-                            boss: {
-                                score: 10,
-                            },
-                        }
-                    },
-                    scene: {
-                        nextScene: {
-                            name: 'worldSelectMenu',
-                            type: 'STORY',
-                        }
-                    },
-                    levels: res.levels,
-                    name: 'worldSelectMenu'
-                }
-            );
-            this.scene.stop(this); // stop itself
+                this.events.addListener('pause', () => {
+                    this.events.removeListener('pause');
+                    this.scene.setVisible(false);
+
+                    this.scene.launch('templateCutscene', {
+                        url: this.cutsceneURL,
+                        open: 'savefileMenu',
+                        scene: this
+                    });
+                });
+                this.events.addListener('resume', () => {
+                    this.scene.setVisible(true);
+                    this.events.removeListener('resume');
+                    this.playTutorial(res);
+                    this.scene.stop(this); // stop itself
+                })
+            } else {
+                this.playTutorial(res);
+                this.scene.stop(this); // stop itself
+            }
         });
+    }
+
+    playTutorial(res) {
+        this.scene.start(
+            (this.playerCount == 1) ? 'timedTutorialScene' : 'storyReadyScene',
+            {
+                meta: {
+                    difficulty: this.difficulty,
+                    players: this.players,
+                    currentPlayer: 0,
+                    playerCount: this.playerCount,
+                    levelName: 'timedTutorialScene'
+                },
+                level: {
+                    difficulty_multiplier: [1, 1.5, 2],
+                    powerup_spawnrate: 500,
+                    aliens: {
+                        grunt: {
+                            score: 10,
+                        },
+                        mini_boss: {
+                            score: 10,
+                        },
+                        boss: {
+                            score: 10,
+                        },
+                    }
+                },
+                scene: {
+                    nextScene: {
+                        name: 'worldSelectMenu',
+                        type: 'STORY',
+                    }
+                },
+                levels: res.levels,
+                name: 'worldSelectMenu'
+            }
+        );
     }
 
     /**
