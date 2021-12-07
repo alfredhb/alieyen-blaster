@@ -41,7 +41,7 @@ export default class AlienMini extends Alien {
             this.canFire = false;
         }
         this.willFire = false;
-        this.difficulty = scene.difficulty;
+        this.difficulty = scene.levelData.meta.difficulty;
 
         this.dMultiplier;
         try { // use template level if that scene is it
@@ -50,7 +50,10 @@ export default class AlienMini extends Alien {
             this.dMultiplier = this.constants.GetDifficultyMultiplier(this.difficulty);
         }
 
-        this.currentBoss = (this.scene?.currentBoss) ? this.scene.currentBoss : 0;
+        // Ensure that miniboss difficulty increases per world
+        this.currentBoss = (this.scene?.currentBoss) ? this.scene.currentBoss :
+            (this.staticTexture == 'alien-mini-boss-2') ? 1 : (this.staticTexture == "alien-mini-boss-3") ? 2 : 0;
+        this.canfire = (this.currentBoss) ? true : false;
     }
 
     update(time, delta) {

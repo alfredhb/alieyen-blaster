@@ -254,6 +254,12 @@ export default class TemplateLevelScene extends Phaser.Scene {
                     });
                 }
 
+                if (!this.events.listenerCount('bosskilled')) {
+                    this.events.addListener('bosskilled', () => {
+                        if (this.checkObjective()) this.endLevel();
+                    }); // special case listener for boss levels
+                }
+
                 if (!this.events.listenerCount('minibosskilled')) {
                     this.events.addListener('minibosskilled', () => {
                         if (this.checkObjective()) this.endLevel();

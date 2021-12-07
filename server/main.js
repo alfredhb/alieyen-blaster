@@ -274,6 +274,30 @@ Meteor.methods({
           name: "2 - 5",
           complete: false,
         },
+        {
+          name: "3 - 1",
+          complete: false,
+        },
+        {
+          name: "3 - 2",
+          complete: false,
+        },
+        {
+          name: "3 - 3",
+          complete: false,
+        },
+        {
+          name: "3 - 4",
+          complete: false,
+        },
+        {
+          name: "3 - 5",
+          complete: false,
+        },
+        {
+          name: "Boss Battle",
+          complete: false,
+        },
       ]
     };
     SaveData.insert(save);
@@ -289,6 +313,7 @@ Meteor.methods({
    */
   saveLevelData(id, level, stars) {
     var levelEntry = String(level[5] + ' - ' + level[11]);
+    if (level == "Boss Battle") levelEntry = "Boss Battle";
 
     SaveData.update(
       {_id: ("slot" + String(id + 1))},

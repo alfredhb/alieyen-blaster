@@ -249,6 +249,65 @@ export default class LevelSelect extends Phaser.Scene {
     }
 
     /**
+     * Places a triangle to the right of the last level button that, when clicked
+     * transitions to the boss battle
+     * @param {number} width 
+     * @param {number} height 
+     */
+    bossBattleButton(width, height) {
+        const bB = this.add.triangle(
+            this.buttons[4].button.x + width * 0.2,
+            this.buttons[4].button.y,
+            0, 128, 0, 0, 128, 64,
+            0xFFFFFF, 1);
+        bB.setName('bossBattle');
+
+        // add interactivity and color flashing
+        bB.setInteractive();
+        this.nextTimer = this.time.addEvent({
+            delay: 1000,
+            callback: () => {
+                if (bB.fillColor == this.constants.Red) {
+                    bB.setFillStyle(this.constants.Blue, 1);
+                } else {
+                    bB.setFillStyle(this.constants.Red, 1);
+                }
+            },
+            callbackScope: this,
+            loop: true,
+            paused: false,
+        });
+        this.constants.HoverClick(this, bB, () => {
+            this.menuSounds.menuClick.play({volume: this.game.config.sfxVolume});
+            this.scene.start(
+                'levelFactory',
+                {
+                    meta: {
+                        playerCount: this.playerCount,
+                        difficulty: this.difficulty,
+                        players: this.players,
+                        levelName: "levelFactory",
+                        currentPlayer: 0,
+                        world: this.world,
+                    },
+                    scene: {
+                        prevScene: {
+                            name: 'levelSelectMenu',
+                            type: 'STORY',
+                        },
+                        nextScene: {
+                            name: "Boss Battle",
+                            type: 'STORY'
+                        }
+                    },
+                    levels: this.levelData.levels
+                }
+            );
+            this.scene.stop(this);
+        })
+    }
+
+    /**
      * places green outline and star for complete, and red outline for incomplete
      * @param {number} width 
      * @param {number} height 
@@ -270,6 +329,10 @@ export default class LevelSelect extends Phaser.Scene {
         // Move text up, place 3 star outlines, and place num stars
         if (complete) {
             this.placeLevelStars(b, this.worldLevels[index].stars, width, height);
+
+            if (this.world == 3 && index == 4) {
+                this.bossBattleButton(width, height); // style this button if final level is complete
+            }
         }
 
         b.button.setInteractive();
@@ -294,7 +357,7 @@ export default class LevelSelect extends Phaser.Scene {
 
         // add level play
         this.constants.HoverClick(this, b.button, () => {
-            this.menuSounds.menuClick.play();
+            this.menuSounds.menuClick.play({volume: this.game.config.sfxVolume});
             this.scene.start(
                 (this.playerCount == 1) ? b.button.name : 'storyReadyScene',
                 {

@@ -502,7 +502,6 @@ export default class StoryReportScene extends Phaser.Scene {
         // hoverclick for replay
         this.constants.HoverClick(this, b[0].button, () => {
             this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
-
             this.scene.start(
                 (this.playerCount == 1) ? 'levelFactory': 'storyReadyScene',
                 {
@@ -533,9 +532,11 @@ export default class StoryReportScene extends Phaser.Scene {
         // hoverclick for story
         this.constants.HoverClick(this, b[1].button, () => {
             this.menuSounds.menuClick.play({ volume: this.game.config.sfxVolume });
+        
+            let world = (this.name[5] == 'B') ? "worldSelectMenu" : 'levelSelectMenu';
 
             this.scene.start(
-                'levelSelectMenu',
+                world,
                 {
                     meta: {
                         playerCount: this.playerCount,

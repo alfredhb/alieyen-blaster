@@ -102,6 +102,7 @@ export default class MenuScene5 extends Phaser.Scene {
 
         // Place Closest incomplete level in center and star for each complete
         let closestLevel = "1 - 1";
+        let completedLevels = 0;
         for (let i = 0; i < slot.levels.length; i++) {
             if (!slot.levels[i].complete) {
                 closestLevel = slot.levels[i].name;
@@ -109,11 +110,17 @@ export default class MenuScene5 extends Phaser.Scene {
             }
 
             // place star
-            let star = this.add.image(
-                slotButton.x - width * 0.12 + width * 0.055 * i,
-                slotButton.y + height * 0.12,
-                'star'
-            ).setDisplaySize(width * 0.05, width * 0.05).setOrigin(0.5, 1);
+            completedLevels += 1;
+            if (completedLevels % 5 == 0) {
+                let star = this.add.image(
+                    slotButton.x - width * 0.10 + width * 0.055 * i / 5,
+                    slotButton.y + height * 0.12,
+                    'star'
+                ).setDisplaySize(width * 0.05, width * 0.05).setOrigin(0.5, 1);
+            }
+        }
+        if (completedLevels == 16) {
+            closestLevel = "Completed"
         }
         this[slot._id + "World"] = this.add.text(slotButton.x, slotButton.y, closestLevel, this.constants.MenuButtonStyle("#000000")
         ).setOrigin(0.5);
