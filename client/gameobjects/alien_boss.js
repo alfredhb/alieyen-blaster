@@ -142,6 +142,11 @@ export default class AlienBoss extends Alien {
     kill() {
         this.deadVal = true;
 
+        // let projectile handle killed alien
+        if (this.projectile && this.projectile.alienKilled()) {
+            this.projectile.destroy();
+        }
+
         this.play({ key: 'explode', loop: false, repeat: 4 });
         this.on('animationcomplete', () => {
             this.off('animationcomplete');

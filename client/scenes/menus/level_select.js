@@ -102,13 +102,18 @@ export default class LevelSelect extends Phaser.Scene {
         const title = this.add.text(width * 0.5, height * 0.15, ('World ' + this.world), this.constants.MenuTitleStyle("#000000"));
         title.setOrigin(0.5);
 
-        const titleSound = this.sound.get('world-' + this.world);
+        const worldSound = this.sound.get("world");
+        const worldNumSound = this.sound.get(String(this.world));
 
         // interactives
         title.setInteractive();
         title.on('pointerover', () => {
-            if (!titleSound.isPlaying) {
-                titleSound.play({volume: this.game.config.ttsVolume});
+            if (!worldSound.isPlaying && !worldNumSound.isPlaying) {
+                worldSound.play({volume: this.game.config.ttsVolume});
+                worldSound.on('complete', () => {
+                    worldSound.off('complete');
+                    worldNumSound.play({volume: this.game.config.ttsVolume});
+                })
             }
         })
     }

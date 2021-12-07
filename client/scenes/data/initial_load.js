@@ -124,7 +124,7 @@ export default class DataScene1 extends Phaser.Scene {
             {"key": "tutorial",         "path": path + "sounds/tts/tutorial.mp3",                "config": { loop: false }},
             {"key": "who-p1",           "path": path + "sounds/tts/who-is-player-1.mp3",         "config": { loop: false }},
             {"key": "who-p2",           "path": path + "sounds/tts/who-is-player-2.mp3",         "config": { loop: false }},
-            {"key": "world-1",          "path": path + "sounds/tts/world_1.mp3",                 "config": { loop: false }},
+            {"key": "world",            "path": path + "sounds/tts/world.mp3",                 "config": { loop: false }},
             {"key": "world-select",     "path": path + "sounds/tts/world_select.mp3",            "config": { loop: false }},
             {"key": "yes",              "path": path + "sounds/tts/yes.mp3",                     "config": { loop: false }},
             {"key": "glass-break",      "path": path + "sounds/sprite/glass_break.mp3",          "config": { loop: false, volume: 0.5 }},
