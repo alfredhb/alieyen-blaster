@@ -61,6 +61,9 @@ export default class WorldSelect extends Phaser.Scene {
         // Difficulty
         this.initDifficultyButton(width, height);
 
+        // Tutorial
+        this.initTutorialButton(width, height);
+
         // World Buttons
         this.initWorldButtons(width, height);
 
@@ -152,6 +155,73 @@ export default class WorldSelect extends Phaser.Scene {
                 },
                 levels: this.levelData.levels
             });
+            this.scene.stop(this); // stop itself
+        });
+
+    }
+
+    /**
+     * Places a tutorial button in the top left which on click, transitions to the
+     * tutorial
+     * @param {number} width 
+     * @param {number} height 
+     */
+    initTutorialButton(width, height) {
+        const tutB = this.add.image(width * 0.05, height * 0.07, '__WHITE');
+        const tutT = this.add.text(width * 0.05, height * 0.07, 'T', this.constants.MenuButtonStyle("#000000"));
+        tutB.setDisplaySize(width * 0.075, width * 0.075).setOrigin(0.5);
+        tutT.setOrigin(0.5);
+
+        let tutorialTTS = this.sound.get('tutorial');
+
+        tutB.setInteractive();
+        tutB.on('pointerover', () => {
+            tutB.setTint(this.constants.Red);
+
+            if (!tutorialTTS.isPlaying) {
+                tutorialTTS.play({volume: this.game.config.ttsVolume});
+            }
+        }).on('pointerout', () => {
+            tutB.clearTint();
+        });
+
+        this.constants.HoverClick(this, tutB, () => {
+            this.menuSounds.menuClick.play({volume: this.game.config.sfxVolume});
+            this.scene.start(
+                (this.playerCount == 1) ? 'timedTutorialScene' : 'storyReadyScene',
+                {
+                    meta: {
+                        difficulty: this.difficulty,
+                        players: this.players,
+                        currentPlayer: 0,
+                        playerCount: this.playerCount,
+                        levelName: 'timedTutorialScene'
+                    },
+                    level: {
+                        difficulty_multiplier: [1, 1.5, 2],
+                        powerup_spawnrate: 500,
+                        aliens: {
+                            grunt: {
+                                score: 10,
+                            },
+                            mini_boss: {
+                                score: 10,
+                            },
+                            boss: {
+                                score: 10,
+                            },
+                        }
+                    },
+                    scene: {
+                        nextScene: {
+                            name: 'worldSelectMenu',
+                            type: 'STORY',
+                        }
+                    },
+                    levels: this.levelData.levels,
+                    name: 'worldSelectMenu'
+                }
+            );
             this.scene.stop(this); // stop itself
         });
 

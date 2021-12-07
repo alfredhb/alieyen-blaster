@@ -181,7 +181,7 @@ export default class TimedTutorialScene extends Phaser.Scene {
         });
 
         this.constants.HoverClick(this, yesB, () => {
-            this.sound.play('menu-click');
+            this.sound.play('menu-click', {volume: this.game.config.sfxVolume});
 
             this.bg.setDepth(0);
             centerOutline.setDepth(-1);
@@ -198,7 +198,7 @@ export default class TimedTutorialScene extends Phaser.Scene {
 
         // transition to next scene whatever it may be if last player is current player
         this.constants.HoverClick(this, noB, () => {
-            this.sound.play('menu-click');
+            this.sound.play('menu-click', {volume: this.game.config.sfxVolume});
 
             if (this.levelData.meta.playerCount == 2 && this.levelData.meta.currentPlayer == 0) {
                 // go to ready scene which runs back to tutorial

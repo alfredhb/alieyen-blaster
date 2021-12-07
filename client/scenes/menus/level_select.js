@@ -148,7 +148,7 @@ export default class LevelSelect extends Phaser.Scene {
 
         // Add hoverclick and normalclick
         this.constants.HoverClick(this, difButton, () => {
-            this.menuSounds.menuClick.play();
+            this.menuSounds.menuClick.play({volume: this.game.config.sfxVolume});
             this.scene.start('difficultySelectMenu', {
                 meta: {
                     playerCount: this.playerCount,
