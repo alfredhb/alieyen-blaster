@@ -105,6 +105,7 @@ export default class LevelLives extends Phaser.GameObjects.GameObject {
         if (this.numLives < this.maxLives) {
             for (let i = this.numLives; i < this.numLives + health; i++) {
                 if (i >= this.maxLives) break;
+                if (this.lives[i] == undefined) break; // Short circuit if lives have already been removed
 
                 this.addLife(i);
             }
