@@ -346,6 +346,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
     removeAlienListeners() {
         this.events.removeListener('gruntkilled');
         this.events.removeListener('minibosskilled');
+        this.events.removeListener('bosskilled');
     }
 
     /**
