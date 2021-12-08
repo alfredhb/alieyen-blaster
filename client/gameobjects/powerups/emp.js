@@ -60,7 +60,7 @@ export default class EMP extends Phaser.Physics.Arcade.Sprite {
         }
 
         this.spawnTimer = this.scene.time.addEvent({
-            delay: this.scene.levelData.level.powerup_spawnrate * this.difficulty, //spawn at 3 or 6 or 9 sec
+            delay: this.scene.levelData.level.powerup_spawnrate * this.difficulty * 2, //spawn at 3 or 6 or 9 sec
             callback: spawnFunc,
             callbackScope: this,
             loop: false,

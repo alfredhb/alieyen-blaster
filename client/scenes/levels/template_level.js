@@ -743,7 +743,7 @@ export default class TemplateLevelScene extends Phaser.Scene {
         report data as well. else transition directly to typ specific report
         */
 
-        if (this.levelData.scene?.cutscene?.close) {
+        if (this.levelData.level.objComplete && this.levelData.scene?.cutscene?.close) {
             // play close cutscene, ends with scene start, set current player to next
             // pause this scene to transition to templatecutscene, then that
             // should transition back here
