@@ -1,5 +1,6 @@
 import HelpButton from "../../../gameobjects/help_button";
 import QuitButton from "../../../gameobjects/quit_button";
+import Constants from "../../../lib/constants";
 
 /**
  * Responsible for loading the provided video URL stored in GCS onto the canvas
@@ -32,6 +33,7 @@ export default class TemplateCutscene extends Phaser.Scene {
      */
     create() {
         const { width, height } = this.scale;
+        this.constants = new Constants(width, height);
 
         const loadText = this.add.text(
             width * 0.5, 
@@ -46,6 +48,8 @@ export default class TemplateCutscene extends Phaser.Scene {
         loadText.setOrigin(0.5);
 
         this.addVideo(width, height);
+
+        this.alternatePlayer(width, height);
 
         this.quit = new QuitButton(this, {
             backMenu: this.levelData, 
@@ -78,6 +82,8 @@ export default class TemplateCutscene extends Phaser.Scene {
         this.video.width = width;
         this.video.height = height * 0.75;
         this.video.autoplay = true;
+        this.video.playsInline = true;
+        this.video.controls = true;
         
         // add to dom
         this.videoElt = document.body.appendChild(this.video);
@@ -92,6 +98,31 @@ export default class TemplateCutscene extends Phaser.Scene {
                 this.scene.resume(this.levelData, { cutscene: true });
                 this.scene.stop();
             }, 500); // wait 1 sec before transition
+        });
+    }
+
+    /**
+     * Adds a "Video Not playing?" button which opens the src in a new tab
+     * @param {number} width 
+     * @param {number} height 
+     */
+    alternatePlayer(width, height) {
+        const b = this.add.image(width * 0.5, height * 0.95, '__WHITE');
+        b.setDisplaySize(width * 0.3, height * 0.1).setOrigin();
+        const T = this.add.text(width * 0.5, height * 0.95, "Video Not Playing?", this.constants.MenuButtonStyle("#000000"));
+        T.setOrigin(0.5);
+
+        b.setInteractive();
+        b.on('pointerover', () => {
+            b.setTint(this.constants.Red);
+        });
+        b.on('pointerout', () => {
+            b.clearTint();
+        });
+
+        this.constants.HoverClick(this, b, () => {
+            window.open(this.videoURL, '_blank');
+            T.setText("Hit X to continue");
         });
     }
 }

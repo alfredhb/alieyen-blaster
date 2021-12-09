@@ -28,8 +28,8 @@ export default class AlienMini extends Alien {
         this.setInteractive();
         this.setPosition(width + 50, height + 50);
         this.setDisplaySize(width * 0.03, height * 0.05);
-        this.body.setSize(this.displayWidth * 1, this.displayHeight * 1.5);
-        this.setOffset(this.displayWidth * 2, this.displayHeight * 1.5);
+        this.body.setSize(this.displayWidth * 2.5, this.displayHeight * 2.5);
+        this.setOffset(this.body.width * 0.5, this.body.height * 0.5);
 
         this.maxX = width + 65;
         this.maxY = height + 65;
